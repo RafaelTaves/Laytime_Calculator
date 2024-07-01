@@ -13,8 +13,18 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        "light-blue-I": "#3f81bf",
+        "mid-blue-I": "#2d5c88",
+      },
+      fontFamily: {
+        Jost: ["Jost", "sans-serif"],
+        Poppins: ["Poppins", "sans-serif"],
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 };
 export default config;
