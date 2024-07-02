@@ -8,7 +8,7 @@ export default function Header() {
 
   return (
     <header className="bg-white">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <nav className="mx-auto flex max-w-8xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <a href="#" className="-m-1.5 p-1.5">
           <span className="sr-only">Great Ocean</span>
           <img className="h-12 w-auto" src="./images/greatOceanMinLogo.png" alt="" />
