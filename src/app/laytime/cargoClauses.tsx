@@ -8,7 +8,7 @@ export default function CargoClauses() {
           <div>
             <h2 className='font-Jost text-lg font-bold text-black'>Cargo Clauses</h2> 
           </div>
-            <div className='bg-white mt-4 md:mt-0 p-8 rounded-lg shadow-md md:w-1/2 flex flex-col'>
+            <div className='bg-white mt-4 md:mt-0 p-8 rounded-lg shadow-md md:w-1/2 flex flex-col overflow-x-auto'>
                 <div className='flex flex-row mt-4 space-x-6'>
                     <div className='flex flex-col w-1/2'>
                     {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> */}
@@ -19,13 +19,13 @@ export default function CargoClauses() {
                         </select> {/* string */}
                     </div>
                     <div className='flex flex-col w-1/4'>
-                        <input type="text" id="timeClause1" name="timeClause1"  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
+                        <input type="text" id="timeClause1" name="timeClause1"  placeholder='hh:mm'  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
                     </div>
                     <div className='flex flex-col w-1/4 items-center justify-center'>
-                        <label className='text-lg font-Jost align-center text-black'>time counts</label>
+                        <label className='text-md font-Jost align-center text-black'>time counts</label>
                     </div>
                     <div className='flex flex-col w-1/4'>
-                        <input type="text" id="timeClause2" name="timeClause2"  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
+                        <input type="text" id="timeClause2" name="timeClause2"  placeholder='hh:mm' className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
                     </div>
                     <div className='flex flex-col w-1/2'>
                         {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> */}
@@ -51,8 +51,8 @@ export default function CargoClauses() {
                             <option value="fhinc">Fhinc</option>
                         </select> {/* string */}
                     </div>
-                    <div className='flex flex-col w-1/4'>
-                        <input type="text" id="timeClause3" name="timeClause3"  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
+                    <div className='flex flex-col w-1/3'>
+                        <input type="text" id="timeClause3" name="timeClause3" placeholder='hh:mm'  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
                     </div>
                     <div className='flex flex-col w-1/2'>
                     {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> */}
@@ -66,8 +66,8 @@ export default function CargoClauses() {
                             <option value="saturday">Saturday</option>
                         </select> {/* string */}
                     </div>
-                    <div className='flex flex-col w-1/4'>
-                        <input type="text" id="timeClause4" name="timeClause4"  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
+                    <div className='flex flex-col w-1/3'>
+                        <input type="text" id="timeClause4" name="timeClause4" placeholder='hh:mm'  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
                     </div>
                     <div className='flex flex-col w-1/2'>
                         {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> */}

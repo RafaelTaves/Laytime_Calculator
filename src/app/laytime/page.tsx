@@ -3,6 +3,9 @@ import Header from "./header";
 import Laytime_calculation from "./laytime_calculation";
 import CargoRates from "./cargoRates";
 import CargoClauses from "./cargoClauses";
+import TableNOR from "./tableNOR";
+import TableRemark from "./tableRemark";
+import Total from "./total";
 
 export default function Laytime() {
     return(
@@ -12,6 +15,9 @@ export default function Laytime() {
             <Laytime_calculation/>
             <CargoRates/>
             <CargoClauses/>
+            <TableNOR/>
+            <TableRemark/>
+            <Total/>
         </div>
         </>
     )
