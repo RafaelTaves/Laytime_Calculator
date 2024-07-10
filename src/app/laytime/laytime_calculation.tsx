@@ -98,7 +98,7 @@ export default function Laytime_calculation() {
                 </div>
             
                 <div className='flex flex-row mt-4 space-x-6'>
-                    <div className='flex flex-col w-1/2'>
+                    <div className='flex flex-col w-full'>
                     {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> */}
                         <select id="selectClause3" name="selectClause3" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                             <option value="sunday">Sunday</option>
@@ -112,11 +112,11 @@ export default function Laytime_calculation() {
                             <option value="fhinc">Fhinc</option>
                         </select> {/* string */}
                     </div>
-                    <div className='flex flex-col w-1/3'>
-                        <input type="text" id="timeClause3" name="timeClause3" placeholder='hh:mm'  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
+                    {/* <div className='flex flex-col w-1/3'>
+                        <input type="text" id="timeClause3" name="timeClause3" placeholder='hh:mm'  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string 
                     </div>
                     <div className='flex flex-col w-1/2'>
-                    {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> */}
+                    {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> 
                         <select id="selectClause4" name="selectClause4" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                             <option value="sunday">Sunday</option>
                             <option value="Monday">Monday</option>
@@ -125,18 +125,18 @@ export default function Laytime_calculation() {
                             <option value="thursday">Thursday</option>
                             <option value="friday">Friday</option>
                             <option value="saturday">Saturday</option>
-                        </select> {/* string */}
+                        </select> {/* string 
                     </div>
                     <div className='flex flex-col w-1/3'>
-                        <input type="text" id="timeClause4" name="timeClause4" placeholder='hh:mm'  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string */}
+                        <input type="text" id="timeClause4" name="timeClause4" placeholder='hh:mm'  className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/> {/* string 
                     </div>
                     <div className='flex flex-col w-1/2'>
-                        {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> */}
+                        {/* <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label> 
                         <select id="selectClause5" name="selectClause5" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                             <option value="NTC_even_if_used">NTC even if used</option>
                             <option value="NTC_unless_used">NTC unless used</option>
-                        </select> {/* string */}
-                    </div> 
+                        </select> {/* string 
+                    </div>  */}
                 </div>
                 <div className='flex flex-row mt-4 space-x-6'>
                     <div className='flex flex-col w-full'>
