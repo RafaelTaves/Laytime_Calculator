@@ -1,29 +1,71 @@
 "use client";
 import React, { useState } from "react"
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import BadNotification from "../notifications";
 
+const BASE_URL = "http://127.0.0.1:8000"
 
 export default function Login() {
-    const [email, setEmail] = useState<string>("")
+    const [username, setUsername] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [hidePassword, setHidePassword] = useState<boolean>(true)
     const [hideCheck, setHideCheck] = useState<boolean>(true);
+    const [error, setError] = useState('');
+    const [showNotification, setShowNotification] = useState(false);
 
-    async function handleSubmit(e: any) {
-        e.preventDefault();
-        console.log(email + password);
-        setEmail("")
-        setPassword("")
-    }
+    const router = useRouter();
+
+    const handleCloseNotification = () => {
+      setShowNotification(false);
+    };
 
     function passwordVisibility() {
       setHidePassword((prev) => !prev);
       setHideCheck((prev) => !prev);
     }
 
+    const handleSubmit = async (event: any) => {
+      event.preventDefault();
+      
+      const formDetails = new URLSearchParams();
+        formDetails.append('grant_type', '');
+        formDetails.append('username', username);
+        formDetails.append('password', password);
+        formDetails.append('scope', '');
+        formDetails.append('client_id', '');
+        formDetails.append('client_secret', '');
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/login', formDetails, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+  
+        if (response.status == 200) {
+          localStorage.setItem('token', response.data.access_token);
+          router.push('/laytime');
+        } else {
+          setError('Authentication failed!');
+          setShowNotification(true);
+        }
+      } catch (error) {
+        setError('An error occurred. Please try again later.');
+        setShowNotification(true);
+      }
+    };
+
     return (
       <>
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-white">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+            <BadNotification
+              show={showNotification}
+              title="Login Falhou"
+              desc="Senha ou usuário inválido"
+              onClose={handleCloseNotification}
+            />
             <img
               className="mx-auto h-40 w-auto"
               src="./images/greatOceanLogo.png"
@@ -37,19 +79,19 @@ export default function Login() {
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" method="POST" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                  Email address
+                <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                  Username
                 </label>
                 <div className="mt-2">
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    id="username"
+                    name="username"
+                    type="username"
+                    autoComplete="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                    className="ps-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>

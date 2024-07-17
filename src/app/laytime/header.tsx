@@ -2,9 +2,17 @@
 import { useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation';
+
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const router = useRouter();
+
+  function handleLogout() {
+    localStorage.clear()
+    router.push('/')
+  }
 
   return (
     <header className="bg-white">
@@ -36,9 +44,9 @@ export default function Header() {
             <a href="" className="text-sm bg-gray-900 text-white font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Clear
             </a>
-          <a href="#" className="text-sm bg-red-800 text-white font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-red-700">
+          <button onClick={handleLogout} className="text-sm bg-red-800 text-white font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-red-700">
             Log out <span aria-hidden="true">&rarr;</span>
-          </a>
+          </button>
         </div>
       </nav>
       <Dialog className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
