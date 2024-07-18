@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./header";
 import Laytime_calculation from "./laytime_calculation";
 import TableNOR from "./tableNOR";
@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Laytime() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -21,6 +22,7 @@ export default function Laytime() {
         if (!response.ok) {
           throw new Error('Token verification failed');
         }
+        setLoading(false)
       } catch (error) {
         localStorage.removeItem('token');
         router.push('/');
@@ -29,6 +31,10 @@ export default function Laytime() {
 
     verifyToken();
   }, [router]);
+
+  if (loading) {
+    return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
+  }
   
     return(
         <>
