@@ -37,7 +37,7 @@ export default function Login() {
         formDetails.append('client_secret', '');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/login', formDetails, {
+      const response = await axios.post(`${BASE_URL}/login`, formDetails, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -45,7 +45,7 @@ export default function Login() {
   
         if (response.status == 200) {
           localStorage.setItem('token', response.data.access_token);
-          router.push('/laytime');
+          router.push('/select_service');
         } else {
           setError('Authentication failed!');
           setShowNotification(true);
