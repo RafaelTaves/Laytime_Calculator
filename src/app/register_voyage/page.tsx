@@ -7,17 +7,18 @@ import GoodNotification from '../components/notifications/goodNotification';
 
 const BASE_URL = "http://127.0.0.1:8000"
 
-export default function Register_vessel() {
-    const [i_code, setCode] = useState<string>("")
+export default function Register_voyage() {
+    const [i_from_location, setFromLocation] = useState<string>("")
     const [i_description, setDescription] = useState<string>("")
     const [i_name, setName] = useState<string>("")
+    const [i_to_location, setToLocation] = useState<string>("")
     const [showNotification, setShowNotification] = useState(false);
     const [showNotificationGood, setShowNotificationGood] = useState(false);
 
     const router = useRouter();
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    useEffect(() => {     
         const verifyToken = async () => {
           const token = localStorage.getItem('token');
           try {
@@ -36,9 +37,9 @@ export default function Register_vessel() {
         verifyToken();
       }, [router]);
     
-    if (loading) {
-      return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
-    }
+      if (loading) {
+        return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
+      }
 
     async function handleSubmit(e:any) {
         e.preventDefault()
@@ -46,9 +47,10 @@ export default function Register_vessel() {
         const token = localStorage.getItem('token');
 
         const formBody = {
-            code: i_code,
+            name: i_name,
             description: i_description,
-            name: i_name
+            from_location: i_from_location,
+            to_location: i_to_location
         }
 
         const headersForm = {
@@ -56,7 +58,7 @@ export default function Register_vessel() {
         }
 
         try {
-            const response = await axios.post(`${BASE_URL}/register_vessel`, formBody, {
+            const response = await axios.post(`${BASE_URL}/register_voyage`, formBody, {
                 headers: {
                   Authorization: `Bearer ${token}`
                 },
@@ -64,20 +66,20 @@ export default function Register_vessel() {
             
             if (response.status == 200) {
                 setShowNotificationGood(true)
-                setCode("")
+                setFromLocation("")
                 setDescription("")
                 setName("")
+                setToLocation("")
             }
         } catch {
-          setShowNotification(true)
+            setShowNotification(true)
           }
     }
 
     const handleCloseNotification = () => {
-      setShowNotification(false);
-      setShowNotificationGood(false)
-    };
-
+        setShowNotification(false);
+        setShowNotificationGood(false)
+      };
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-12 sm:space-y-16">
@@ -91,12 +93,12 @@ export default function Register_vessel() {
         <GoodNotification
               show={showNotificationGood}
               title="Success"
-              desc="Vessel sucessfully registered"
+              desc="Voyage sucessfully registered"
               onClose={handleCloseNotification}
         />
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Vessel Registration</h2>
+          <h2 className="text-base font-semibold leading-7 text-gray-900">Voyage Registration</h2>
           <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-          Fill out the form to register your ship.
+          Fill out the form to register a voyage.
           </p>
 
           <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
@@ -120,7 +122,7 @@ export default function Register_vessel() {
 
             <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
               <label htmlFor="code" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
-                IRIN Code
+                From
               </label>
               <div className="mt-2 sm:col-span-2 sm:mt-0">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mid-blue-I sm:max-w-md">
@@ -128,8 +130,26 @@ export default function Register_vessel() {
                     id="code"
                     name="code"
                     type="text"
-                    value={i_code}
-                    onChange={(e) => setCode(e.target.value)}
+                    value={i_from_location}
+                    onChange={(e) => setFromLocation(e.target.value)}
+                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+              <label htmlFor="code" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
+                To
+              </label>
+              <div className="mt-2 sm:col-span-2 sm:mt-0">
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mid-blue-I sm:max-w-md">
+                  <input
+                    id="code"
+                    name="code"
+                    type="text"
+                    value={i_to_location}
+                    onChange={(e) => setToLocation(e.target.value)}
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                   />
                 </div>

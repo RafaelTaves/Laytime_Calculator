@@ -2,7 +2,7 @@
 import React, { useState } from "react"
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import BadNotification from "../notifications";
+import BadNotification from "../notifications/badNotification";
 
 const BASE_URL = "http://127.0.0.1:8000"
 
