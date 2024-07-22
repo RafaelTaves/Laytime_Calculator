@@ -2,17 +2,19 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import BadNotification from '../components/notifications/badNotification';
-import GoodNotification from '../components/notifications/goodNotification';
+import FetchVessels from '../Functions/fetchVessels';
+
+interface Vessel {
+  code: string,
+  description: string,
+  name: string,
+  id_vessel: number
+}
 
 const BASE_URL = "http://127.0.0.1:8000"
 
 export default function Register_vessel() {
-    const [i_code, setCode] = useState<string>("")
-    const [i_description, setDescription] = useState<string>("")
-    const [i_name, setName] = useState<string>("")
-    const [showNotification, setShowNotification] = useState(false);
-    const [showNotificationGood, setShowNotificationGood] = useState(false);
+    const [vessels, setVessels] = useState<Vessel[]>([])
 
     const router = useRouter();
     const [loading, setLoading] = useState(true);
@@ -35,139 +37,86 @@ export default function Register_vessel() {
     
         verifyToken();
       }, [router]);
+
+    useEffect(() => {
+       if (!loading) {
+        const getVessels = async () => {
+          const fetchedVessels = await FetchVessels();
+          setVessels(fetchedVessels);
+        };
+    
+      getVessels();
+    }
+      }, [loading]);  
     
     if (loading) {
       return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
     }
 
-    async function handleSubmit(e:any) {
-        e.preventDefault()
-
-        const token = localStorage.getItem('token');
-
-        const formBody = {
-            code: i_code,
-            description: i_description,
-            name: i_name
-        }
-
-        const headersForm = {
-            Authorization: `Bearer ${token}`,
-        }
-
-        try {
-            const response = await axios.post(`${BASE_URL}/register_vessel`, formBody, {
-                headers: {
-                  Authorization: `Bearer ${token}`
-                },
-              });
-            
-            if (response.status == 200) {
-                setShowNotificationGood(true)
-                setCode("")
-                setDescription("")
-                setName("")
-            }
-        } catch {
-          setShowNotification(true)
-          }
-    }
-
-    const handleCloseNotification = () => {
-      setShowNotification(false);
-      setShowNotificationGood(false)
-    };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="space-y-12 sm:space-y-16">
-        <div className='p-4'>
-        <BadNotification
-              show={showNotification}
-              title="Error!"
-              desc="An error has ocurred, try again later."
-              onClose={handleCloseNotification}
-        />
-        <GoodNotification
-              show={showNotificationGood}
-              title="Success"
-              desc="Vessel sucessfully registered"
-              onClose={handleCloseNotification}
-        />
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Vessel Registration</h2>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-          Fill out the form to register your ship.
+    <div className="px-4 sm:px-6 lg:px-8">
+      <div className="sm:flex sm:items-center mt-10">
+        <div className="sm:flex-auto">
+          <h1 className="text-base font-semibold leading-6 text-gray-900">Vessels</h1>
+          <p className="mt-2 text-sm text-gray-700">
+            A list of all the vessels registered.
           </p>
-
-          <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
-            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-              <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
-                Name
-              </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mid-blue-I sm:max-w-md">
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={i_name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
+        </div>
+        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <button
+            type="button"
+            className="block rounded-md bg-mid-blue-I px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-ligh-blue-I focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mid-blue-I"
+          >
+            Add vessel
+          </button>
+        </div>
+      </div>
+      <div className="mt-8 flow-root">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+              <table className="min-w-full divide-y divide-gray-300">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                      Name
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Id
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Code
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Description
+                    </th>
+                    <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                      <span className="sr-only">Edit</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  {vessels.map((vessel) => (
+                    <tr key={vessel.id_vessel}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                        {vessel.name}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vessel.id_vessel}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vessel.code}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vessel.description}</td>
+                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                        <a href="#" className="text-mid-blue-I hover:text-indigo-900">
+                          Edit<span className="sr-only">, {vessel.name}</span>
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-              <label htmlFor="code" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
-                IRIN Code
-              </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mid-blue-I sm:max-w-md">
-                  <input
-                    id="code"
-                    name="code"
-                    type="text"
-                    value={i_code}
-                    onChange={(e) => setCode(e.target.value)}
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-              <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
-                Description
-              </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <textarea
-                  id="description"
-                  name="description"
-                  rows={3}
-                  value={i_description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="block w-full max-w-2xl rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                  defaultValue={''}
-                />
-              </div>
-            </div>
- 
           </div>
-        </div>    
+        </div>
       </div>
-
-      <div className="mt-6 flex items-center justify-end gap-x-6 px-4">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="inline-flex justify-center rounded-md bg-mid-blue-I px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-light-blue-I focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mid-blue-I"
-        >
-          Save
-        </button>
-      </div>
-    </form>
+    </div>
   )
 }
