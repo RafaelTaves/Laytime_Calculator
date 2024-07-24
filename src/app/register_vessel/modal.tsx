@@ -6,7 +6,7 @@ import GoodNotification from '../components/notifications/goodNotification';
 
 const BASE_URL = "http://127.0.0.1:8000"
 
-export default function Register_vessel() {
+export default function Modal_vessel() {
     const [i_code, setCode] = useState<string>("")
     const [i_description, setDescription] = useState<string>("")
     const [i_name, setName] = useState<string>("")
@@ -50,7 +50,7 @@ export default function Register_vessel() {
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-12 sm:space-y-16">
-        <div className='p-4'>
+        <div className=''>
         <BadNotification
               show={showNotification}
               title="Error!"
