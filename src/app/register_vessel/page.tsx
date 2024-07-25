@@ -59,23 +59,30 @@ export default function Register_vessel() {
       return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
     }
 
-    async function consultApi(vessel_id: number) {
+    async function handleDelete(vessel_id: number) {
       const token = localStorage.getItem('token');
-
+  
+      const confirmDelete = window.confirm("Tem certeza que deseja deletar este vessel?");
+      if (!confirmDelete) {
+        return;
+      }
+  
       try {
         const response = await axios.delete(`${BASE_URL}/vessels/${vessel_id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           },
-        })
-
-        if(response.status == 200)
-          window.alert("Vessel sucessfully deleted")
-
+        });
+  
+        if (response.status === 200) {
+          window.alert("Vessel deletado com sucesso");
+          setVessels(vessels.filter(vessel => vessel.id_vessel !== vessel_id));
+        }
       } catch {
-        window.alert("Error! could not delete vessel.")
+        window.alert("Erro! Não foi possível deletar o vessel.");
       }
     }
+  
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -130,7 +137,7 @@ export default function Register_vessel() {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vessel.code}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vessel.description}</td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                        <button onClick={() => consultApi(vessel.id_vessel)} className="text-mid-blue-I hover:text-light-blue-I">
+                        <button onClick={() => handleDelete(vessel.id_vessel)} className="text-mid-blue-I hover:text-light-blue-I">
                           Delete<span className="sr-only">, {vessel.name}</span>
                         </button>
                       </td>

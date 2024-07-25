@@ -2,23 +2,31 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import BadNotification from '../components/notifications/badNotification';
-import GoodNotification from '../components/notifications/goodNotification';
+import Modal from '../components/Dialogs/modal';
+import Modal_voyage from './modal';
+import FetchVoyages from '../Functions/fetchVoyages';
+
+interface Voyages {
+  from_location: string,
+  description: string,
+  name: string,
+  id_voyage: number,
+  to_location: string
+}
 
 const BASE_URL = "http://127.0.0.1:8000"
 
-export default function Register_voyage() {
-    const [i_from_location, setFromLocation] = useState<string>("")
-    const [i_description, setDescription] = useState<string>("")
-    const [i_name, setName] = useState<string>("")
-    const [i_to_location, setToLocation] = useState<string>("")
-    const [showNotification, setShowNotification] = useState(false);
-    const [showNotificationGood, setShowNotificationGood] = useState(false);
+export default function Register_vessel() {
+    const [voyages, setVoyages] = useState<Voyages[]>([])
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+   const openModal = () => setIsModalOpen(true);
+   const closeModal = () => setIsModalOpen(false);
 
     const router = useRouter();
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {     
+    useEffect(() => {
         const verifyToken = async () => {
           const token = localStorage.getItem('token');
           try {
@@ -36,158 +44,116 @@ export default function Register_voyage() {
     
         verifyToken();
       }, [router]);
+
+    useEffect(() => {
+       if (!loading) {
+        const getVoyages = async () => {
+          const fetchedVoyages = await FetchVoyages();
+          setVoyages(fetchedVoyages);
+        };
     
-      if (loading) {
-        return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
-      }
-
-    async function handleSubmit(e:any) {
-        e.preventDefault()
-
-        const token = localStorage.getItem('token');
-
-        const formBody = {
-            name: i_name,
-            description: i_description,
-            from_location: i_from_location,
-            to_location: i_to_location
-        }
-
-        const headersForm = {
-            Authorization: `Bearer ${token}`,
-        }
-
-        try {
-            const response = await axios.post(`${BASE_URL}/register_voyage`, formBody, {
-                headers: {
-                  Authorization: `Bearer ${token}`
-                },
-              });
-            
-            if (response.status == 200) {
-                setShowNotificationGood(true)
-                setFromLocation("")
-                setDescription("")
-                setName("")
-                setToLocation("")
-            }
-        } catch {
-            setShowNotification(true)
-          }
+      getVoyages();
+    }
+      }, [loading]);  
+    
+    if (loading) {
+      return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
     }
 
-    const handleCloseNotification = () => {
-        setShowNotification(false);
-        setShowNotificationGood(false)
-      };
+    async function handleDelete(voyage_id: number) {
+      const token = localStorage.getItem('token');
+  
+      const confirmDelete = window.confirm("Are you sure?");
+      if (!confirmDelete) {
+        return;
+      }
+  
+      try {
+        const response = await axios.delete(`${BASE_URL}/voyages/${voyage_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+  
+        if (response.status === 200) {
+          window.alert("Voyage deletado com sucesso");
+          setVoyages(voyages.filter(voyage => voyage.id_voyage !== voyage_id));
+        }
+      } catch {
+        window.alert("Erro! Não foi possível deletar o voyage.");
+      }
+    }
+  
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="space-y-12 sm:space-y-16">
-        <div className='p-4'>
-        <BadNotification
-              show={showNotification}
-              title="Error!"
-              desc="An error has ocurred, try again later."
-              onClose={handleCloseNotification}
-        />
-        <GoodNotification
-              show={showNotificationGood}
-              title="Success"
-              desc="Voyage sucessfully registered"
-              onClose={handleCloseNotification}
-        />
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Voyage Registration</h2>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-          Fill out the form to register a voyage.
+    <div className="px-4 sm:px-6 lg:px-8">
+      <div className="sm:flex sm:items-center mt-10">
+        <div className="sm:flex-auto">
+          <h1 className="text-base font-semibold leading-6 text-gray-900">Voyages</h1>
+          <p className="mt-2 text-sm text-gray-700">
+            A list of all the voyages registered.
           </p>
-
-          <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
-            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-              <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
-                Name
-              </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mid-blue-I sm:max-w-md">
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={i_name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
+        </div>
+        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <button
+            type="button"
+            onClick={openModal}
+            className="block rounded-md bg-mid-blue-I px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-ligh-blue-I focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mid-blue-I"
+          >
+            Add vessel
+          </button>
+        </div>
+      </div>
+      <div className="mt-8 flow-root">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+              <table className="min-w-full divide-y divide-gray-300">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-mid-blue-I sm:pl-6 text-mid-blue-I">
+                      Name
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-mid-blue-I">
+                      Id
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-mid-blue-I">
+                      Code
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-mid-blue-I">
+                      Description
+                    </th>
+                    <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                      <span className="sr-only">Edit</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  {voyages.map((voyage) => (
+                    <tr key={voyage.id_voyage}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                        {voyage.name}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{voyage.id_voyage}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{voyage.from_location}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{voyage.to_location}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{voyage.description}</td>
+                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                        <button onClick={() => handleDelete(voyage.id_voyage)} className="text-mid-blue-I hover:text-light-blue-I">
+                          Delete<span className="sr-only">, {voyage.name}</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-              <label htmlFor="code" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
-                From
-              </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mid-blue-I sm:max-w-md">
-                  <input
-                    id="code"
-                    name="code"
-                    type="text"
-                    value={i_from_location}
-                    onChange={(e) => setFromLocation(e.target.value)}
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-              <label htmlFor="code" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
-                To
-              </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-mid-blue-I sm:max-w-md">
-                  <input
-                    id="code"
-                    name="code"
-                    type="text"
-                    value={i_to_location}
-                    onChange={(e) => setToLocation(e.target.value)}
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-              <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
-                Description
-              </label>
-              <div className="mt-2 sm:col-span-2 sm:mt-0">
-                <textarea
-                  id="description"
-                  name="description"
-                  rows={3}
-                  value={i_description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="block w-full max-w-2xl rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                  defaultValue={''}
-                />
-              </div>
-            </div>
- 
           </div>
-        </div>    
+        </div>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <Modal_voyage/>
+        </Modal>
       </div>
-
-      <div className="mt-6 flex items-center justify-end gap-x-6 px-4">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="inline-flex justify-center rounded-md bg-mid-blue-I px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-light-blue-I focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mid-blue-I"
-        >
-          Save
-        </button>
-      </div>
-    </form>
+    </div>
   )
 }
