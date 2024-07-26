@@ -83,6 +83,10 @@ export default function Register_vessel() {
       }
     }
   
+    function handleLogout() {
+      localStorage.clear()
+      router.push('/')
+    }
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -93,6 +97,9 @@ export default function Register_vessel() {
             A list of all the vessels registered.
           </p>
         </div>
+        <button onClick={handleLogout} className="block rounded-md bg-red-800 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mid-blue-I">
+            Log out <span aria-hidden="true">&rarr;</span>
+          </button>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
             type="button"

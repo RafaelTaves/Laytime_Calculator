@@ -83,7 +83,11 @@ export default function Register_vessel() {
         window.alert("Erro! Não foi possível deletar o voyage.");
       }
     }
-  
+    
+    function handleLogout() {
+      localStorage.clear()
+      router.push('/')
+    }
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -94,13 +98,16 @@ export default function Register_vessel() {
             A list of all the voyages registered.
           </p>
         </div>
+        <button onClick={handleLogout} className="block rounded-md bg-red-800 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mid-blue-I">
+            Log out <span aria-hidden="true">&rarr;</span>
+          </button>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
             type="button"
             onClick={openModal}
             className="block rounded-md bg-mid-blue-I px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-ligh-blue-I focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mid-blue-I"
           >
-            Add vessel
+            Add voyage
           </button>
         </div>
       </div>
@@ -118,7 +125,10 @@ export default function Register_vessel() {
                       Id
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-mid-blue-I">
-                      Code
+                      From
+                    </th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-mid-blue-I">
+                      To
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-mid-blue-I">
                       Description
