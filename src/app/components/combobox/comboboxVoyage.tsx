@@ -1,8 +1,9 @@
 // 'use client'
 
+// import FetchVoyages from '@/app/Functions/fetchVoyages'
 // import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Label } from '@headlessui/react'
 // import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-// import { useState } from 'react'
+// import { useEffect, useState } from 'react'
 
 // const people = [
 //   { id: 1, name: 'Leslie Alexander' },
@@ -22,7 +23,14 @@
 //   const [selectedPerson, setSelectedPerson] = useState(null)
 //   const [voyages, setVoyages] = useState<Voyages[]>([])
 
-
+//   useEffect(() => {
+//     const getVoyages = async () => {
+//        const fetchedVoyages = await FetchVoyages();
+//        setVoyages(fetchedVoyages);
+ 
+//    getVoyages();
+//  }
+//    }, []);  
 
 //   const filteredPeople =
 //     query === ''

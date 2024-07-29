@@ -7,11 +7,29 @@ import TableRemark from "./tableRemark";
 import Total from "./total";
 import Notepad from "./notepad";
 import { useRouter } from 'next/navigation';
+import FetchVoyages from "../Functions/fetchVoyages";
+import FetchVessels from "../Functions/fetchVessels";
 
+interface Voyages {
+  from_location: string,
+  description: string,
+  name: string,
+  id_voyage: number,
+  to_location: string
+}
+
+interface Vessel {
+  code: string,
+  description: string,
+  name: string,
+  id_vessel: number
+}
 
 export default function Laytime() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [voyages, setVoyages] = useState<Voyages[]>([])
+  const [vessels, setVessels] = useState<Vessel[]>([])
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -32,6 +50,22 @@ export default function Laytime() {
     verifyToken();
   }, [router]);
 
+  useEffect(() => {
+    if (!loading) {
+     const getVoyages = async () => {
+       const fetchedVoyages = await FetchVoyages();
+       setVoyages(fetchedVoyages);
+     };
+     const getVessels = async () => {
+      const fetchedVessels = await FetchVessels();
+      setVessels(fetchedVessels);
+    };
+ 
+   getVoyages();
+   getVessels();
+ }
+   }, [loading]);
+
   if (loading) {
     return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
   }
@@ -40,7 +74,7 @@ export default function Laytime() {
         <>
         <Header />
         <div className="bg-gray-200 w-full h-full">
-            <Laytime_calculation/>
+            <Laytime_calculation voyages={voyages} vessels={vessels}/>
             <TableNOR/>
             <TableRemark/>
             <Total/>
