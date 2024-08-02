@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 
 export default function TableNOR() {
+    const [norTendered, setNorTendered] = useState<string>("")
+    const [norRetendered, setNorRetendered] = useState<string>("")
+    const [norLaytimeStart, setNorLaytimeStart] = useState<string>("")
+
     return (
         <>
            <div className='flex flex-col md:flex-row w-full justify-between mx-auto p-8 max-w-8xl border-b-2 border-gray-300'>
@@ -26,10 +30,20 @@ export default function TableNOR() {
             <tbody className="bg-white divide-y divide-gray-200">
                 <tr>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        <input type="date" id="NORTendered" name="NORTendered" className='w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/>
+                        <input 
+                        type="date" 
+                        id="NORTendered" 
+                        name="NORTendered"
+                        className='w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <input type="text" id="timeClause1" name="timeClause1" placeholder='hh:mm' className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/>
+                        <input 
+                        type="text" 
+                        id="timeClause1" 
+                        name="timeClause1" 
+                        placeholder='hh:mm' 
+
+                        className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'/>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         NOR tendered
