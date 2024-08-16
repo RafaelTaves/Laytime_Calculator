@@ -33,19 +33,19 @@ const TableRemark: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-full justify-center mx-auto p-8 max-w-8xl border-b-2 border-gray-300">
+    <div className="flex flex-col w-full justify-center mx-auto p-8 max-w-8xl border-b-2 border-gray-300">
         <div className='bg-white mt-4 md:mt-0 p-8 rounded-lg shadow-md flex flex-col overflow-x-auto'>
             <table className="min-w-full border-collapse">
                 <thead>
                 <tr>
-                    <th className="border p-2"></th>
-                    <th className="border p-2">Date</th>
-                    <th className="border p-2">From</th>
-                    <th className="border p-2">To</th>
-                    <th className="border p-2">% count</th>
-                    <th className="border p-2">Remarks</th>
-                    <th className="border p-2">Time used</th>
-                    <th className="border p-2">Total time</th>
+                    <th className="border p-2 text-black"></th>
+                    <th className="border p-2 text-black">Date</th>
+                    <th className="border p-2 text-black">From</th>
+                    <th className="border p-2 text-black">To</th>
+                    <th className="border p-2 text-black">% count</th>
+                    <th className="border p-2 text-black">Remarks</th>
+                    <th className="border p-2 text-black">Time used</th>
+                    <th className="border p-2 text-black">Total time</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -108,20 +108,22 @@ const TableRemark: React.FC = () => {
                         />
                     </td>
                     <td className="border p-2">
-                        <p
-                        className="
-                        w-full border rounded p-1 text-center"
-                        // value={row.timeUsed}
-                        // onChange={(e) => handleChange(index, 'timeUsed', e.target.value)}
-                        >0d 00:00 </p>
+                        <input
+                        className=" w-full border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                        type='text'
+                        readOnly
+                        value={row.timeUsed}
+                        onChange={(e) => handleChange(index, 'timeUsed', e.target.value)}
+                        />
                     </td>
                     <td className="border p-2">
-                    <p
-                        className="
-                        w-full border rounded p-1 text-center"
-                        // value={row.timeUsed}
-                        // onChange={(e) => handleChange(index, 'timeUsed', e.target.value)}
-                        >0d 00:00 </p>
+                    <input
+                        className=" w-full border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                        type='text'
+                        readOnly
+                        value={row.timeUsed}
+                        onChange={(e) => handleChange(index, 'timeUsed', e.target.value)}
+                        />
                     </td>
                     </tr>
                 ))}

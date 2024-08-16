@@ -32,19 +32,19 @@ export default function Header() {
           </button>
         </div>
         <div className="hidden lg:flex lg:gap-x-6">
-            <a href="" className="text-sm bg-gray-900 text-white font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+            <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Save
             </a>
-            <a href="" className="text-sm bg-gray-900 text-white font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+            <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Save new
             </a>
-            <a href="" className="text-sm bg-gray-900 text-white font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+            <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Print
             </a>
-            <a href="" className="text-sm bg-gray-900 text-white font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+            <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Clear
             </a>
-          <button onClick={handleLogout} className="text-sm bg-red-800 text-white font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-red-700">
+          <button onClick={handleLogout} className="text-md w-32 bg-red-800 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-red-700">
             Log out <span aria-hidden="true">&rarr;</span>
           </button>
         </div>
