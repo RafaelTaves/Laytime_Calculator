@@ -10,10 +10,10 @@ interface Voyages {
 
 interface laytimeProps {
     voyages: Voyages[],
-    vessels: Vessel[]
+    vessels: Vessels[]
 }
 
-interface Vessel {
+interface Vessels {
     code: string,
     description: string,
     name: string,
@@ -41,6 +41,13 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
     const [assistOption2, setAssistOption2] = useState<string>("Once_on_demurrage_always_on_demurrage")
     const [assistOption3, setAssistOption3] = useState<string>("Working_time_saved")
 
+    const [voyageInput, setVoyageInput] = useState<string>("");
+    const [filteredVoyages, setFilteredVoyages] = useState<Voyages[]>(voyages);
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
+
+    const [vesselInput, setVesselInput] = useState<string>("");
+    const [showDropdownVessel, setShowDropdownVessel] = useState<boolean>(false);
+
     useEffect(() => {
         if (selectedVoyage !== null) {
             const voyage = voyages.find((v) => v.id_voyage === selectedVoyage);
@@ -51,13 +58,35 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
         }
     }, [selectedVoyage, voyages]);
 
-    function handleVoyageChange(e: any) {
-        setSelectedVoyage(Number(e.target.value));
-    }
+    useEffect(() => {
+        const filtered = voyages.filter(voyage =>
+            voyage.name.toLowerCase().includes(voyageInput.toLowerCase())
+        );
+        setFilteredVoyages(filtered);
+    }, [voyageInput, voyages]);
+
+    const handleVoyageSelect = (voyage: Voyages) => {
+        setSelectedVoyage(voyage.id_voyage);
+        setVoyageInput(voyage.name);
+        setShowDropdown(false);
+    };
+
+    const handleBlur = () => {
+        setTimeout(() => {
+            setShowDropdown(false);
+            setShowDropdownVessel(false);
+        }, 100);
+    };
 
     function handleVesselChange(e: any) {
         setSelectedVessel(Number(e.target.value))
     }
+
+    const handleVesselSelect = (vessel: Vessels) => {
+        setSelectedVessel(vessel.id_vessel);
+        setVesselInput(vessel.name);
+        setShowDropdown(false);
+    };
 
     return (
         <>
@@ -68,32 +97,86 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                 <div className='bg-white mt-4 md:mt-4 p-8 rounded-lg shadow-md w-full flex flex-col'>
                     <div className='flex flex-col lg:hidden'>
                         <label htmlFor="voyage" className='text-lg font-Jost font-semibold text-black'>Voyage</label>
-                        <select id="selectVoyage" name="selectVoyage" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVoyageChange} value={selectedVoyage ?? ''}>
-                            <option value={0}>Select a voyage</option>
-                            {voyages.map((voyage) => (
-                                <option key={voyage.id_voyage} value={voyage.id_voyage}>{voyage.name}</option>
-                            ))}
-                        </select>
+                        <input
+                                type="text"
+                                value={voyageInput}
+                                onChange={(e) => setVoyageInput(e.target.value)}
+                                onFocus={() => setShowDropdown(true)}
+                                onBlur={handleBlur}
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
+                                placeholder="Type to search voyages"
+                            />
+                            {showDropdown && (
+                                <ul className='bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                    {filteredVoyages.map((voyage) => (
+                                        <li
+                                            key={voyage.id_voyage}
+                                            onMouseDown={() => handleVoyageSelect(voyage)}
+                                            className='cursor-pointer p-2 hover:bg-gray-200'
+                                        >
+                                            {voyage.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                     </div>
 
                     <div className='flex flex-row space-x-6 hidden lg:flex'>
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="voyage" className='text-md font-Jost font-semibold text-black'>Voyage</label>
-                            <select id="selectVoyage" name="selectVoyage" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVoyageChange} value={selectedVoyage ?? ''}>
-                                <option value={0}>Select a voyage</option>
-                                {voyages.map((voyage) => (
-                                    <option key={voyage.id_voyage} value={voyage.id_voyage}>{voyage.name}</option>
-                                ))}
-                            </select>
+                            <input
+                                type="text"
+                                value={voyageInput}
+                                onChange={(e) => setVoyageInput(e.target.value)}
+                                onFocus={() => setShowDropdown(true)}
+                                onBlur={handleBlur}
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
+                                placeholder="Type to search voyages"
+                            />
+                            {showDropdown && (
+                                <ul className='bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                    {filteredVoyages.map((voyage) => (
+                                        <li
+                                            key={voyage.id_voyage}
+                                            onMouseDown={() => handleVoyageSelect(voyage)}
+                                            className='cursor-pointer p-2 hover:bg-gray-200'
+                                        >
+                                            {voyage.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Vessel</label>
-                            <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
+                            {/* <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
                                 <option value={0}>Select a vessel</option>
                                 {vessels.map((vessel) => (
                                     <option key={vessel.id_vessel} value={vessel.id_vessel}>{vessel.name}</option>
                                 ))}
-                            </select>
+                            </select> */}
+                            <input
+                                type="text"
+                                value={vesselInput}
+                                onChange={(e) => setVesselInput(e.target.value)}
+                                onFocus={() => setShowDropdownVessel(true)}
+                                onBlur={handleBlur}
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
+                                placeholder="Type to search vessels"
+                            />
+                            {showDropdownVessel && (
+                                <ul className='bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                    {vessels.map((vessel) => (
+                                        <li
+                                            key={vessel.id_vessel}
+                                            onMouseDown={() => handleVesselSelect(vessel)}
+                                            className='cursor-pointer p-2 hover:bg-gray-200'
+                                        >
+                                            {vessel.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
                     </div>
 

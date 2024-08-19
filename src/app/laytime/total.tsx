@@ -60,7 +60,6 @@ export default function Total() {
                         <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Less Comission</label>
                         <input 
                         className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
-                        readOnly
                         />
                     </div>
                     <div className='flex flex-col w-1/2'>
