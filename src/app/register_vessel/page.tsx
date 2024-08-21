@@ -23,7 +23,8 @@ export default function Register_vessel() {
    const closeModal = () => setIsModalOpen(false);
 
     const router = useRouter();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true)
+    const [refresh, setRefresh] = useState(false)
 
     useEffect(() => {
         const verifyToken = async () => {
@@ -53,10 +54,24 @@ export default function Register_vessel() {
     
       getVessels();
     }
-      }, [loading]);  
+      }, [loading]);
+      
+      useEffect(() => {
+        const getVessels = async () => {
+          const fetchedVessels = await FetchVessels();
+          setVessels(fetchedVessels);
+          setRefresh(false)
+        }
+
+        getVessels()
+      }, [refresh])
+
+      function onRefresh () {
+        setRefresh(true)
+      }
     
     if (loading) {
-      return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
+      return <div>{null}</div>; 
     }
 
     async function handleDelete(vessel_id: number) {
@@ -77,6 +92,7 @@ export default function Register_vessel() {
         if (response.status === 200) {
           window.alert("Vessel deletado com sucesso");
           setVessels(vessels.filter(vessel => vessel.id_vessel !== vessel_id));
+          onRefresh()
         }
       } catch {
         window.alert("Erro! Não foi possível deletar o vessel.");
@@ -156,7 +172,7 @@ export default function Register_vessel() {
           </div>
         </div>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <Modal_vessel/>
+        <Modal_vessel onRefresh={onRefresh}/>
         </Modal>
       </div>
     </div>

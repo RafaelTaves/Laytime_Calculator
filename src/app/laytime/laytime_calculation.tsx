@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import Modal from '../components/Dialogs/modal';
+import Modal_vessel from '../register_vessel/modal';
+import Modal_voyage from '../register_voyage/modal';
 
 interface Voyages {
     from_location: string,
@@ -48,6 +51,14 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
     const [vesselInput, setVesselInput] = useState<string>("");
     const [showDropdownVessel, setShowDropdownVessel] = useState<boolean>(false);
 
+    const [isModalVoyageOpen, setIsModalVoyageOpen] = useState(false);
+    const openModalVoyage = () => setIsModalVoyageOpen(true);
+    const closeModalVoyage = () => setIsModalVoyageOpen(false);
+
+    const [isModalVesselOpen, setIsModalVesselOpen] = useState(false);
+    const openModalVessel = () => setIsModalVesselOpen(true);
+    const closeModalVessel = () => setIsModalVesselOpen(false);
+
     useEffect(() => {
         if (selectedVoyage !== null) {
             const voyage = voyages.find((v) => v.id_voyage === selectedVoyage);
@@ -88,6 +99,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
         setShowDropdown(false);
     };
 
+    function onRefresh () {}
+
     return (
         <>
             <div className='flex flex-col w-full mx-auto p-8 max-w-8xl border-b-2 border-gray-300'>
@@ -122,7 +135,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                     </div>
 
                     <div className='flex flex-row space-x-6 hidden lg:flex'>
-                        <div className='flex flex-col w-1/2'>
+                        <div className='flex flex-col w-1/2 relative'>
                             <label htmlFor="voyage" className='text-md font-Jost font-semibold text-black'>Voyage</label>
                             <input
                                 type="text"
@@ -134,7 +147,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 placeholder="Type to search voyages"
                             />
                             {showDropdown && (
-                                <ul className='bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                <ul className='absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
                                     {filteredVoyages.map((voyage) => (
                                         <li
                                             key={voyage.id_voyage}
@@ -147,14 +160,13 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 </ul>
                             )}
                         </div>
-                        <div className='flex flex-col w-1/2'>
+                        <div className='flex flex-col w-1/6 self-end'>
+                            <button className='text-md w-full bg-mid-blue-I text-white text-center font-semibold font-Jost border py-2 px-2 rounded-lg hover:bg-light-blue-I' onClick={openModalVoyage} >
+                                Register Voyage
+                            </button>
+                        </div>
+                        <div className='flex flex-col w-1/2 relative'>
                             <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Vessel</label>
-                            {/* <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
-                                <option value={0}>Select a vessel</option>
-                                {vessels.map((vessel) => (
-                                    <option key={vessel.id_vessel} value={vessel.id_vessel}>{vessel.name}</option>
-                                ))}
-                            </select> */}
                             <input
                                 type="text"
                                 value={vesselInput}
@@ -165,7 +177,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 placeholder="Type to search vessels"
                             />
                             {showDropdownVessel && (
-                                <ul className='bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                <ul className='absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
                                     {vessels.map((vessel) => (
                                         <li
                                             key={vessel.id_vessel}
@@ -177,6 +189,11 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                     ))}
                                 </ul>
                             )}
+                        </div>
+                        <div className='flex flex-col w-1/6 self-end'>
+                            <button className='text-md w-full bg-mid-blue-I text-white text-center font-semibold font-Jost border py-2 px-2 rounded-lg hover:bg-light-blue-I' onClick={openModalVessel}>
+                                Register Vessel
+                            </button>
                         </div>
                     </div>
 
@@ -568,6 +585,12 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             </select>
                         </div>
                     </div>
+                    <Modal isOpen={isModalVesselOpen} onClose={closeModalVessel}>
+                        <Modal_vessel onRefresh={onRefresh}/>
+                    </Modal>
+                    <Modal isOpen={isModalVoyageOpen} onClose={closeModalVoyage}>
+                        <Modal_voyage onRefresh={onRefresh}/>
+                    </Modal>
                 </div>
             </div>
         </>

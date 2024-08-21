@@ -6,7 +6,11 @@ import GoodNotification from '../components/notifications/goodNotification';
 
 const BASE_URL = "http://127.0.0.1:8000";
 
-export default function Modal_voyage() {
+interface ModaVoyageProps {
+  onRefresh: () => void;
+}
+
+export default function Modal_voyage({onRefresh}: ModaVoyageProps) {
   const [i_from_location, setFromLocation] = useState<string>("");
   const [i_description, setDescription] = useState<string>("");
   const [i_name, setName] = useState<string>("");
@@ -41,6 +45,7 @@ export default function Modal_voyage() {
           setDescription("");
           setName("");
           setToLocation("");
+          onRefresh()
         }
       } else {
         setShowNotificationBad(true);

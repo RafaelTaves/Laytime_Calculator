@@ -6,7 +6,11 @@ import GoodNotification from '../components/notifications/goodNotification';
 
 const BASE_URL = "http://127.0.0.1:8000"
 
-export default function Modal_vessel() {
+interface ModaVesselProps {
+  onRefresh: () => void;
+}
+
+export default function Modal_vessel({onRefresh}: ModaVesselProps) {
     const [i_code, setCode] = useState<string>("")
     const [i_description, setDescription] = useState<string>("")
     const [i_name, setName] = useState<string>("")
@@ -39,6 +43,7 @@ export default function Modal_vessel() {
                   setCode("")
                   setDescription("")
                   setName("")
+                  onRefresh()
             }
           } else {
             setShowNotificationBad(true)

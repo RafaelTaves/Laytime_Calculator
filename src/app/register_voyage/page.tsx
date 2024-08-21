@@ -25,6 +25,7 @@ export default function Register_vessel() {
 
     const router = useRouter();
     const [loading, setLoading] = useState(true);
+    const [refresh, setRefresh] = useState(false)
 
     useEffect(() => {
         const verifyToken = async () => {
@@ -56,8 +57,22 @@ export default function Register_vessel() {
     }
       }, [loading]);  
     
+      useEffect(() => {
+        const getVoyages = async () => {
+          const fetchedVoyages = await FetchVoyages();
+          setVoyages(fetchedVoyages);
+          setRefresh(false)
+        }
+
+        getVoyages()
+      }, [refresh])
+
+      function onRefresh () {
+        setRefresh(true)
+      }
+    
     if (loading) {
-      return <div>{null}</div>; // Tela de carregamento enquanto verifica o token
+      return <div>{null}</div>; 
     }
 
     async function handleDelete(voyage_id: number) {
@@ -78,6 +93,7 @@ export default function Register_vessel() {
         if (response.status === 200) {
           window.alert("Voyage deletado com sucesso");
           setVoyages(voyages.filter(voyage => voyage.id_voyage !== voyage_id));
+          onRefresh()
         }
       } catch {
         window.alert("Erro! Não foi possível deletar o voyage.");
@@ -161,7 +177,7 @@ export default function Register_vessel() {
           </div>
         </div>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <Modal_voyage/>
+        <Modal_voyage onRefresh={onRefresh}/>
         </Modal>
       </div>
     </div>
