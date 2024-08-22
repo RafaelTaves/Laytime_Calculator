@@ -13,7 +13,27 @@ interface Voyages {
 
 interface laytimeProps {
     voyages: Voyages[],
-    vessels: Vessels[]
+    vessels: Vessels[],
+    selectedVoyage: number | null,
+    fromLocation: string,
+    toLocation: string,
+    selectedVessel: number | null,
+    charteres: string,
+    cpDate: string,
+    cpOperation: string,
+    cargoQuantity: number | null,
+    cargoType: string,
+    demurrageRate: number | null,
+    despatchRate: number | null,
+    norType: string,
+    timeVar1: string,
+    timeVar2: string,
+    timeType: string,
+    endweekType: string,
+    assistOption1: string,
+    assistOption2: string,
+    assistOption3: string,
+    setConsts:  (selectedVoyage: number, fromLocation: string, toLocation: string, selectedVessel: number, charteres: string, cpDate: string, cpOperation: string, cargoQuantity: number | null, cargoType: string, demurrageRate: number, despatchRate: number, norType: string, timeVar1: string, timeVar2: string, timeType: string, endweekType: string, assistOption1: string, assistOption2: string, assistOption3: string) => void
 }
 
 interface Vessels {
@@ -23,32 +43,33 @@ interface Vessels {
     id_vessel: number
 }
 
-export default function Laytime_calculation({ voyages, vessels }: laytimeProps) {
-    const [selectedVoyage, setSelectedVoyage] = useState<number | null>(null);
-    const [fromLocation, setFromLocation] = useState<string>("");
-    const [toLocation, setToLocation] = useState<string>("");
-    const [selectedVessel, setSelectedVessel] = useState<number | null>(null)
-    const [charteres, setCharteres] = useState<string>("")
-    const [cpDate, setCpDate] = useState<string>("")
-    const [cpOperation, setOperation] = useState<string>("")
-    const [cargoQuantity, setCargoQuantity] = useState<string>("")
-    const [cargoType, setCargoType] = useState<string>("")
-    const [demurrageRate, setDemurrageRate] = useState<string>("")
-    const [despatchRate, setDespatchRate] = useState<string>("")
-    const [norType, setNorType] = useState<string>("If_NOR_before")
-    const [timeVar1, setTimeVar1] = useState<string>()
-    const [timeVar2, setTimeVar2] = useState<string>()
-    const [timeType, setTimeType] = useState<string>("same_day")
-    const [endweekType, setEndweekType] = useState<string>("sunday")
-    const [assistOption1, setAssistOption1] = useState<string>("laytime_non-reversible")
-    const [assistOption2, setAssistOption2] = useState<string>("Once_on_demurrage_always_on_demurrage")
-    const [assistOption3, setAssistOption3] = useState<string>("Working_time_saved")
+export default function Laytime_calculation({ voyages, vessels, selectedVoyage, fromLocation, toLocation, selectedVessel, charteres, cpDate, cpOperation, cargoQuantity, cargoType, demurrageRate, despatchRate, norType, timeVar1, timeVar2, timeType, endweekType, assistOption1, assistOption2, assistOption3, setConsts}: laytimeProps) {
+    const [NewselectedVoyage, setNewSelectedVoyage] = useState<number | null>(selectedVoyage);
+    const [NewfromLocation, setNewFromLocation] = useState<string>(fromLocation);
+    const [NewtoLocation, setNewToLocation] = useState<string>(toLocation);
+    const [NewselectedVessel, setNewSelectedVessel] = useState<number | null>(selectedVessel)
+    const [Newcharteres, setNewCharteres] = useState<string>(charteres)
+    const [NewcpDate, setNewCpDate] = useState<string>(cpDate)
+    const [NewcpOperation, setNewOperation] = useState<string>(cpOperation)
+    const [NewcargoQuantity, setNewCargoQuantity] = useState<number | null>(cargoQuantity)
+    const [NewcargoType, setNewCargoType] = useState<string>(cargoType)
+    const [NewdemurrageRate, setNewDemurrageRate] = useState<number | null>(demurrageRate)
+    const [NewdespatchRate, setNewDespatchRate] = useState<number | null>(despatchRate)
+    const [NewnorType, setNewNorType] = useState<string>(norType)
+    const [NewtimeVar1, setNewTimeVar1] = useState<string>(timeVar1)
+    const [NewtimeVar2, setNewTimeVar2] = useState<string>(timeVar2)
+    const [NewtimeType, setNewTimeType] = useState<string>(timeType)
+    const [NewendweekType, setNewEndweekType] = useState<string>(endweekType)
+    const [NewassistOption1, setNewAssistOption1] = useState<string>(assistOption1)
+    const [NewassistOption2, setNewAssistOption2] = useState<string>(assistOption2)
+    const [NewassistOption3, setNewAssistOption3] = useState<string>(assistOption3)
 
     const [voyageInput, setVoyageInput] = useState<string>("");
     const [filteredVoyages, setFilteredVoyages] = useState<Voyages[]>(voyages);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
     const [vesselInput, setVesselInput] = useState<string>("");
+    const [filteredVessels, setFilteredVessels] = useState<Vessels[]>(vessels);
     const [showDropdownVessel, setShowDropdownVessel] = useState<boolean>(false);
 
     const [isModalVoyageOpen, setIsModalVoyageOpen] = useState(false);
@@ -60,14 +81,14 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
     const closeModalVessel = () => setIsModalVesselOpen(false);
 
     useEffect(() => {
-        if (selectedVoyage !== null) {
-            const voyage = voyages.find((v) => v.id_voyage === selectedVoyage);
+        if (NewselectedVoyage !== null) {
+            const voyage = voyages.find((v) => v.id_voyage === NewselectedVoyage);
             if (voyage) {
-                setFromLocation(voyage.from_location);
-                setToLocation(voyage.to_location);
+                setNewFromLocation(voyage.from_location);
+                setNewToLocation(voyage.to_location);
             }
         }
-    }, [selectedVoyage, voyages]);
+    }, [NewselectedVoyage, voyages]);
 
     useEffect(() => {
         const filtered = voyages.filter(voyage =>
@@ -77,7 +98,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
     }, [voyageInput, voyages]);
 
     const handleVoyageSelect = (voyage: Voyages) => {
-        setSelectedVoyage(voyage.id_voyage);
+        setNewSelectedVoyage(voyage.id_voyage);
         setVoyageInput(voyage.name);
         setShowDropdown(false);
     };
@@ -90,11 +111,18 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
     };
 
     function handleVesselChange(e: any) {
-        setSelectedVessel(Number(e.target.value))
+        setNewSelectedVessel(Number(e.target.value))
     }
 
+    useEffect(() => {
+        const filtered = vessels.filter(vessel =>
+            vessel.name.toLowerCase().includes(vesselInput.toLowerCase())
+        );
+        setFilteredVessels(filtered);
+    }, [vesselInput, vessels]);
+
     const handleVesselSelect = (vessel: Vessels) => {
-        setSelectedVessel(vessel.id_vessel);
+        setNewSelectedVessel(vessel.id_vessel);
         setVesselInput(vessel.name);
         setShowDropdown(false);
     };
@@ -178,7 +206,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             />
                             {showDropdownVessel && (
                                 <ul className='absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
-                                    {vessels.map((vessel) => (
+                                    {filteredVessels.map((vessel) => (
                                         <li
                                             key={vessel.id_vessel}
                                             onMouseDown={() => handleVesselSelect(vessel)}
@@ -200,7 +228,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Vessel</label>
-                            <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
+                            <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={NewselectedVessel ?? ''}>
                                 <option value={0}>Select a vessel</option>
                                 {vessels.map((vessel) => (
                                     <option key={vessel.id_vessel} value={vessel.id_vessel}>{vessel.name}</option>
@@ -213,8 +241,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="charterers"
                                 name="charterers"
-                                value={charteres}
-                                onChange={(e) => setCharteres(e.target.value)}
+                                value={Newcharteres}
+                                onChange={(e) => setNewCharteres(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -226,8 +254,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="charterers"
                                 name="charterers"
-                                value={charteres}
-                                onChange={(e) => setCharteres(e.target.value)}
+                                value={Newcharteres}
+                                onChange={(e) => setNewCharteres(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -236,7 +264,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="from"
                                 name="from"
-                                value={fromLocation}
+                                value={NewfromLocation}
                                 readOnly
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
                             />
@@ -247,7 +275,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="to"
                                 name="to"
-                                value={toLocation}
+                                value={NewtoLocation}
                                 readOnly
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
                             />
@@ -258,8 +286,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="date"
                                 id="cpDate"
                                 name="cpDate"
-                                value={cpDate}
-                                onChange={(e) => setCpDate(e.target.value)}
+                                value={NewcpDate}
+                                onChange={(e) => setNewCpDate(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -267,8 +295,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="incoterm"
                                 name="incoterm"
-                                value={cpOperation}
-                                onChange={(e) => setOperation(e.target.value)}
+                                value={NewcpOperation}
+                                onChange={(e) => setNewOperation(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="">Select an operation</option>
                                 <option value="discharging">Discharging</option>
@@ -284,7 +312,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="from"
                                 name="from"
-                                value={fromLocation}
+                                value={NewfromLocation}
                                 readOnly
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
                             />
@@ -295,7 +323,7 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="to"
                                 name="to"
-                                value={toLocation}
+                                value={NewtoLocation}
                                 readOnly
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
                             />
@@ -309,8 +337,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="date"
                                 id="cpDate"
                                 name="cpDate"
-                                value={cpDate}
-                                onChange={(e) => setCpDate(e.target.value)}
+                                value={NewcpDate}
+                                onChange={(e) => setNewCpDate(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -318,8 +346,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="incoterm"
                                 name="incoterm"
-                                value={cpOperation}
-                                onChange={(e) => setOperation(e.target.value)}
+                                value={NewcpOperation}
+                                onChange={(e) => setNewOperation(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="">Select an operation</option>
                                 <option value="discharging">Discharging</option>
@@ -335,8 +363,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="cargoQuantity"
                                 name="cargoQuantity"
-                                value={cargoQuantity}
-                                onChange={(e) => setCargoQuantity(e.target.value)}
+                                value={NewcargoQuantity !== null ? NewcargoQuantity : ""}
+                                onChange={(e) => setNewCargoQuantity(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -345,8 +373,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="cargiType"
                                 name="cargiType"
-                                value={cargoType}
-                                onChange={(e) => setCargoType(e.target.value)}
+                                value={NewcargoType}
+                                onChange={(e) => setNewCargoType((e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -358,8 +386,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
-                                value={demurrageRate}
-                                onChange={(e) => setDemurrageRate(e.target.value)}
+                                value={NewdemurrageRate !== null ? NewdemurrageRate : ""}
+                                onChange={(e) => setNewDemurrageRate(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -368,8 +396,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
-                                value={despatchRate}
-                                onChange={(e) => setDespatchRate(e.target.value)}
+                                value={NewdespatchRate !== null ? NewdespatchRate : ""}
+                                onChange={(e) => setNewDespatchRate(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -381,8 +409,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="cargoQuantity"
                                 name="cargoQuantity"
-                                value={cargoQuantity}
-                                onChange={(e) => setCargoQuantity(e.target.value)}
+                                value={NewcargoQuantity !== null ? NewcargoQuantity : ""}
+                                onChange={(e) => setNewCargoQuantity(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -391,8 +419,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="cargiType"
                                 name="cargiType"
-                                value={cargoType}
-                                onChange={(e) => setCargoType(e.target.value)}
+                                value={NewcargoType}
+                                onChange={(e) => setNewCargoType(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -401,8 +429,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
-                                value={demurrageRate}
-                                onChange={(e) => setDemurrageRate(e.target.value)}
+                                value={NewdemurrageRate !== null ? NewdemurrageRate : ""}
+                                onChange={(e) => setNewDemurrageRate(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -411,8 +439,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
-                                value={despatchRate}
-                                onChange={(e) => setDespatchRate(e.target.value)}
+                                value={NewdespatchRate !== null ? NewdespatchRate : ""}
+                                onChange={(e) => setNewDespatchRate(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -422,8 +450,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="norType"
                                 name="norType"
-                                value={norType}
-                                onChange={(e) => setNorType(e.target.value)}
+                                value={NewnorType}
+                                onChange={(e) => setNewNorType(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="If_NOR_before">If NOR before</option>
                                 <option value="If_NOR_after">If NOR after</option>
@@ -436,8 +464,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 id="timeVar1"
                                 name="timeVar1"
                                 placeholder='hh:mm'
-                                value={timeVar1}
-                                onChange={(e) => setTimeVar1(e.target.value)}
+                                value={NewtimeVar1}
+                                onChange={(e) => setNewTimeVar1(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/4 items-center justify-center'>
@@ -449,16 +477,16 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                                 id="timeVar2"
                                 name="timeVar2"
                                 placeholder='hh:mm'
-                                value={timeVar2}
-                                onChange={(e) => setTimeVar2(e.target.value)}
+                                value={NewtimeVar2}
+                                onChange={(e) => setNewTimeVar2(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
                             <select
                                 id="selectClause2"
                                 name="selectClause2"
-                                value={timeType}
-                                onChange={(e) => setTimeType(e.target.value)}
+                                value={NewtimeType}
+                                onChange={(e) => setNewTimeType(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="same_day">Same day</option>
                                 <option value="next_working_day">Next working day</option>
@@ -471,8 +499,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="selectClause3"
                                 name="selectClause3"
-                                value={endweekType}
-                                onChange={(e) => setEndweekType(e.target.value)}
+                                value={NewendweekType}
+                                onChange={(e) => setNewEndweekType(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="sunday">Sunday</option>
                                 <option value="Monday">Monday</option>
@@ -489,8 +517,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="selectClause6"
                                 name="selectClause6"
-                                value={assistOption1}
-                                onChange={(e) => setAssistOption1(e.target.value)}
+                                value={NewassistOption1}
+                                onChange={(e) => setNewAssistOption1(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="laytime_non-reversible">Laytime non-reversible</option>
                                 <option value="laytime_reversible">Laytime reversible</option>
@@ -503,8 +531,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="selectClause3"
                                 name="selectClause3"
-                                value={endweekType}
-                                onChange={(e) => setEndweekType(e.target.value)}
+                                value={NewendweekType}
+                                onChange={(e) => setNewEndweekType(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="sunday">Sunday</option>
                                 <option value="Monday">Monday</option>
@@ -524,8 +552,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="selectClause6"
                                 name="selectClause6"
-                                value={assistOption1}
-                                onChange={(e) => setAssistOption1(e.target.value)}
+                                value={NewassistOption1}
+                                onChange={(e) => setNewAssistOption1(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="laytime_non-reversible">Laytime non-reversible</option>
                                 <option value="laytime_reversible">Laytime reversible</option>
@@ -538,8 +566,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="selectClause7"
                                 name="selectClause7"
-                                value={assistOption2}
-                                onChange={(e) => setAssistOption2(e.target.value)}
+                                value={NewassistOption2}
+                                onChange={(e) => setNewAssistOption2(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
                                 <option value="Once_on_demurrage_not_always_on_demurrage">Once on demurrage not always on demurrage</option>
@@ -549,8 +577,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="selectClause8"
                                 name="selectClause8"
-                                value={assistOption3}
-                                onChange={(e) => setAssistOption3(e.target.value)}
+                                value={NewassistOption3}
+                                onChange={(e) => setNewAssistOption3(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Working_time_saved">Working time saved</option>
                                 <option value="All_time_saved">All time saved</option>
@@ -563,8 +591,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="selectClause7"
                                 name="selectClause7"
-                                value={assistOption2}
-                                onChange={(e) => setAssistOption2(e.target.value)}
+                                value={NewassistOption2}
+                                onChange={(e) => setNewAssistOption2(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
                                 <option value="Once_on_demurrage_not_always_on_demurrage">Once on demurrage not always on demurrage</option>
@@ -577,8 +605,8 @@ export default function Laytime_calculation({ voyages, vessels }: laytimeProps) 
                             <select
                                 id="selectClause8"
                                 name="selectClause8"
-                                value={assistOption3}
-                                onChange={(e) => setAssistOption3(e.target.value)}
+                                value={NewassistOption3}
+                                onChange={(e) => setNewAssistOption3(e.target.value)}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Working_time_saved">Working time saved</option>
                                 <option value="All_time_saved">All time saved</option>
