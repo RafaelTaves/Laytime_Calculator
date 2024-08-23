@@ -20,7 +20,8 @@ interface laytimeProps {
     selectedVessel: number | null,
     charteres: string,
     cpDate: string,
-    cpOperation: string,
+    cpRate: number | null,
+    operation: string,
     cargoQuantity: number | null,
     cargoType: string,
     demurrageRate: number | null,
@@ -33,7 +34,8 @@ interface laytimeProps {
     assistOption1: string,
     assistOption2: string,
     assistOption3: string,
-    setConsts:  (selectedVoyage: number | null, fromLocation: string, toLocation: string, selectedVessel: number | null, charteres: string, cpDate: string, cpOperation: string, cargoQuantity: number | null, cargoType: string, demurrageRate: number | null, despatchRate: number | null, norType: string, timeVar1: string, timeVar2: string, timeType: string, endweekType: string, assistOption1: string, assistOption2: string, assistOption3: string) => void
+    setConsts:  (selectedVoyage: number | null, fromLocation: string, toLocation: string, selectedVessel: number | null, charteres: string, cpDate: string, cpRate: number | null,operation: string, cargoQuantity: number | null, cargoType: string, demurrageRate: number | null, despatchRate: number | null, norType: string, timeVar1: string, timeVar2: string, timeType: string, endweekType: string, assistOption1: string, assistOption2: string, assistOption3: string) => void
+    calcTimeAllowed: () => void
 }
 
 interface Vessels {
@@ -43,14 +45,15 @@ interface Vessels {
     id_vessel: number
 }
 
-export default function Laytime_calculation({ voyages, vessels, selectedVoyage, fromLocation, toLocation, selectedVessel, charteres, cpDate, cpOperation, cargoQuantity, cargoType, demurrageRate, despatchRate, norType, timeVar1, timeVar2, timeType, endweekType, assistOption1, assistOption2, assistOption3, setConsts}: laytimeProps) {
+export default function Laytime_calculation({ voyages, vessels, selectedVoyage, fromLocation, toLocation, selectedVessel, charteres, cpDate, operation, cargoQuantity, cargoType, demurrageRate, despatchRate, norType, timeVar1, timeVar2, timeType, endweekType, assistOption1, assistOption2, assistOption3, setConsts, calcTimeAllowed}: laytimeProps) {
     const [NewselectedVoyage, setNewSelectedVoyage] = useState<number | null>(selectedVoyage);
     const [NewfromLocation, setNewFromLocation] = useState<string>(fromLocation);
     const [NewtoLocation, setNewToLocation] = useState<string>(toLocation);
     const [NewselectedVessel, setNewSelectedVessel] = useState<number | null>(selectedVessel)
     const [Newcharteres, setNewCharteres] = useState<string>(charteres)
     const [NewcpDate, setNewCpDate] = useState<string>(cpDate)
-    const [NewcpOperation, setNewOperation] = useState<string>(cpOperation)
+    const [NewcpRate, setNewCpRate] = useState<number | null>(null)
+    const [Newoperation, setNewOperation] = useState<string>(operation)
     const [NewcargoQuantity, setNewCargoQuantity] = useState<number | null>(cargoQuantity)
     const [NewcargoType, setNewCargoType] = useState<string>(cargoType)
     const [NewdemurrageRate, setNewDemurrageRate] = useState<number | null>(demurrageRate)
@@ -129,9 +132,16 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
 
     function onRefresh () {}
 
-    function handleChangeToSetConsts () {
-        setConsts(NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpOperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3)
-    }
+    useEffect(() => {
+        console.log("cp rate " + NewcpRate)
+        setConsts(NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpRate, Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3)
+
+    }, 
+    [ NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3])
+
+    useEffect(() => {
+        calcTimeAllowed()
+    }, [NewcargoQuantity, NewcpRate])
 
     return (
         <>
@@ -174,7 +184,6 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={voyageInput}
                                 onChange={(e) => {
                                     setVoyageInput(e.target.value); 
-                                    handleChangeToSetConsts()
                                 }}
                                 onFocus={() => setShowDropdown(true)}
                                 onBlur={handleBlur}
@@ -207,7 +216,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={vesselInput}
                                 onChange={(e) => {
                                     setVesselInput(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 onFocus={() => setShowDropdownVessel(true)}
                                 onBlur={handleBlur}
@@ -254,7 +263,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={Newcharteres}
                                 onChange={(e) => {
                                     setNewCharteres(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -270,7 +279,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={Newcharteres}
                                 onChange={(e) => {
                                     setNewCharteres(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -305,7 +314,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewcpDate}
                                 onChange={(e) => {
                                     setNewCpDate(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -314,10 +323,10 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="incoterm"
                                 name="incoterm"
-                                value={NewcpOperation}
+                                value={Newoperation}
                                 onChange={(e) => {
                                     setNewOperation(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="">Select an operation</option>
@@ -362,7 +371,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewcpDate}
                                 onChange={(e) => {
                                     setNewCpDate(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -371,10 +380,10 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="incoterm"
                                 name="incoterm"
-                                value={NewcpOperation}
+                                value={Newoperation}
                                 onChange={(e) => {
                                     setNewOperation(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="">Select an operation</option>
@@ -394,7 +403,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewcargoQuantity !== null ? NewcargoQuantity : ""}
                                 onChange={(e) => {
                                     setNewCargoQuantity(Number(e.target.value))
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -407,7 +416,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewcargoType}
                                 onChange={(e) => {
                                     setNewCargoType((e.target.value))
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -423,7 +432,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewdemurrageRate !== null ? NewdemurrageRate : ""}
                                 onChange={(e) => {
                                     setNewDemurrageRate(Number(e.target.value))
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -436,7 +445,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewdespatchRate !== null ? NewdespatchRate : ""}
                                 onChange={(e) => {
                                     setNewDespatchRate(Number(e.target.value))
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -452,7 +461,20 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewcargoQuantity !== null ? NewcargoQuantity : ""}
                                 onChange={(e) => {
                                     setNewCargoQuantity(Number(e.target.value))
-                                    handleChangeToSetConsts()
+                                    
+                                }}
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
+                        </div>
+                        <div className='flex flex-col w-1/2'>
+                            <label htmlFor="cpRate" className='text-md font-Jost font-semibold text-black'>C/P Rate (t/day)</label>
+                            <input
+                                type="text"
+                                id="cpRate"
+                                name="cpRate"
+                                value={NewcpRate !== null ? NewcpRate : ""}
+                                onChange={(e) => {
+                                    setNewCpRate(Number(e.target.value))
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -465,7 +487,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewcargoType}
                                 onChange={(e) => {
                                     setNewCargoType(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -478,7 +500,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewdemurrageRate !== null ? NewdemurrageRate : ""}
                                 onChange={(e) => {
                                     setNewDemurrageRate(Number(e.target.value))
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -491,7 +513,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewdespatchRate !== null ? NewdespatchRate : ""}
                                 onChange={(e) => {
                                     setNewDespatchRate(Number(e.target.value))
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -505,7 +527,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewnorType}
                                 onChange={(e) => {
                                     setNewNorType(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="If_NOR_before">If NOR before</option>
@@ -522,7 +544,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewtimeVar1}
                                 onChange={(e) => {
                                     setNewTimeVar1(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -538,7 +560,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewtimeVar2}
                                 onChange={(e) => {
                                     setNewTimeVar2(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
@@ -549,7 +571,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewtimeType}
                                 onChange={(e) => {
                                     setNewTimeType(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="same_day">Same day</option>
@@ -566,7 +588,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewendweekType}
                                 onChange={(e) => {
                                     setNewEndweekType(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="sunday">Sunday</option>
@@ -587,7 +609,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewassistOption1}
                                 onChange={(e) => {
                                     setNewAssistOption1(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="laytime_non-reversible">Laytime non-reversible</option>
@@ -604,7 +626,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewendweekType}
                                 onChange={(e) => {
                                     setNewEndweekType(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="sunday">Sunday</option>
@@ -628,7 +650,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewassistOption1}
                                 onChange={(e) => {
                                     setNewAssistOption1(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="laytime_non-reversible">Laytime non-reversible</option>
@@ -645,7 +667,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewassistOption2}
                                 onChange={(e) => {
                                     setNewAssistOption2(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
@@ -659,7 +681,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewassistOption3}
                                 onChange={(e) => {
                                     setNewAssistOption3(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Working_time_saved">Working time saved</option>
@@ -676,7 +698,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewassistOption2}
                                 onChange={(e) => {
                                     setNewAssistOption2(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
@@ -693,7 +715,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 value={NewassistOption3}
                                 onChange={(e) => {
                                     setNewAssistOption3(e.target.value)
-                                    handleChangeToSetConsts()
+                                    
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Working_time_saved">Working time saved</option>

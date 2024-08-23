@@ -37,7 +37,8 @@ export default function Laytime() {
   const [selectedVessel, setSelectedVessel] = useState<number | null>(null)
   const [charteres, setCharteres] = useState<string>("")
   const [cpDate, setCpDate] = useState<string>("")
-  const [cpOperation, setOperation] = useState<string>("")
+  const [cpRate, setCpRate] = useState<number | null>(null)
+  const [operation, setOperation] = useState<string>("")
   const [cargoQuantity, setCargoQuantity] = useState<number | null>(null)
   const [cargoType, setCargoType] = useState<string>("")
   const [demurrageRate, setDemurrageRate] = useState<number | null>(null)
@@ -50,6 +51,9 @@ export default function Laytime() {
   const [assistOption1, setAssistOption1] = useState<string>("laytime_non-reversible")
   const [assistOption2, setAssistOption2] = useState<string>("Once_on_demurrage_always_on_demurrage")
   const [assistOption3, setAssistOption3] = useState<string>("Working_time_saved")
+
+  // math consts
+  const [timeAllowed, setTimeAllowed] = useState<number | null>(null)
 
   useEffect(() => {
     const verifyToken = async () => { 
@@ -92,10 +96,6 @@ export default function Laytime() {
 
   // Funções para resgatar dados inseridos por usuario e calcular laytime
 
-  const handleButtonClick = () => {
-    console.log(selectedVoyage + "" + fromLocation + "" + toLocation + "" + selectedVessel + "" + charteres + "" + cpDate + "" + cpOperation + "" + cargoQuantity + "" + cargoType + "" + demurrageRate + "" + despatchRate)
-  };
-
   function setConsts (
     selectedVoyage: number | null, 
     fromLocation: string, 
@@ -103,7 +103,8 @@ export default function Laytime() {
     selectedVessel: number | null, 
     charteres: string, 
     cpDate: string, 
-    cpOperation: string, 
+    cpRate: number | null,
+    operation: string, 
     cargoQuantity: number | null, 
     cargoType: string, 
     demurrageRate: number | null, 
@@ -123,7 +124,8 @@ export default function Laytime() {
     setSelectedVessel(selectedVessel)
     setCharteres(charteres)
     setCpDate(cpDate)
-    setOperation(cpOperation)
+    setCpRate(cpRate)
+    setOperation(operation)
     setCargoQuantity(cargoQuantity)
     setCargoType(cargoType)
     setDemurrageRate(demurrageRate)
@@ -138,6 +140,22 @@ export default function Laytime() {
     setAssistOption3(assistOption3)
   }
   
+  function calcTimeAllowed() {
+    console.log(cargoQuantity, cpRate)
+    if (cargoQuantity !== null && cpRate !== null) {
+        const x = cargoQuantity / cpRate;
+        setTimeAllowed(x);
+    } else {
+        console.log("else")
+        setTimeAllowed(0); 
+    }
+    console.log(timeAllowed)
+  }
+
+  const handleButtonClick = () => {
+  };
+
+  
     return(
         <>
         <Header onButtonClick={handleButtonClick}/>
@@ -151,7 +169,8 @@ export default function Laytime() {
             selectedVessel={selectedVessel}
             charteres={charteres}
             cpDate={cpDate}
-            cpOperation={cpOperation}
+            cpRate={cpRate}
+            operation={operation}
             cargoQuantity={cargoQuantity}
             cargoType={cargoType}
             demurrageRate={demurrageRate}
@@ -165,6 +184,7 @@ export default function Laytime() {
             assistOption2={assistOption2}
             assistOption3={assistOption3}
             setConsts={setConsts}
+            calcTimeAllowed={calcTimeAllowed}
             />
             <TableNOR/>
             <TableRemark/>
