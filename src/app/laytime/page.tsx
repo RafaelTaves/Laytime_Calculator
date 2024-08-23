@@ -92,35 +92,31 @@ export default function Laytime() {
 
   // Funções para resgatar dados inseridos por usuario e calcular laytime
 
-  const [inputData, setInputData] = useState({
-    selectedVoyage: null,
-    fromLocation: "",
-    toLocation: "",
-    selectedVessel: null,
-    charteres: "",
-    cpDate: "",
-    cpOperation: "",
-    cargoQuantity: null,
-    cargoType: "",
-    demurrageRate: null,
-    despatchRate: null,
-    norType: "If_NOR_before",
-    timeVar1: "",
-    timeVar2: "",
-    timeType: "same_day",
-    endweekType: "sunday",
-    assistOption1: "laytime_non-reversible",
-    assistOption2: "Once_on_demurrage_always_on_demurrage",
-    assistOption3: "Working_time_saved"
-  });
-
   const handleButtonClick = () => {
-    setConsts(inputData.selectedVoyage, inputData.fromLocation, inputData.toLocation, inputData.selectedVessel, inputData.charteres, inputData.cpDate, inputData.cpOperation, inputData.cargoQuantity, inputData.cargoType, inputData.demurrageRate, inputData.despatchRate, inputData.norType, inputData.timeVar1, inputData.timeVar2, inputData.timeType, inputData.endweekType, inputData.assistOption1, inputData.assistOption2, inputData.assistOption3)
-   console.log('Dados atuais:', inputData);
-  // Sua lógica com inputData
+    console.log(selectedVoyage + "" + fromLocation + "" + toLocation + "" + selectedVessel + "" + charteres + "" + cpDate + "" + cpOperation + "" + cargoQuantity + "" + cargoType + "" + demurrageRate + "" + despatchRate)
   };
 
-  function setConsts (selectedVoyage: number | null, fromLocation: string, toLocation: string, selectedVessel: number | null, charteres: string, cpDate: string, cpOperation: string, cargoQuantity: number | null, cargoType: string, demurrageRate: number | null, despatchRate: number | null, norType: string, timeVar1: string, timeVar2: string, timeType: string, endweekType: string, assistOption1: string, assistOption2: string, assistOption3: string) {
+  function setConsts (
+    selectedVoyage: number | null, 
+    fromLocation: string, 
+    toLocation: string, 
+    selectedVessel: number | null, 
+    charteres: string, 
+    cpDate: string, 
+    cpOperation: string, 
+    cargoQuantity: number | null, 
+    cargoType: string, 
+    demurrageRate: number | null, 
+    despatchRate: number | null, 
+    norType: string, 
+    timeVar1: string, 
+    timeVar2: string, 
+    timeType: string, 
+    endweekType: string, 
+    assistOption1: string, 
+    assistOption2: string, 
+    assistOption3: string ) 
+    {
     setSelectedVoyage(selectedVoyage)
     setFromLocation(fromLocation)
     setToLocation(toLocation)
@@ -144,7 +140,7 @@ export default function Laytime() {
   
     return(
         <>
-        <Header />
+        <Header onButtonClick={handleButtonClick}/>
         <div className="bg-gray-200 w-full h-full">
             <Laytime_calculation 
             voyages={voyages} 

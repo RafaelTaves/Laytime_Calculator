@@ -4,8 +4,11 @@ import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation';
 
+interface headerProps {
+  onButtonClick: () => void
+}
 
-export default function Header() {
+export default function Header({onButtonClick}: headerProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter();
 
@@ -32,9 +35,9 @@ export default function Header() {
           </button>
         </div>
         <div className="hidden lg:flex lg:gap-x-6">
-            <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+            <button onClick={onButtonClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Save
-            </a>
+            </button>
             <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Save new
             </a>
