@@ -25,6 +25,16 @@ interface Vessel {
   id_vessel: number
 }
 
+interface TableRow {
+  date: string;
+  from: string;
+  to: string;
+  percentCount: string;
+  remarks: string;
+  timeUsed: string;
+  totalTime: string;
+}
+
 export default function Laytime() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -52,6 +62,9 @@ export default function Laytime() {
   const [assistOption2, setAssistOption2] = useState<string>("Once_on_demurrage_always_on_demurrage")
   const [assistOption3, setAssistOption3] = useState<string>("Working_time_saved")
 
+  const [rows, setRows] = useState<TableRow[]>([
+    { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '0:00 (0 days)', totalTime: '0:00 (0 days)' }
+  ]);
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<number | null>(null)
 
@@ -141,18 +154,19 @@ export default function Laytime() {
   }
   
   function calcTimeAllowed() {
-    console.log(cargoQuantity, cpRate)
     if (cargoQuantity !== null && cpRate !== null) {
         const x = cargoQuantity / cpRate;
-        setTimeAllowed(x);
+        const roundedX = parseFloat(x.toFixed(2));
+        setTimeAllowed(roundedX);
     } else {
         console.log("else")
         setTimeAllowed(0); 
     }
-    console.log(timeAllowed)
   }
 
   const handleButtonClick = () => {
+    calcTimeAllowed()
+    console.log(rows)
   };
 
   
@@ -184,11 +198,15 @@ export default function Laytime() {
             assistOption2={assistOption2}
             assistOption3={assistOption3}
             setConsts={setConsts}
-            calcTimeAllowed={calcTimeAllowed}
             />
             <TableNOR/>
-            <TableRemark/>
-            <Total/>
+            <TableRemark
+            rows={rows}
+            setRows={setRows}
+            />
+            <Total
+            timeAllowed={timeAllowed}
+            />
             <Notepad/>
         </div>
         </>

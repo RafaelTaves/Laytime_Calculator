@@ -36,10 +36,10 @@ export default function Header({onButtonClick}: headerProps) {
         </div>
         <div className="hidden lg:flex lg:gap-x-6">
             <button onClick={onButtonClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
-              Save
+              Calculate
             </button>
             <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
-              Save new
+              Save 
             </a>
             <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Print

@@ -105,7 +105,7 @@ export default function Register_vessel() {
     }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="px-4 sm:px-6 lg:px-8 bg-white">
       <div className="sm:flex sm:items-center mt-10">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">Vessels</h1>

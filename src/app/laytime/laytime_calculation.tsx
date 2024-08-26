@@ -35,7 +35,6 @@ interface laytimeProps {
     assistOption2: string,
     assistOption3: string,
     setConsts:  (selectedVoyage: number | null, fromLocation: string, toLocation: string, selectedVessel: number | null, charteres: string, cpDate: string, cpRate: number | null,operation: string, cargoQuantity: number | null, cargoType: string, demurrageRate: number | null, despatchRate: number | null, norType: string, timeVar1: string, timeVar2: string, timeType: string, endweekType: string, assistOption1: string, assistOption2: string, assistOption3: string) => void
-    calcTimeAllowed: () => void
 }
 
 interface Vessels {
@@ -45,7 +44,7 @@ interface Vessels {
     id_vessel: number
 }
 
-export default function Laytime_calculation({ voyages, vessels, selectedVoyage, fromLocation, toLocation, selectedVessel, charteres, cpDate, operation, cargoQuantity, cargoType, demurrageRate, despatchRate, norType, timeVar1, timeVar2, timeType, endweekType, assistOption1, assistOption2, assistOption3, setConsts, calcTimeAllowed}: laytimeProps) {
+export default function Laytime_calculation({ voyages, vessels, selectedVoyage, fromLocation, toLocation, selectedVessel, charteres, cpDate, operation, cargoQuantity, cargoType, demurrageRate, despatchRate, norType, timeVar1, timeVar2, timeType, endweekType, assistOption1, assistOption2, assistOption3, setConsts}: laytimeProps) {
     const [NewselectedVoyage, setNewSelectedVoyage] = useState<number | null>(selectedVoyage);
     const [NewfromLocation, setNewFromLocation] = useState<string>(fromLocation);
     const [NewtoLocation, setNewToLocation] = useState<string>(toLocation);
@@ -133,15 +132,10 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
     function onRefresh () {}
 
     useEffect(() => {
-        console.log("cp rate " + NewcpRate)
         setConsts(NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpRate, Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3)
 
     }, 
-    [ NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3])
-
-    useEffect(() => {
-        calcTimeAllowed()
-    }, [NewcargoQuantity, NewcpRate])
+    [ NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpRate,Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3])
 
     return (
         <>
@@ -191,7 +185,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 placeholder="Type to search voyages"
                             />
                             {showDropdown && (
-                                <ul className='absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                <ul className='text-black absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
                                     {filteredVoyages.map((voyage) => (
                                         <li
                                             key={voyage.id_voyage}
@@ -224,7 +218,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 placeholder="Type to search vessels"
                             />
                             {showDropdownVessel && (
-                                <ul className='absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                <ul className='text-black absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
                                     {filteredVessels.map((vessel) => (
                                         <li
                                             key={vessel.id_vessel}
