@@ -18,11 +18,11 @@ interface RemarkProps {
 
 export default function TableRemark ({rows, setRows}: RemarkProps) {
   const [childRows, setChildRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '0:00 (0 days)', totalTime: '0:00 (0 days)' }
+    { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
   ]);
 
   const addRow = () => {
-    setChildRows([...childRows, { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '0:00 (0 days)', totalTime: '0:00 (0 days)' }]);
+    setChildRows([...childRows, { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '(0 days) 0:00', totalTime: '(0 days) 0:00' }]);
   };
 
   const removeRow = (index: number) => {
@@ -51,7 +51,7 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
     const remainingMinutes = minutes % 1440;
     const hours = Math.floor(remainingMinutes / 60);
     const mins = remainingMinutes % 60;
-    return `${hours}:${mins.toString().padStart(2, '0')} (${days} days)`;
+    return `(${days} days) ${hours}:${mins.toString().padStart(2, '0')}`;
   };
 
   const updateRows = (newRows: TableRow[]) => {

@@ -63,10 +63,11 @@ export default function Laytime() {
   const [assistOption3, setAssistOption3] = useState<string>("Working_time_saved")
 
   const [rows, setRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '0:00 (0 days)', totalTime: '0:00 (0 days)' }
+    { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
   ]);
   // math consts
-  const [timeAllowed, setTimeAllowed] = useState<number | null>(null)
+  const [timeAllowed, setTimeAllowed] = useState<string>("")
+  const lastTimeUsed = rows.length > 0 ? rows[rows.length - 1].timeUsed : '(0 days) 0:00';
 
   useEffect(() => {
     const verifyToken = async () => { 
@@ -153,14 +154,29 @@ export default function Laytime() {
     setAssistOption3(assistOption3)
   }
   
+  // Funções para o calculo matematico
+
+  function convertDecimalDaysToString(decimalDays: number) {
+    const days = Math.floor(decimalDays); 
+    const decimalPart = decimalDays - days; 
+  
+    
+    const totalMinutes = Math.round(decimalPart * 24 * 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+  
+    return `(${days} days) ${hours}:${minutes.toString().padStart(2, '0')}`;
+  }
+
   function calcTimeAllowed() {
     if (cargoQuantity !== null && cpRate !== null) {
-        const x = cargoQuantity / cpRate;
-        const roundedX = parseFloat(x.toFixed(2));
-        setTimeAllowed(roundedX);
+      const x = cargoQuantity / cpRate;
+      const roundedX = parseFloat(x.toFixed(2));
+      const timeAllowedString = convertDecimalDaysToString(roundedX);
+      setTimeAllowed(timeAllowedString); 
     } else {
-        console.log("else")
-        setTimeAllowed(0); 
+      console.log("else");
+      setTimeAllowed("(0 days) 0:00"); 
     }
   }
 
@@ -206,6 +222,9 @@ export default function Laytime() {
             />
             <Total
             timeAllowed={timeAllowed}
+            timeUsed={lastTimeUsed}
+            demurrageRate={demurrageRate}
+            despatchRate={despatchRate}
             />
             <Notepad/>
         </div>
