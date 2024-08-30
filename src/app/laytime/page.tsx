@@ -159,8 +159,7 @@ export default function Laytime() {
   function convertDecimalDaysToString(decimalDays: number) {
     const days = Math.floor(decimalDays); 
     const decimalPart = decimalDays - days; 
-  
-    
+
     const totalMinutes = Math.round(decimalPart * 24 * 60);
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
@@ -182,7 +181,7 @@ export default function Laytime() {
 
   const handleButtonClick = () => {
     calcTimeAllowed()
-    console.log(rows)
+    console.log(despatchRate)
   };
 
   

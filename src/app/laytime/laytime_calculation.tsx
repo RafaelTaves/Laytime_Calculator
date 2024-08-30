@@ -56,9 +56,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
     const [NewcargoQuantity, setNewCargoQuantity] = useState<number | null>(cargoQuantity)
     const [NewcargoType, setNewCargoType] = useState<string>(cargoType)
     const [NewdemurrageRate, setNewDemurrageRate] = useState<number>(demurrageRate)
-    const [NewStringdemurrageRate, setNewStringDemurrageRate] = useState<string>("")
+    const [NewDisplaydemurrageRate, setNewDisplayDemurrageRate] = useState<string>("$ 0.00")
     const [NewdespatchRate, setNewDespatchRate] = useState<number>(despatchRate)
-    const [NewStringdespatchRate, setNewStringDespatchRate] = useState<string>("")
+    const [NewDisplaydespatchRate, setNewDisplayDespatchRate] = useState<string>("$ 0.00")
     const [NewnorType, setNewNorType] = useState<string>(norType)
     const [NewtimeVar1, setNewTimeVar1] = useState<string>(timeVar1)
     const [NewtimeVar2, setNewTimeVar2] = useState<string>(timeVar2)
@@ -139,28 +139,33 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
     }, 
     [ NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpRate,Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3])
 
-    const handleDespatchRateChange = (e: any) => {
-        let inputValue = e.target.value.replace(/[^0-9.]/g, '');
-        setNewDespatchRate(inputValue)
-    
-        const formattedValue = new Intl.NumberFormat('en-US', {
+    const formatCurrency = (value: number) => {
+        return new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD',
-        }).format(parseFloat(inputValue || '0'));
-    
-        setNewStringDespatchRate(formattedValue);
+        }).format(value);
     };
 
-    const handleDemurrageRateChange = (e: any) => {
-        let inputValue = e.target.value.replace(/[^0-9.]/g, '');
+    const handleDespatchInputChange = (e: any) => {
+        const inputValue = e.target.value.replace(/[^0-9.]/g, ''); 
+        setNewDespatchRate(inputValue)
+        const [integerPart, decimalPart] = inputValue.split('.');
+    
+        const formattedDecimal = decimalPart ? decimalPart.slice(0, 2) : '00';
+
+        const formattedValue = `$ ${integerPart || '0'}.${formattedDecimal}`;
+        setNewDisplayDespatchRate(formattedValue);
+    };
+
+    const handleDemurrageInputChange = (e: any) => {
+        const inputValue = e.target.value.replace(/[^0-9.]/g, ''); 
         setNewDemurrageRate(inputValue)
+        const [integerPart, decimalPart] = inputValue.split('.');
     
-        const formattedValue = new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(parseFloat(inputValue || '0'));
-    
-        setNewStringDemurrageRate(formattedValue);
+        const formattedDecimal = decimalPart ? decimalPart.slice(0, 2) : '00';
+
+        const formattedValue = `$ ${integerPart || '0'}.${formattedDecimal}`;
+        setNewDisplayDemurrageRate(formattedValue);
     };
 
     return (
@@ -449,8 +454,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
-                                value={NewStringdemurrageRate}
-                                onChange={handleDemurrageRateChange}
+                                value={NewdemurrageRate}
+                                onChange={(e) => setNewDemurrageRate(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -459,8 +464,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
-                                value={NewStringdespatchRate}
-                                onChange={handleDespatchRateChange}
+                                value={NewdespatchRate}
+                                onChange={(e) => setNewDespatchRate(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -511,8 +516,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
-                                value={NewStringdemurrageRate}
-                                onChange={handleDemurrageRateChange}
+                                value={NewDisplaydemurrageRate}
+                                onChange={handleDespatchInputChange}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -521,8 +526,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
-                                value={NewStringdespatchRate}
-                                onChange={handleDespatchRateChange}
+                                value={NewDisplaydespatchRate}
+                                onChange={handleDespatchInputChange}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -627,6 +632,20 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 <option value="laytime_reversible">Laytime reversible</option>
                             </select>
                         </div>
+                        <div className='flex flex-col w-full'>
+                            <select
+                                id="selectClause7"
+                                name="selectClause7"
+                                value={NewassistOption2}
+                                onChange={(e) => {
+                                    setNewAssistOption2(e.target.value)
+                                    
+                                }}
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
+                                <option value="Once_on_demurrage_not_always_on_demurrage">Once on demurrage not always on demurrage</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
@@ -672,37 +691,6 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6'>
-                        <div className='flex flex-col w-full'>
-                            <select
-                                id="selectClause7"
-                                name="selectClause7"
-                                value={NewassistOption2}
-                                onChange={(e) => {
-                                    setNewAssistOption2(e.target.value)
-                                    
-                                }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
-                                <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
-                                <option value="Once_on_demurrage_not_always_on_demurrage">Once on demurrage not always on demurrage</option>
-                            </select>
-                        </div>
-                        <div className='flex flex-col w-full'>
-                            <select
-                                id="selectClause8"
-                                name="selectClause8"
-                                value={NewassistOption3}
-                                onChange={(e) => {
-                                    setNewAssistOption3(e.target.value)
-                                    
-                                }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
-                                <option value="Working_time_saved">Working time saved</option>
-                                <option value="All_time_saved">All time saved</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
                         <div className='flex flex-col w-full'>
                             <select
@@ -716,23 +704,6 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
                                 <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
                                 <option value="Once_on_demurrage_not_always_on_demurrage">Once on demurrage not always on demurrage</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
-                        <div className='flex flex-col w-full'>
-                            <select
-                                id="selectClause8"
-                                name="selectClause8"
-                                value={NewassistOption3}
-                                onChange={(e) => {
-                                    setNewAssistOption3(e.target.value)
-                                    
-                                }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
-                                <option value="Working_time_saved">Working time saved</option>
-                                <option value="All_time_saved">All time saved</option>
                             </select>
                         </div>
                     </div>
