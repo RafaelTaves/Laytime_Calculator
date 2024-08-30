@@ -24,8 +24,8 @@ interface laytimeProps {
     operation: string,
     cargoQuantity: number | null,
     cargoType: string,
-    demurrageRate: number | null,
-    despatchRate: number | null,
+    demurrageRate: number,
+    despatchRate: number,
     norType: string,
     timeVar1: string,
     timeVar2: string,
@@ -34,7 +34,7 @@ interface laytimeProps {
     assistOption1: string,
     assistOption2: string,
     assistOption3: string,
-    setConsts:  (selectedVoyage: number | null, fromLocation: string, toLocation: string, selectedVessel: number | null, charteres: string, cpDate: string, cpRate: number | null,operation: string, cargoQuantity: number | null, cargoType: string, demurrageRate: number | null, despatchRate: number | null, norType: string, timeVar1: string, timeVar2: string, timeType: string, endweekType: string, assistOption1: string, assistOption2: string, assistOption3: string) => void
+    setConsts:  (selectedVoyage: number | null, fromLocation: string, toLocation: string, selectedVessel: number | null, charteres: string, cpDate: string, cpRate: number | null,operation: string, cargoQuantity: number | null, cargoType: string, demurrageRate: number, despatchRate: number, norType: string, timeVar1: string, timeVar2: string, timeType: string, endweekType: string, assistOption1: string, assistOption2: string, assistOption3: string) => void
 }
 
 interface Vessels {
@@ -55,8 +55,10 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
     const [Newoperation, setNewOperation] = useState<string>(operation)
     const [NewcargoQuantity, setNewCargoQuantity] = useState<number | null>(cargoQuantity)
     const [NewcargoType, setNewCargoType] = useState<string>(cargoType)
-    const [NewdemurrageRate, setNewDemurrageRate] = useState<number | null>(demurrageRate)
-    const [NewdespatchRate, setNewDespatchRate] = useState<number | null>(despatchRate)
+    const [NewdemurrageRate, setNewDemurrageRate] = useState<number>(demurrageRate)
+    const [NewStringdemurrageRate, setNewStringDemurrageRate] = useState<string>("")
+    const [NewdespatchRate, setNewDespatchRate] = useState<number>(despatchRate)
+    const [NewStringdespatchRate, setNewStringDespatchRate] = useState<string>("")
     const [NewnorType, setNewNorType] = useState<string>(norType)
     const [NewtimeVar1, setNewTimeVar1] = useState<string>(timeVar1)
     const [NewtimeVar2, setNewTimeVar2] = useState<string>(timeVar2)
@@ -136,6 +138,30 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
 
     }, 
     [ NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpRate,Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3])
+
+    const handleDespatchRateChange = (e: any) => {
+        let inputValue = e.target.value.replace(/[^0-9.]/g, '');
+        setNewDespatchRate(inputValue)
+    
+        const formattedValue = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(parseFloat(inputValue || '0'));
+    
+        setNewStringDespatchRate(formattedValue);
+    };
+
+    const handleDemurrageRateChange = (e: any) => {
+        let inputValue = e.target.value.replace(/[^0-9.]/g, '');
+        setNewDemurrageRate(inputValue)
+    
+        const formattedValue = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+        }).format(parseFloat(inputValue || '0'));
+    
+        setNewStringDemurrageRate(formattedValue);
+    };
 
     return (
         <>
@@ -423,11 +449,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
-                                value={NewdemurrageRate !== null ? NewdemurrageRate : ""}
-                                onChange={(e) => {
-                                    setNewDemurrageRate(Number(e.target.value))
-                                    
-                                }}
+                                value={NewStringdemurrageRate}
+                                onChange={handleDemurrageRateChange}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -436,11 +459,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
-                                value={NewdespatchRate !== null ? NewdespatchRate : ""}
-                                onChange={(e) => {
-                                    setNewDespatchRate(Number(e.target.value))
-                                    
-                                }}
+                                value={NewStringdespatchRate}
+                                onChange={handleDespatchRateChange}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -491,11 +511,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
-                                value={NewdemurrageRate !== null ? NewdemurrageRate : ""}
-                                onChange={(e) => {
-                                    setNewDemurrageRate(Number(e.target.value))
-                                    
-                                }}
+                                value={NewStringdemurrageRate}
+                                onChange={handleDemurrageRateChange}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -504,11 +521,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
-                                value={NewdespatchRate !== null ? NewdespatchRate : ""}
-                                onChange={(e) => {
-                                    setNewDespatchRate(Number(e.target.value))
-                                    
-                                }}
+                                value={NewStringdespatchRate}
+                                onChange={handleDespatchRateChange}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -568,8 +582,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                     
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
-                                <option value="same_day">Same day</option>
-                                <option value="next_working_day">Next working day</option>
+                                <option value="same day">Same day</option>
+                                <option value="next working day">Next working day</option>
+                                <option value="hours after NOR">Hour after NOR (TT)</option>
                             </select>
                         </div>
                     </div>
@@ -594,6 +609,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 <option value="saturday">Saturday</option>
                                 <option value="shinc">Shinc</option>
                                 <option value="fhinc">Fhinc</option>
+                                <option value="shex">Shex</option>
+                                <option value="Fhex">Fhex</option>
                             </select>
                         </div>
                         <div className='flex flex-col w-full'>
@@ -632,6 +649,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 <option value="saturday">Saturday</option>
                                 <option value="shinc">Shinc</option>
                                 <option value="fhinc">Fhinc</option>
+                                <option value="shex">Shex</option>
+                                <option value="Fhex">Fhex</option>
                             </select>
                         </div>
                     </div>

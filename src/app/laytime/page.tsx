@@ -51,8 +51,8 @@ export default function Laytime() {
   const [operation, setOperation] = useState<string>("")
   const [cargoQuantity, setCargoQuantity] = useState<number | null>(null)
   const [cargoType, setCargoType] = useState<string>("")
-  const [demurrageRate, setDemurrageRate] = useState<number | null>(null)
-  const [despatchRate, setDespatchRate] = useState<number | null>(null)
+  const [demurrageRate, setDemurrageRate] = useState<number>(0)
+  const [despatchRate, setDespatchRate] = useState<number>(0)
   const [norType, setNorType] = useState<string>("If_NOR_before")
   const [timeVar1, setTimeVar1] = useState<string>("")
   const [timeVar2, setTimeVar2] = useState<string>("")
@@ -121,8 +121,8 @@ export default function Laytime() {
     operation: string, 
     cargoQuantity: number | null, 
     cargoType: string, 
-    demurrageRate: number | null, 
-    despatchRate: number | null, 
+    demurrageRate: number, 
+    despatchRate: number, 
     norType: string, 
     timeVar1: string, 
     timeVar2: string, 
