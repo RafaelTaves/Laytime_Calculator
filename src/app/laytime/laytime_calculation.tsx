@@ -517,7 +517,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 id="demurrageRate"
                                 name="demurrageRate"
                                 value={NewDisplaydemurrageRate}
-                                onChange={handleDespatchInputChange}
+                                onChange={handleDemurrageInputChange}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -543,9 +543,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                     
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
-                                <option value="If_NOR_before">If NOR before</option>
-                                <option value="If_NOR_after">If NOR after</option>
-                                <option value="If_NOR_on">If NOR on</option>
+                                <option value="If NOR before">If NOR before</option>
+                                <option value="If NOR after">If NOR after</option>
+                                <option value="If NOR on">If NOR on</option>
                             </select>
                         </div>
                         <div className='flex flex-col w-1/4'>
@@ -605,6 +605,10 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                     
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                <option value="shinc">Shinc</option>
+                                <option value="fhinc">Fhinc</option>
+                                <option value="shex">Shex</option>
+                                <option value="Fhex">Fhex</option>
                                 <option value="sunday">Sunday</option>
                                 <option value="Monday">Monday</option>
                                 <option value="Tuesday">Tuesday</option>
@@ -612,10 +616,6 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 <option value="thursday">Thursday</option>
                                 <option value="friday">Friday</option>
                                 <option value="saturday">Saturday</option>
-                                <option value="shinc">Shinc</option>
-                                <option value="fhinc">Fhinc</option>
-                                <option value="shex">Shex</option>
-                                <option value="Fhex">Fhex</option>
                             </select>
                         </div>
                         <div className='flex flex-col w-full'>

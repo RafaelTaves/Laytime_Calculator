@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import Header from "./header";
 import Laytime_calculation from "./laytime_calculation";
 import TableNOR from "./tableNOR";
@@ -9,6 +9,7 @@ import Notepad from "./notepad";
 import { useRouter } from 'next/navigation';
 import FetchVoyages from "../Functions/fetchVoyages";
 import FetchVessels from "../Functions/fetchVessels";
+import calcDateDifference from "../Functions/calcDateDifference";
 
 interface Voyages {
   from_location: string,
@@ -57,7 +58,7 @@ export default function Laytime() {
   const [timeVar1, setTimeVar1] = useState<string>("")
   const [timeVar2, setTimeVar2] = useState<string>("")
   const [timeType, setTimeType] = useState<string>("same_day")
-  const [endweekType, setEndweekType] = useState<string>("sunday")
+  const [endweekType, setEndweekType] = useState<string>("Shinc")
   const [assistOption1, setAssistOption1] = useState<string>("laytime_non-reversible")
   const [assistOption2, setAssistOption2] = useState<string>("Once_on_demurrage_always_on_demurrage")
   const [assistOption3, setAssistOption3] = useState<string>("Working_time_saved")
@@ -65,6 +66,10 @@ export default function Laytime() {
   const [rows, setRows] = useState<TableRow[]>([
     { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
   ]);
+
+  const [startDate, setStartDate] = useState<string>("")
+  const [endDate, setEndDate] = useState<string>("")
+  
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<string>("")
   const lastTimeUsed = rows.length > 0 ? rows[rows.length - 1].timeUsed : '(0 days) 0:00';
@@ -174,17 +179,15 @@ export default function Laytime() {
       const timeAllowedString = convertDecimalDaysToString(roundedX);
       setTimeAllowed(timeAllowedString); 
     } else {
-      console.log("else");
       setTimeAllowed("(0 days) 0:00"); 
     }
   }
 
   const handleButtonClick = () => {
     calcTimeAllowed()
-    console.log(despatchRate)
+    calcDateDifference(startDate, endDate)
   };
 
-  
     return(
         <>
         <Header onButtonClick={handleButtonClick}/>
@@ -214,7 +217,10 @@ export default function Laytime() {
             assistOption3={assistOption3}
             setConsts={setConsts}
             />
-            <TableNOR/>
+            <TableNOR
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            />
             <TableRemark
             rows={rows}
             setRows={setRows}
