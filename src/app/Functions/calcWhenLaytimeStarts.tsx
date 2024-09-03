@@ -1,37 +1,45 @@
 import React from 'react'
 import moment from 'moment'
 
-export default async function calcWhenLaytimeStarts(ifNor: string, dayTime: string, hours: string, whenTime: string, initialDate: string) {
-    const [hour, minute] = dayTime.split(':');
-    const [hoursToAdd, minutesToAdd] = hours.split(':');
+export default async function calcWhenLaytimeStarts(ifNor: string, referenceHour: string, hoursAfter: string, whenTime: string, initialDate: string) {
+    const format = "HH:mm";
 
-    let startDateTime = moment(initialDate).set({ hour: parseInt(hour), minute: parseInt(minute) });
+    const momentReferenceHour = moment(referenceHour, format)
+    const momentHoursAfter = moment(hoursAfter, format)
+
+    const timeOnlyInitialDate = moment(initialDate).format("HH:mm");
+    const momentHourInitialDate = moment(timeOnlyInitialDate, format)
+
+    let startDateTime =  moment(initialDate)
 
     switch (ifNor) {
         case "If NOR before":
-            if (whenTime === "Same day") {
-                startDateTime.add(parseInt(hoursToAdd), 'hours').add(parseInt(minutesToAdd), 'minutes');
-            } else if (whenTime === "Next day") {
-                startDateTime.add(1, 'day').add(parseInt(hoursToAdd), 'hours').add(parseInt(minutesToAdd), 'minutes');
+            const checkTime = momentReferenceHour.diff(momentHourInitialDate, 'minutes');
+
+            if (checkTime < 0){
+                if (whenTime === "same day") {
+                    startDateTime.add(momentHoursAfter.hours(), 'hours').add(momentHoursAfter.minutes(), 'minutes');
+                }  else if (whenTime === "next working day") {
+
+                } else if (whenTime == "hours after NOR"){
+
+                }
+            } else {
+
             }
+
             break;
 
         case "If NOR after":
-            // Remove o tempo do "startDateTime" se "Same day", "Next day" etc.
-            if (whenTime === "Same day") {
-                startDateTime.subtract(parseInt(hoursToAdd), 'hours').subtract(parseInt(minutesToAdd), 'minutes');
-            } else if (whenTime === "Next day") {
-                startDateTime.subtract(1, 'day').subtract(parseInt(hoursToAdd), 'hours').subtract(parseInt(minutesToAdd), 'minutes');
-            }
             break;
 
         case "If NOR on":
-            // Ajusta o "startDateTime" exatamente no horário fornecido
-            if (whenTime === "Same day") {
-                // Não altera a data, apenas garante que o tempo seja ajustado conforme inserido
-            } else if (whenTime === "Next day") {
-                startDateTime.add(1, 'day');
-            }
+            // if (whenTime === "same day") {
+            // } else if (whenTime === "next working day") {
+            //     startDateTime.add(1, 'day');
+            // } else if (whenTime == "hours after NOR"){
+
+            // }
             break;
 
         default:
