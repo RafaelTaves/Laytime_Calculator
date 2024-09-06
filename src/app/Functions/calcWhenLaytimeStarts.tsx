@@ -1,7 +1,9 @@
 import React from 'react'
 import moment from 'moment'
+import getNextWorkingDay from './getNextWorkingDay';
 
-export default async function calcWhenLaytimeStarts(ifNor: string, referenceHour: string, hoursAfter: string, whenTime: string, initialDate: string) {
+export default async function calcWhenLaytimeStarts(ifNor: string, referenceHour: string, hoursAfter: string, whenTime: string, initialDate: string, condition: string) {
+
     const format = "HH:mm";
 
     const momentReferenceHour = moment(referenceHour, format)
@@ -9,37 +11,81 @@ export default async function calcWhenLaytimeStarts(ifNor: string, referenceHour
 
     const timeOnlyInitialDate = moment(initialDate).format("HH:mm");
     const momentHourInitialDate = moment(timeOnlyInitialDate, format)
+    const checkTime = momentReferenceHour.diff(momentHourInitialDate, 'minutes');
 
-    let startDateTime =  moment(initialDate)
+    let startDateTime = moment(initialDate)
 
     switch (ifNor) {
         case "If NOR before":
-            const checkTime = momentReferenceHour.diff(momentHourInitialDate, 'minutes');
-
-            if (checkTime < 0){
+            if (checkTime < 0) {
                 if (whenTime === "same day") {
-                    startDateTime.add(momentHoursAfter.hours(), 'hours').add(momentHoursAfter.minutes(), 'minutes');
-                }  else if (whenTime === "next working day") {
+                    const timeDiffInMinutes = momentHoursAfter.diff(momentReferenceHour, 'minutes');
 
-                } else if (whenTime == "hours after NOR"){
+                    const hoursToAdd = Math.floor(timeDiffInMinutes / 60);
+                    const minutesToAdd = timeDiffInMinutes % 60;
 
+                    startDateTime.add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
+
+                } else if (whenTime === "next working day") {
+                    startDateTime = getNextWorkingDay(startDateTime, condition)
+
+                    const hoursToSet = momentHoursAfter.hours();
+                    const minutesToSet = momentHoursAfter.minutes();
+
+                    startDateTime.set({
+                        hour: hoursToSet,
+                        minute: minutesToSet,
+                        second: 0,
+                        millisecond: 0
+                    });
+
+                } else if (whenTime == "hours after NOR") {
+                    const hoursToAdd = momentHoursAfter.hours();
+                    const minutesToAdd = momentHoursAfter.minutes();
+
+                    startDateTime.add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
                 }
             } else {
-
+                startDateTime = moment(initialDate)
             }
 
             break;
 
         case "If NOR after":
-            break;
+            if (checkTime > 0) {
+                if (whenTime === "same day") {
+                    const timeDiffInMinutes = momentHoursAfter.diff(momentReferenceHour, 'minutes');
+
+                    const hoursToAdd = Math.floor(timeDiffInMinutes / 60);
+                    const minutesToAdd = timeDiffInMinutes % 60;
+
+                    startDateTime.add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
+
+                } else if (whenTime === "next working day") {
+                    startDateTime = getNextWorkingDay(startDateTime, condition)
+
+                    const hoursToSet = momentHoursAfter.hours();
+                    const minutesToSet = momentHoursAfter.minutes();
+
+                    startDateTime.set({
+                        hour: hoursToSet,
+                        minute: minutesToSet,
+                        second: 0,
+                        millisecond: 0
+                    });
+
+                } else if (whenTime == "hours after NOR") {
+                    const hoursToAdd = momentHoursAfter.hours();
+                    const minutesToAdd = momentHoursAfter.minutes();
+
+                    startDateTime.add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
+                }
+            } else {
+                startDateTime = moment(initialDate)
+            }
 
         case "If NOR on":
-            // if (whenTime === "same day") {
-            // } else if (whenTime === "next working day") {
-            //     startDateTime.add(1, 'day');
-            // } else if (whenTime == "hours after NOR"){
-
-            // }
+            startDateTime = moment(initialDate)
             break;
 
         default:

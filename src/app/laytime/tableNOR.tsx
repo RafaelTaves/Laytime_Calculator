@@ -3,17 +3,17 @@ import React, { useEffect, useState } from 'react'
 interface TableNorProps {
     setStartDate: React.Dispatch<React.SetStateAction<string>>
     setEndDate: React.Dispatch<React.SetStateAction<string>>
+    norLaytimeStartDays: string,
+    norLaytimeStartHours: string
 }
 
-export default function TableNOR({setStartDate, setEndDate}: TableNorProps) {
+export default function TableNOR({setStartDate, setEndDate, norLaytimeStartDays, norLaytimeStartHours}: TableNorProps) {
+
     const [norTenderedDays, setNorTenderedDays] = useState<string>("")
     const [norTenderedHours, setNorTenderedHours] = useState<string>("")
 
     const [norRetenderedDays, setNorRetenderedDays] = useState<string>("")
     const [norRetenderedHours, setNorRetenderedHours] = useState<string>("")
-
-    const [norLaytimeStartDays, setNorLaytimeStartDays] = useState<string>("")
-    const [norLaytimeStartHours, setNorLaytimeStartHours] = useState<string>("")
 
     const [norAcepptedHours, setNorAcepptedHours] = useState<string>("")
     const [norAcepptedDays, setNorAcepptedDays] = useState<string>("")
@@ -34,8 +34,8 @@ export default function TableNOR({setStartDate, setEndDate}: TableNorProps) {
     }
 
     useEffect(() => {
-        formatStartDateTime(norLaytimeStartDays, norLaytimeStartHours)
-    }, [norLaytimeStartHours])
+        formatStartDateTime(norAcepptedDays, norAcepptedHours)
+    }, [norAcepptedHours])
 
     useEffect(() => {
         formatEndDateTime(norLaytimeEndDays, norLaytimeEndHours)
@@ -144,7 +144,7 @@ export default function TableNOR({setStartDate, setEndDate}: TableNorProps) {
                                 id="layTimeStarts" 
                                 name="layTimeStarts" 
                                 value={norLaytimeStartDays}
-                                onChange={(e) => setNorLaytimeStartDays(e.target.value)}
+                                readOnly
                                 className='text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -154,7 +154,7 @@ export default function TableNOR({setStartDate, setEndDate}: TableNorProps) {
                                 name="timeClause1" 
                                 placeholder='hh:mm' 
                                 value={norLaytimeStartHours}
-                                onChange={(e) => setNorLaytimeStartHours(e.target.value)}
+                                readOnly
                                 className='mt-2 block text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
                             <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

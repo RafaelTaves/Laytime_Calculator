@@ -139,13 +139,6 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
     }, 
     [ NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpRate,Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3])
 
-    const formatCurrency = (value: number) => {
-        return new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(value);
-    };
-
     const handleDespatchInputChange = (e: any) => {
         const inputValue = e.target.value.replace(/[^0-9.]/g, ''); 
         setNewDespatchRate(inputValue)
@@ -609,13 +602,6 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 <option value="fhinc">Fhinc</option>
                                 <option value="shex">Shex</option>
                                 <option value="Fhex">Fhex</option>
-                                <option value="sunday">Sunday</option>
-                                <option value="Monday">Monday</option>
-                                <option value="Tuesday">Tuesday</option>
-                                <option value="wensday">Wednesday</option>
-                                <option value="thursday">Thursday</option>
-                                <option value="friday">Friday</option>
-                                <option value="saturday">Saturday</option>
                             </select>
                         </div>
                         <div className='flex flex-col w-full'>

@@ -10,6 +10,8 @@ import { useRouter } from 'next/navigation';
 import FetchVoyages from "../Functions/fetchVoyages";
 import FetchVessels from "../Functions/fetchVessels";
 import calcDateDifference from "../Functions/calcDateDifference";
+import calcWhenLaytimeStarts from "../Functions/calcWhenLaytimeStarts";
+import moment from "moment";
 
 interface Voyages {
   from_location: string,
@@ -69,6 +71,9 @@ export default function Laytime() {
 
   const [startDate, setStartDate] = useState<string>("")
   const [endDate, setEndDate] = useState<string>("")
+  const [laytimeStarts, setLaytimeStarts] = useState<string>("")
+  const [norLaytimeStartDays, setNorLaytimeStartDays] = useState<string>("")
+  const [norLaytimeStartHours, setNorLaytimeStartHours] = useState<string>("")
   
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<string>("")
@@ -183,9 +188,13 @@ export default function Laytime() {
     }
   }
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     calcTimeAllowed()
-    calcDateDifference(startDate, endDate)
+    const start = await calcWhenLaytimeStarts(norType, timeVar1, timeVar2, timeType, startDate, endweekType)
+    setLaytimeStarts(start)
+    setNorLaytimeStartDays(moment(start).format("DD-MM-YYYY"));
+    setNorLaytimeStartHours(moment(start).format("HH:mm"));
+    calcDateDifference(laytimeStarts, endDate)
   };
 
     return(
@@ -220,6 +229,8 @@ export default function Laytime() {
             <TableNOR
             setStartDate={setStartDate}
             setEndDate={setEndDate}
+            norLaytimeStartDays={norLaytimeStartDays}
+            norLaytimeStartHours={norLaytimeStartHours}
             />
             <TableRemark
             rows={rows}
