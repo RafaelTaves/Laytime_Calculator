@@ -11,7 +11,7 @@ export default function Total({timeAllowed, timeUsed, demurrageRate, despatchRat
     const [timeDifference, setTimeDifference] = useState<string>('(0 days) 0:00');
     const [timeResult, setTimeResult] = useState<string>("Time Result")
     const [despatchOrDemurrage, setDespatchOrDemurrage] = useState<string>("Demurrage/Despatch")
-    const [despatchOrDemurrageRate, setDespatchOrDemurrageRate] = useState<number | null>()
+    const [despatchOrDemurrageRate, setDespatchOrDemurrageRate] = useState<number | null>(0)
     const [totalAmount, setTotalAmount] = useState<number>(0)
 
     useEffect(() => {
@@ -125,7 +125,7 @@ export default function Total({timeAllowed, timeUsed, demurrageRate, despatchRat
                         <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>{despatchOrDemurrage} Rate</label>
                         <input 
                         className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
-                        value={despatchOrDemurrageRate !== null ? despatchOrDemurrageRate : ""}
+                        value={despatchOrDemurrageRate !== null ? formatCurrency(despatchOrDemurrageRate) : ""}
                         readOnly
                         />
                     </div>

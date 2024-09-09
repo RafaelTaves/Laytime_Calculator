@@ -56,10 +56,10 @@ export default function Laytime() {
   const [cargoType, setCargoType] = useState<string>("")
   const [demurrageRate, setDemurrageRate] = useState<number>(0)
   const [despatchRate, setDespatchRate] = useState<number>(0)
-  const [norType, setNorType] = useState<string>("If_NOR_before")
+  const [norType, setNorType] = useState<string>("If NOR before")
   const [timeVar1, setTimeVar1] = useState<string>("")
   const [timeVar2, setTimeVar2] = useState<string>("")
-  const [timeType, setTimeType] = useState<string>("same_day")
+  const [timeType, setTimeType] = useState<string>("same day")
   const [endweekType, setEndweekType] = useState<string>("Shinc")
   const [assistOption1, setAssistOption1] = useState<string>("laytime_non-reversible")
   const [assistOption2, setAssistOption2] = useState<string>("Once_on_demurrage_always_on_demurrage")
@@ -190,9 +190,9 @@ export default function Laytime() {
 
   const handleButtonClick = async () => {
     calcTimeAllowed()
-    const start = await calcWhenLaytimeStarts(norType, timeVar1, timeVar2, timeType, startDate, endweekType)
+    const start = calcWhenLaytimeStarts(norType, timeVar1, timeVar2, timeType, startDate, endweekType)
     setLaytimeStarts(start)
-    setNorLaytimeStartDays(moment(start).format("DD-MM-YYYY"));
+    setNorLaytimeStartDays(moment(start).format("YYYY-MM-DD"));
     setNorLaytimeStartHours(moment(start).format("HH:mm"));
     calcDateDifference(laytimeStarts, endDate)
   };

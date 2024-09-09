@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 
 interface TableNorProps {
@@ -35,7 +36,7 @@ export default function TableNOR({setStartDate, setEndDate, norLaytimeStartDays,
 
     useEffect(() => {
         formatStartDateTime(norAcepptedDays, norAcepptedHours)
-    }, [norAcepptedHours])
+    }, [norAcepptedDays ,norAcepptedHours])
 
     useEffect(() => {
         formatEndDateTime(norLaytimeEndDays, norLaytimeEndHours)
