@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 interface totalProps {
     timeAllowed: string,
-    timeUsed: string,
+    timeWasted: string,
     demurrageRate: number | null,
     despatchRate: number | null
 }
 
-export default function Total({timeAllowed, timeUsed, demurrageRate, despatchRate}: totalProps) {
+export default function Total({timeAllowed, timeWasted, demurrageRate, despatchRate}: totalProps) {
     const [timeDifference, setTimeDifference] = useState<string>('(0 days) 0:00');
     const [timeResult, setTimeResult] = useState<string>("Time Result")
     const [despatchOrDemurrage, setDespatchOrDemurrage] = useState<string>("Demurrage/Despatch")
@@ -15,9 +15,9 @@ export default function Total({timeAllowed, timeUsed, demurrageRate, despatchRat
     const [totalAmount, setTotalAmount] = useState<number>(0)
 
     useEffect(() => {
-        const x = calculateDifference(timeAllowed, timeUsed);
+        const x = calculateDifference(timeAllowed, timeWasted);
         setTimeDifference(x)
-      }, [timeAllowed, timeUsed]);
+      }, [timeAllowed, timeWasted]);
     
     useEffect(() => {
         let timeDifferenceMinutes = convertStringToMinutes(timeDifference);
@@ -63,9 +63,9 @@ export default function Total({timeAllowed, timeUsed, demurrageRate, despatchRat
       return `(${days} days) ${hours}:${minutes.toString().padStart(2, '0')}`;
     }
     
-    function calculateDifference(timeAllowed: string, timeUsed: string) {
+    function calculateDifference(timeAllowed: string, timeWasted: string) {
       const allowedMinutes = convertStringToMinutes(timeAllowed);
-      const usedMinutes = convertStringToMinutes(timeUsed);
+      const usedMinutes = convertStringToMinutes(timeWasted);
     
       const differenceMinutes = allowedMinutes - usedMinutes;
       
@@ -109,7 +109,7 @@ export default function Total({timeAllowed, timeUsed, demurrageRate, despatchRat
                         <label htmlFor="charterers" className='text-md font-Jost font-semibold text-black'>Time used</label>
                         <input 
                         className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
-                        value={timeUsed}
+                        value={timeWasted}
                         readOnly
                         />
                     </div>

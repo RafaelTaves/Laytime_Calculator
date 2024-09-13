@@ -7,7 +7,7 @@ interface TableRow {
   to: string;
   percentCount: string;
   remarks: string;
-  timeUsed: string;
+  timeWasted: string;
   totalTime: string;
 }
 
@@ -18,11 +18,11 @@ interface RemarkProps {
 
 export default function TableRemark ({rows, setRows}: RemarkProps) {
   const [childRows, setChildRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
+    { date: '', from: '', to: '', percentCount: '', remarks: '', timeWasted: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
   ]);
 
   const addRow = () => {
-    setChildRows([...childRows, { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '(0 days) 0:00', totalTime: '(0 days) 0:00' }]);
+    setChildRows([...childRows, { date: '', from: '', to: '', percentCount: '', remarks: '', timeWasted: '(0 days) 0:00', totalTime: '(0 days) 0:00' }]);
   };
 
   const removeRow = (index: number) => {
@@ -54,24 +54,31 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
     return `(${days} days) ${hours}:${mins.toString().padStart(2, '0')}`;
   };
 
+  const formatTimeInHours = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}:${mins.toString().padStart(2, '0')}`;
+  };
+
   const updateRows = (newRows: TableRow[]) => {
-    let cumulativeTotalTime = 0;
-    let cumulativeTimeUsed = 0;
+    let cumulativeTimeWasted = 0;
 
     for (let i = 0; i < newRows.length; i++) {
       const diff = calculateTimeDifference(newRows[i].from, newRows[i].to);
-      cumulativeTotalTime += diff;
-
-      if (newRows[i].percentCount === '100') {
-        cumulativeTimeUsed += diff;
-      }
-
-      newRows[i].totalTime = formatTime(cumulativeTotalTime);
-      newRows[i].timeUsed = formatTime(cumulativeTimeUsed);
+      const percent = parseFloat(newRows[i].percentCount) || 0;
+      const timeWasted = (diff * percent) / 100;
+      
+      cumulativeTimeWasted += timeWasted;
+      newRows[i].timeWasted = formatTimeInHours(cumulativeTimeWasted);
     }
 
     setChildRows(newRows);
-    setRows(newRows)
+    setRows(newRows);
+
+    if (newRows.length > 0) {
+      const lastTimeWasted = newRows[newRows.length - 1].timeWasted;
+      console.log('Time Wasted da última linha:', lastTimeWasted);
+    }
   };
 
   const handleChange = (index: number, field: keyof TableRow, value: string) => {
@@ -83,99 +90,90 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
 
   return (
     <div className="flex flex-col w-full justify-center mx-auto p-8 max-w-8xl border-b-2 border-gray-300">
-        <div className='bg-white mt-4 md:mt-0 p-8 rounded-lg shadow-md flex flex-col overflow-x-auto'>
-            <table className="min-w-full border-collapse">
-                <thead>
-                <tr>
-                    <th className="border p-2 text-black"></th>
-                    <th className="border p-2 text-black">Date</th>
-                    <th className="border p-2 text-black">From</th>
-                    <th className="border p-2 text-black">To</th>
-                    <th className="border p-2 text-black">% count</th>
-                    <th className="border p-2 text-black">Remarks</th>
-                    <th className="border p-2 text-black">Time used</th>
-                    <th className="border p-2 text-black">Total time</th>
-                </tr>
-                </thead>
-                <tbody>
-                {childRows.map((row, index) => (
-                    <tr key={index}>
-                    <td className="border p-2">
-                        <button
-                        className="bg-blue-500 text-white px-2 py-1 rounded mr-2 min-w-full"
-                        onClick={() => addRow()}
-                        >
-                        +
-                        </button>
-                        {childRows.length > 1 && (
-                        <button
-                            className="bg-red-500 text-white px-2 py-1 rounded mt-2 min-w-full"
-                            onClick={() => removeRow(index)}
-                        >
-                            -
-                        </button>
-                        )}
-                    </td>
-                    <td className="border p-2">
-                        <input
-                        className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                        type="text"
-                        value={row.date}
-                        onChange={(e) => handleChange(index, 'date', e.target.value)}
-                        />
-                    </td>
-                    <td className="border p-2">
-                        <input
-                        className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                        type="text"
-                        value={row.from}
-                        onChange={(e) => handleChange(index, 'from', e.target.value)}
-                        />
-                    </td>
-                    <td className="border p-2">
-                        <input
-                        className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                        type="text"
-                        value={row.to}
-                        onChange={(e) => handleChange(index, 'to', e.target.value)}
-                        />
-                    </td>
-                    <td className="border p-2">
-                        <input
-                        className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                        type="text"
-                        value={row.percentCount}
-                        onChange={(e) => handleChange(index, 'percentCount', e.target.value)}
-                        />
-                    </td>
-                    <td className="border p-2">
-                        <input
-                        className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                        type="text"
-                        value={row.remarks}
-                        onChange={(e) => handleChange(index, 'remarks', e.target.value)}
-                        />
-                    </td>
-                    <td className="border p-2">
-                        <input
-                        className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                        type='text'
-                        readOnly
-                        value={row.timeUsed}
-                        />
-                    </td>
-                    <td className="border p-2">
-                    <input
-                        className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                        type='text'
-                        readOnly
-                        value={row.totalTime}
-                        />
-                    </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+      <div className='bg-white mt-4 md:mt-0 p-8 rounded-lg shadow-md flex flex-col overflow-x-auto'>
+        <table className="min-w-full border-collapse">
+          <thead>
+            <tr>
+              <th className="border p-2 text-black"></th>
+              <th className="border p-2 text-black">Date</th>
+              <th className="border p-2 text-black">From</th>
+              <th className="border p-2 text-black">To</th>
+              <th className="border p-2 text-black">% count</th>
+              <th className="border p-2 text-black w-1/3">Remarks</th>
+              <th className="border p-2 text-black">Total time wasted</th>
+            </tr>
+          </thead>
+          <tbody>
+            {childRows.map((row, index) => (
+              <tr key={index}>
+                <td className="border p-2">
+                  <button
+                    className="bg-blue-500 text-white px-2 py-1 rounded mr-2 min-w-full"
+                    onClick={() => addRow()}
+                  >
+                    +
+                  </button>
+                  {childRows.length > 1 && (
+                    <button
+                      className="bg-red-500 text-white px-2 py-1 rounded mt-2 min-w-full"
+                      onClick={() => removeRow(index)}
+                    >
+                      -
+                    </button>
+                  )}
+                </td>
+                <td className="border p-2">
+                  <input
+                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                    type="date"
+                    value={row.date}
+                    onChange={(e) => handleChange(index, 'date', e.target.value)}
+                  />
+                </td>
+                <td className="border p-2">
+                  <input
+                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                    type="text"
+                    value={row.from}
+                    onChange={(e) => handleChange(index, 'from', e.target.value)}
+                  />
+                </td>
+                <td className="border p-2">
+                  <input
+                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                    type="text"
+                    value={row.to}
+                    onChange={(e) => handleChange(index, 'to', e.target.value)}
+                  />
+                </td>
+                <td className="border p-2">
+                  <input
+                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                    type="text"
+                    value={row.percentCount}
+                    onChange={(e) => handleChange(index, 'percentCount', e.target.value)}
+                  />
+                </td>
+                <td className="border p-2">
+                  <input
+                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                    type="text"
+                    value={row.remarks}
+                    onChange={(e) => handleChange(index, 'remarks', e.target.value)}
+                  />
+                </td>
+                <td className="border p-2">
+                  <input
+                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                    type='text'
+                    readOnly
+                    value={row.timeWasted}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ interface TableRow {
   to: string;
   percentCount: string;
   remarks: string;
-  timeUsed: string;
+  timeWasted: string;
   totalTime: string;
 }
 
@@ -66,7 +66,7 @@ export default function Laytime() {
   const [assistOption3, setAssistOption3] = useState<string>("Working_time_saved")
 
   const [rows, setRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', timeUsed: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
+    { date: '', from: '', to: '', percentCount: '', remarks: '', timeWasted: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
   ]);
 
   const [startDate, setStartDate] = useState<string>("")
@@ -77,7 +77,7 @@ export default function Laytime() {
   
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<string>("")
-  const lastTimeUsed = rows.length > 0 ? rows[rows.length - 1].timeUsed : '(0 days) 0:00';
+  const lastTimeWasted = rows.length > 0 ? rows[rows.length - 1].timeWasted : '(0 days) 0:00';
 
   useEffect(() => {
     const verifyToken = async () => { 
@@ -238,7 +238,7 @@ export default function Laytime() {
             />
             <Total
             timeAllowed={timeAllowed}
-            timeUsed={lastTimeUsed}
+            timeWasted={lastTimeWasted}
             demurrageRate={demurrageRate}
             despatchRate={despatchRate}
             />
