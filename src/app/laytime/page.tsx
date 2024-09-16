@@ -12,6 +12,7 @@ import FetchVessels from "../Functions/fetchVessels";
 import calcDateDifference from "../Functions/calcDateDifference";
 import calcWhenLaytimeStarts from "../Functions/calcWhenLaytimeStarts";
 import moment from "moment";
+import calcTimeUsed from "../Functions/calcTimeUsed";
 
 interface Voyages {
   from_location: string,
@@ -74,6 +75,7 @@ export default function Laytime() {
   const [laytimeStarts, setLaytimeStarts] = useState<string>("")
   const [norLaytimeStartDays, setNorLaytimeStartDays] = useState<string>("")
   const [norLaytimeStartHours, setNorLaytimeStartHours] = useState<string>("")
+  const [timeUsed, setTimeUsed] = useState<string>("")
   
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<string>("")
@@ -188,13 +190,25 @@ export default function Laytime() {
     }
   }
 
+  async function calculateAndSetTimeUsed(laytimeStarts: string, endDate: string, lastTimeWasted: string) {
+    try {
+        const dateDiff = await calcDateDifference(laytimeStarts, endDate);
+        
+        const timeUsed = calcTimeUsed(dateDiff, lastTimeWasted);
+        
+        setTimeUsed(timeUsed);
+    } catch (error) {
+        console.error('Erro ao calcular o tempo usado:', error);
+    }
+}
+
   const handleButtonClick = async () => {
     calcTimeAllowed()
     const start = calcWhenLaytimeStarts(norType, timeVar1, timeVar2, timeType, startDate, endweekType)
     setLaytimeStarts(start)
     setNorLaytimeStartDays(moment(start).format("YYYY-MM-DD"));
     setNorLaytimeStartHours(moment(start).format("HH:mm"));
-    calcDateDifference(laytimeStarts, endDate)
+    calculateAndSetTimeUsed(laytimeStarts, endDate, lastTimeWasted);
   };
 
     return(
@@ -238,7 +252,7 @@ export default function Laytime() {
             />
             <Total
             timeAllowed={timeAllowed}
-            timeWasted={lastTimeWasted}
+            timeUsed={timeUsed}
             demurrageRate={demurrageRate}
             despatchRate={despatchRate}
             />

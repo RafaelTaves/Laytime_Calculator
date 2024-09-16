@@ -100,7 +100,7 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
               <th className="border p-2 text-black">To</th>
               <th className="border p-2 text-black">% count</th>
               <th className="border p-2 text-black w-1/3">Remarks</th>
-              <th className="border p-2 text-black">Total time wasted</th>
+              <th className="border p-2 text-black">Total excused time</th>
             </tr>
           </thead>
           <tbody>
