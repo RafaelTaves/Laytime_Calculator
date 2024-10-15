@@ -36,7 +36,7 @@ export default function BadNotification({ show, title, desc, onClose }: Notifica
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <FaRegCircleXmark
-                      className="h-7 w-7 text-light-red-I"
+                      className="h-7 w-7 text-red-500"
                       aria-hidden="true"
                     />
                   </div>
