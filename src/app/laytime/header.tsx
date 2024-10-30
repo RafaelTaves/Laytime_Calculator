@@ -40,6 +40,9 @@ export default function Header({onButtonClick, onButtonSaveClick}: headerProps) 
               Calculate
             </button>
             <button onClick={onButtonSaveClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+              Save New
+            </button>
+            <button className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Save 
             </button>
             <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">

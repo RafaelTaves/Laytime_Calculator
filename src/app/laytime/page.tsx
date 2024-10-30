@@ -37,8 +37,7 @@ interface TableRow {
   to: string;
   percentCount: string;
   remarks: string;
-  timeWasted: string;
-  totalTime: string;
+  excusedTime: string;
 }
 
 const BASE_URL = "http://127.0.0.1:8000"
@@ -127,7 +126,7 @@ export default function Laytime() {
   };
 
   const [rows, setRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', timeWasted: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
+    { date: '', from: '', to: '', percentCount: '', remarks: '', excusedTime: '(0 days) 0:00'}
   ]);
 
   const [startDate, setStartDate] = useState<string>("")
@@ -139,7 +138,7 @@ export default function Laytime() {
 
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<string>("")
-  const lastTimeWasted = rows.length > 0 ? rows[rows.length - 1].timeWasted : '(0 days) 0:00';
+  const lastTimeWasted = rows.length > 0 ? rows[rows.length - 1].excusedTime : '(0 days) 0:00';
 
   // const for api
   const [idUser, setIdUser] = useState<number>(0)
@@ -149,6 +148,17 @@ export default function Laytime() {
   const [comission, setComission] = useState<number>(0)
   const [subtotal, setSubtotal] = useState<number>(0)
   const [total, setTotal] = useState<number>(0)
+  const [norTenderedDays, setNorTenderedDays] = useState<string>("")
+  const [norTenderedHours, setNorTenderedHours] = useState<string>("")
+  const [norRetenderedDays, setNorRetenderedDays] = useState<string>("")
+  const [norRetenderedHours, setNorRetenderedHours] = useState<string>("")
+  const [norAcepptedHours, setNorAcepptedHours] = useState<string>("")
+  const [norAcepptedDays, setNorAcepptedDays] = useState<string>("")
+  const [norLaytimeEndDays, setNorLaytimeEndDays] = useState<string>("")
+  const [norLaytimeEndHours, setNorLaytimeEndHours] = useState<string>("")
+  const [notepad, setNotepad] = useState<string>("")
+  const [idLaytime, setIdLaytime] = useState<number>(0)
+  const [idEventLog, setIdEventLog] = useState<number>(0)
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -381,14 +391,13 @@ export default function Laytime() {
 
   }
 
-  async function postLaytime() {
+  async function postLaytimeAndEventLogs() {
     await getIdUser();
-
-    const postBody = {
+  
+    const laytimeBody = {
       id_user: idUser,
       id_vessel: selectedVessel,
       id_voyage: selectedVoyage,
-      id_event_log: 0,
       charteres: charteres,
       from_location: fromLocation,
       to_location: toLocation,
@@ -406,11 +415,15 @@ export default function Laytime() {
       assist_options_1: assistOption1,
       assist_options_2: assistOption2,
       assist_options_3: assistOption3,
-      nor_tendered: "string",
-      nor_retendered: "string",
-      nor_laytimestarts: "string",
-      nor_laytime_end: "string",
-      notepad: "string",
+      nor_tendered_days: norTenderedDays,
+      nor_tendered_hours: norTenderedHours,
+      nor_retendered_days: norRetenderedDays,
+      nor_retendered_hours: norRetenderedHours,
+      nor_laytimestarts_days: norLaytimeStartDays,
+      nor_laytimestarts_hours: norLaytimeStartHours,
+      nor_laytime_end_days: norLaytimeEndDays,
+      nor_laytime_end_hours: norLaytimeEndHours,
+      notepad: notepad,
       time_used: timeUsed,
       time_result: timeResult,
       time_allowed: timeAllowed,
@@ -419,12 +432,53 @@ export default function Laytime() {
       subtotal: subtotal,
       total: total,
       despatch_or_demurrage: despatchOrDemurrage
+    };
+  
+    const token = localStorage.getItem('token');
+  
+    try {
+      // Fazer o POST para registrar o Laytime
+      const laytimeResp = await axios.post(`${BASE_URL}/register_laytime`, laytimeBody, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+  
+      if (laytimeResp.status === 200) {
+        // Obter o ID do Laytime
+        const idLaytime = laytimeResp.data.id_laytime;
+        setIdLaytime(idLaytime);
+  
+        // Fazer POST de cada Event Log associado ao Laytime criado
+        for (const row of rows) {
+          const eventLogBody = {
+            id_laytime: idLaytime,
+            event_date: row.date,
+            from_time: row.from,
+            to_time: row.to,
+            remarks: row.remarks,
+            time_used: row.percentCount,
+            excused_time: row.excusedTime
+          };
+  
+          await axios.post(`${BASE_URL}/register_event_log`, eventLogBody, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+          });
+        }
+  
+        console.log("Todos os Event Logs foram registrados com sucesso.");
+      }
+    } catch (error) {
+      console.log("Houve um problema ao tentar cadastrar o laytime ou event logs: ", error);
     }
   }
+  
 
   return (
     <>
-      <Header onButtonClick={handleButtonClick} onButtonSaveClick={getIdUser} />
+      <Header onButtonClick={handleButtonClick} onButtonSaveClick={postLaytimeAndEventLogs} />
       <div className="bg-gray-200 w-full h-full">
         <BadNotification
               show={badNotification}
@@ -464,6 +518,22 @@ export default function Laytime() {
           setEndDate={setEndDate}
           norLaytimeStartDays={norLaytimeStartDays}
           norLaytimeStartHours={norLaytimeStartHours}
+          norTenderedDays={norTenderedDays}
+          setNorTenderedDays={setNorTenderedDays}
+          norTenderedHours={norTenderedHours}
+          setNorTenderedHours={setNorTenderedHours}
+          norRetenderedDays={norRetenderedDays}
+          setNorRetenderedDays={setNorRetenderedDays}
+          norRetenderedHours={norRetenderedHours}
+          setNorRetenderedHours={setNorRetenderedHours}
+          norAcepptedDays={norAcepptedDays}
+          setNorAcepptedDays={setNorAcepptedDays}
+          norAcepptedHours={norAcepptedHours}
+          setNorAcepptedHours={setNorAcepptedHours}
+          norLaytimeEndDays={norLaytimeEndDays}
+          setNorLaytimeEndDays={setNorLaytimeEndDays}
+          norLaytimeEndHours={norLaytimeEndHours}
+          setNorLaytimeEndHours={setNorLaytimeEndHours}
         />
         <TableRemark
           rows={rows}
@@ -481,7 +551,10 @@ export default function Laytime() {
           setFatherSubtotal={setSubtotal}
           setFatherTotal={setTotal}
         />
-        <Notepad />
+        <Notepad 
+        notepad={notepad}
+        setNotepad={setNotepad}
+        />
       </div>
     </>
   )

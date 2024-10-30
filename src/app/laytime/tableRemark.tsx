@@ -7,8 +7,7 @@ interface TableRow {
   to: string;
   percentCount: string;
   remarks: string;
-  timeWasted: string;
-  totalTime: string;
+  excusedTime: string;
 }
 
 interface RemarkProps {
@@ -18,11 +17,11 @@ interface RemarkProps {
 
 export default function TableRemark ({rows, setRows}: RemarkProps) {
   const [childRows, setChildRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', timeWasted: '(0 days) 0:00', totalTime: '(0 days) 0:00' }
+    { date: '', from: '', to: '', percentCount: '', remarks: '', excusedTime: '(0 days) 0:00'}
   ]);
 
   const addRow = () => {
-    setChildRows([...childRows, { date: '', from: '', to: '', percentCount: '', remarks: '', timeWasted: '(0 days) 0:00', totalTime: '(0 days) 0:00' }]);
+    setChildRows([...childRows, { date: '', from: '', to: '', percentCount: '', remarks: '', excusedTime: '(0 days) 0:00'}]);
   };
 
   const removeRow = (index: number) => {
@@ -69,14 +68,14 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
       const timeWasted = (diff * percent) / 100;
       
       cumulativeTimeWasted += timeWasted;
-      newRows[i].timeWasted = formatTimeInHours(cumulativeTimeWasted);
+      newRows[i].excusedTime = formatTimeInHours(cumulativeTimeWasted);
     }
 
     setChildRows(newRows);
     setRows(newRows);
 
     if (newRows.length > 0) {
-      const lastTimeWasted = newRows[newRows.length - 1].timeWasted;
+      const lastTimeWasted = newRows[newRows.length - 1].excusedTime;
       console.log('Time Wasted da última linha:', lastTimeWasted);
     }
   };
@@ -167,7 +166,7 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
                     className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
                     type='text'
                     readOnly
-                    value={row.timeWasted}
+                    value={row.excusedTime}
                   />
                 </td>
               </tr>

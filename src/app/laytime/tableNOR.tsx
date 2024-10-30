@@ -5,22 +5,46 @@ interface TableNorProps {
     setStartDate: React.Dispatch<React.SetStateAction<string>>
     setEndDate: React.Dispatch<React.SetStateAction<string>>
     norLaytimeStartDays: string,
-    norLaytimeStartHours: string
+    norLaytimeStartHours: string,
+    norTenderedDays: string;
+    setNorTenderedDays: React.Dispatch<React.SetStateAction<string>>;
+    norTenderedHours: string;
+    setNorTenderedHours: React.Dispatch<React.SetStateAction<string>>;
+    norRetenderedDays: string;
+    setNorRetenderedDays: React.Dispatch<React.SetStateAction<string>>;
+    norRetenderedHours: string;
+    setNorRetenderedHours: React.Dispatch<React.SetStateAction<string>>;
+    norAcepptedDays: string;
+    setNorAcepptedDays: React.Dispatch<React.SetStateAction<string>>;
+    norAcepptedHours: string;
+    setNorAcepptedHours: React.Dispatch<React.SetStateAction<string>>;
+    norLaytimeEndDays: string;
+    setNorLaytimeEndDays: React.Dispatch<React.SetStateAction<string>>;
+    norLaytimeEndHours: string;
+    setNorLaytimeEndHours: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function TableNOR({setStartDate, setEndDate, norLaytimeStartDays, norLaytimeStartHours}: TableNorProps) {
-
-    const [norTenderedDays, setNorTenderedDays] = useState<string>("")
-    const [norTenderedHours, setNorTenderedHours] = useState<string>("")
-
-    const [norRetenderedDays, setNorRetenderedDays] = useState<string>("")
-    const [norRetenderedHours, setNorRetenderedHours] = useState<string>("")
-
-    const [norAcepptedHours, setNorAcepptedHours] = useState<string>("")
-    const [norAcepptedDays, setNorAcepptedDays] = useState<string>("")
-
-    const [norLaytimeEndDays, setNorLaytimeEndDays] = useState<string>("")
-    const [norLaytimeEndHours, setNorLaytimeEndHours] = useState<string>("")
+export default function TableNOR({
+    setStartDate, 
+    setEndDate, 
+    norLaytimeStartDays, norLaytimeStartHours,     
+    norTenderedDays,
+    setNorTenderedDays,
+    norTenderedHours,
+    setNorTenderedHours,
+    norRetenderedDays,
+    setNorRetenderedDays,
+    norRetenderedHours,
+    setNorRetenderedHours,
+    norAcepptedDays,
+    setNorAcepptedDays,
+    norAcepptedHours,
+    setNorAcepptedHours,
+    norLaytimeEndDays,
+    setNorLaytimeEndDays,
+    norLaytimeEndHours,
+    setNorLaytimeEndHours}: TableNorProps) 
+    {
 
     function formatStartDateTime(date: string, time: string){
         const dateTimeString = `${date}T${time}`;
