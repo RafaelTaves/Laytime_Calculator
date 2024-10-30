@@ -24,13 +24,15 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
 
   useEffect(() => {
     const x = calculateDifference(timeAllowed, timeUsed);
+    console.log("Use effect time allowd demurrage rate: " + demurrageRate)
     setTimeDifference(x)
-  }, [timeAllowed, timeUsed]);
+  }, [timeAllowed, timeUsed, demurrageRate, despatchRate]);
 
   useEffect(() => {
     let timeDifferenceMinutes = convertStringToMinutes(timeDifference);
     let timeDifferenceDays = timeDifferenceMinutes / 1440;
-
+    console.log("Calculo demurrage rate: " + demurrageRate)
+    console.log("Calculo despatch rate: " + despatchRate)
 
     let subtotal = 0;
 
@@ -44,12 +46,13 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
       }
     }
 
+    
     setSubtotal(subtotal);
     setFatherSubtotal(subtotal);
     setTotalAmount(subtotal);
     setFatherTotal(subtotal)
 
-  }, [timeDifference]);
+  }, [timeDifference, demurrageRate, despatchRate]);
 
   function convertStringToMinutes(timeString: string) {
     const match = timeString.match(/\((\d+) days\)\s*(\d+):(\d+)/);

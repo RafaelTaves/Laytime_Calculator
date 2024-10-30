@@ -276,12 +276,14 @@ export default function Laytime() {
       setBadNotification(true)
       return;
     }
+    console.log("On click Demurrage rate: " + demurrageRate)
+    console.log("On clickDespatch rate: " + despatchRate)
     calcTimeAllowed()
     const start = calcWhenLaytimeStarts(norType, timeVar1, timeVar2, timeType, startDate, endweekType)
     setLaytimeStarts(start)
     setNorLaytimeStartDays(moment(start).format("YYYY-MM-DD"));
     setNorLaytimeStartHours(moment(start).format("HH:mm"));
-    calculateAndSetTimeUsed(laytimeStarts, endDate, lastTimeWasted);
+    calculateAndSetTimeUsed(start, endDate, lastTimeWasted);
   };
 
   // Função para checar campos antes de calcular
