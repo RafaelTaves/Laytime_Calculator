@@ -5,10 +5,11 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation';
 
 interface headerProps {
-  onButtonClick: () => void
+  onButtonClick: () => void;
+  onButtonSaveClick: () => void;
 }
 
-export default function Header({onButtonClick}: headerProps) {
+export default function Header({onButtonClick, onButtonSaveClick}: headerProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter();
 
@@ -38,9 +39,9 @@ export default function Header({onButtonClick}: headerProps) {
             <button onClick={onButtonClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Calculate
             </button>
-            <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+            <button onClick={onButtonSaveClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Save 
-            </a>
+            </button>
             <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
               Print
             </a>

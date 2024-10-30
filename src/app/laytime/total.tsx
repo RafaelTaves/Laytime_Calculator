@@ -4,10 +4,16 @@ interface totalProps {
   timeAllowed: string,
   timeUsed: string,
   demurrageRate: number | null,
-  despatchRate: number | null
+  despatchRate: number | null,
+  setFatherTimeResult: React.Dispatch<React.SetStateAction<string>>;
+  setFatherDespatchOrDemurrage: React.Dispatch<React.SetStateAction<string>>;
+  setFatherRate: React.Dispatch<React.SetStateAction<number | null>>;
+  setFatherComission: React.Dispatch<React.SetStateAction<number>>;
+  setFatherSubtotal: React.Dispatch<React.SetStateAction<number>>;
+  setFatherTotal: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRate }: totalProps) {
+export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRate, setFatherTimeResult, setFatherDespatchOrDemurrage, setFatherRate, setFatherComission, setFatherSubtotal, setFatherTotal }: totalProps) {
   const [timeDifference, setTimeDifference] = useState<string>('(0 days) 0:00');
   const [timeResult, setTimeResult] = useState<string>("Time Result")
   const [despatchOrDemurrage, setDespatchOrDemurrage] = useState<string>("Demurrage/Despatch")
@@ -39,7 +45,9 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
     }
 
     setSubtotal(subtotal);
+    setFatherSubtotal(subtotal);
     setTotalAmount(subtotal);
+    setFatherTotal(subtotal)
 
   }, [timeDifference]);
 
@@ -75,12 +83,18 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
 
     if (differenceMinutes >= 0) {
       setTimeResult("Time Saved")
+      setFatherTimeResult("Time Saved")
       setDespatchOrDemurrage("Despatch")
+      setFatherDespatchOrDemurrage("Despatch")
       setDespatchOrDemurrageRate(despatchRate)
+      setFatherRate(despatchRate)
     } else {
       setTimeResult("Time Lost")
+      setFatherTimeResult("Time Lost")
       setDespatchOrDemurrage("Demurrage")
+      setFatherDespatchOrDemurrage("Demurrage")
       setDespatchOrDemurrageRate(demurrageRate)
+      setFatherRate(demurrageRate)
     }
 
     return convertMinutesToString(differenceMinutes);
@@ -103,6 +117,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
   useEffect(() => {
     const novoTotal =  calculateLessComission ()
     setTotalAmount(novoTotal)
+    setFatherTotal(novoTotal)
   },[lessComission])
 
   return (
@@ -159,7 +174,11 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
               <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Less Comission</label>
               <input
                 value={lessComission}
-                onChange={(e) => setLessComission(Number(e.target.value))}
+                onChange={(e) => {
+                  setLessComission(Number(e.target.value))
+                  setFatherComission(Number(e.target.value))
+                  }
+                }
                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
               />
             </div>

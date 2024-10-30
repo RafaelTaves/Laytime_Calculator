@@ -14,6 +14,7 @@ import calcWhenLaytimeStarts from "../Functions/calcWhenLaytimeStarts";
 import moment from "moment";
 import calcTimeUsed from "../Functions/calcTimeUsed";
 import BadNotification from "../components/notifications/badNotification";
+import axios from "axios";
 
 interface Voyages {
   from_location: string,
@@ -39,6 +40,8 @@ interface TableRow {
   timeWasted: string;
   totalTime: string;
 }
+
+const BASE_URL = "http://127.0.0.1:8000"
 
 export default function Laytime() {
   const router = useRouter();
@@ -137,6 +140,15 @@ export default function Laytime() {
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<string>("")
   const lastTimeWasted = rows.length > 0 ? rows[rows.length - 1].timeWasted : '(0 days) 0:00';
+
+  // const for api
+  const [idUser, setIdUser] = useState<number>(0)
+  const [timeResult, setTimeResult] = useState<string>("")
+  const [despatchOrDemurrage, setDespatchOrDemurrage] = useState<string>("")
+  const [rate, setRate] = useState<number | null>(0)
+  const [comission, setComission] = useState<number>(0)
+  const [subtotal, setSubtotal] = useState<number>(0)
+  const [total, setTotal] = useState<number>(0)
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -346,9 +358,71 @@ export default function Laytime() {
     return true;
   }
 
+  // post laytime 
+
+  async function getIdUser() {
+    const token = localStorage.getItem('token');
+
+    try{
+      const resp = await axios.get(`${BASE_URL}/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })
+      
+      if(resp.status == 200){
+        setIdUser(resp.data.id_user)
+      }
+    } catch (erro) {
+      console.log("Houve um erro ao resgatar o id do usuário: ", erro)
+    }
+
+  }
+
+  async function postLaytime() {
+    await getIdUser();
+
+    const postBody = {
+      id_user: idUser,
+      id_vessel: selectedVessel,
+      id_voyage: selectedVoyage,
+      id_event_log: 0,
+      charteres: charteres,
+      from_location: fromLocation,
+      to_location: toLocation,
+      cp_date: cpDate,
+      operation: operation,
+      cargo_quantity: cargoQuantity,
+      cargo_type: cargoType,
+      demurrage_rate: demurrageRate,
+      despatch_rate: despatchRate,
+      nor_type: norType,
+      time_var1: timeVar1,
+      time_var2: timeVar2,
+      time_type: timeType,
+      endweek_type: endweekType,
+      assist_options_1: assistOption1,
+      assist_options_2: assistOption2,
+      assist_options_3: assistOption3,
+      nor_tendered: "string",
+      nor_retendered: "string",
+      nor_laytimestarts: "string",
+      nor_laytime_end: "string",
+      notepad: "string",
+      time_used: timeUsed,
+      time_result: timeResult,
+      time_allowed: timeAllowed,
+      rate: rate,
+      comission: comission,
+      subtotal: subtotal,
+      total: total,
+      despatch_or_demurrage: despatchOrDemurrage
+    }
+  }
+
   return (
     <>
-      <Header onButtonClick={handleButtonClick} />
+      <Header onButtonClick={handleButtonClick} onButtonSaveClick={getIdUser} />
       <div className="bg-gray-200 w-full h-full">
         <BadNotification
               show={badNotification}
@@ -398,6 +472,12 @@ export default function Laytime() {
           timeUsed={timeUsed}
           demurrageRate={demurrageRate}
           despatchRate={despatchRate}
+          setFatherTimeResult={setTimeResult}
+          setFatherDespatchOrDemurrage={setDespatchOrDemurrage}
+          setFatherRate={setRate}
+          setFatherComission={setComission}
+          setFatherSubtotal={setSubtotal}
+          setFatherTotal={setTotal}
         />
         <Notepad />
       </div>
