@@ -392,86 +392,106 @@ export default function Laytime() {
   }
 
   async function postLaytimeAndEventLogs() {
-    await getIdUser();
-  
-    const laytimeBody = {
-      id_user: idUser,
-      id_vessel: selectedVessel,
-      id_voyage: selectedVoyage,
-      charteres: charteres,
-      from_location: fromLocation,
-      to_location: toLocation,
-      cp_date: cpDate,
-      operation: operation,
-      cargo_quantity: cargoQuantity,
-      cargo_type: cargoType,
-      demurrage_rate: demurrageRate,
-      despatch_rate: despatchRate,
-      nor_type: norType,
-      time_var1: timeVar1,
-      time_var2: timeVar2,
-      time_type: timeType,
-      endweek_type: endweekType,
-      assist_options_1: assistOption1,
-      assist_options_2: assistOption2,
-      assist_options_3: assistOption3,
-      nor_tendered_days: norTenderedDays,
-      nor_tendered_hours: norTenderedHours,
-      nor_retendered_days: norRetenderedDays,
-      nor_retendered_hours: norRetenderedHours,
-      nor_laytimestarts_days: norLaytimeStartDays,
-      nor_laytimestarts_hours: norLaytimeStartHours,
-      nor_laytime_end_days: norLaytimeEndDays,
-      nor_laytime_end_hours: norLaytimeEndHours,
-      notepad: notepad,
-      time_used: timeUsed,
-      time_result: timeResult,
-      time_allowed: timeAllowed,
-      rate: rate,
-      comission: comission,
-      subtotal: subtotal,
-      total: total,
-      despatch_or_demurrage: despatchOrDemurrage
-    };
-  
     const token = localStorage.getItem('token');
-  
-    try {
-      // Fazer o POST para registrar o Laytime
-      const laytimeResp = await axios.post(`${BASE_URL}/register_laytime`, laytimeBody, {
+
+    try{
+      const resp = await axios.get(`${BASE_URL}/me`, {
         headers: {
           Authorization: `Bearer ${token}`
         },
-      });
-  
-      if (laytimeResp.status === 200) {
-        // Obter o ID do Laytime
-        const idLaytime = laytimeResp.data.id_laytime;
-        setIdLaytime(idLaytime);
-  
-        // Fazer POST de cada Event Log associado ao Laytime criado
-        for (const row of rows) {
-          const eventLogBody = {
-            id_laytime: idLaytime,
-            event_date: row.date,
-            from_time: row.from,
-            to_time: row.to,
-            remarks: row.remarks,
-            time_used: row.percentCount,
-            excused_time: row.excusedTime
-          };
-  
-          await axios.post(`${BASE_URL}/register_event_log`, eventLogBody, {
+      })
+      
+      if(resp.status == 200){
+        setIdUser(resp.data.id_user)
+        console.log("Id do usuario: " + resp.data.id_user)
+
+        const laytimeBody = {
+          id_user: resp.data.id_user,
+          id_vessel: selectedVessel,
+          id_voyage: selectedVoyage,
+          charteres: charteres,
+          from_location: fromLocation,
+          to_location: toLocation,
+          cp_date: cpDate,
+          operation: operation,
+          cargo_quantity: cargoQuantity,
+          cargo_type: cargoType,
+          demurrage_rate: demurrageRate,
+          despatch_rate: despatchRate,
+          nor_type: norType,
+          time_var1: timeVar1,
+          time_var2: timeVar2,
+          time_type: timeType,
+          endweek_type: endweekType,
+          assist_options_1: assistOption1,
+          assist_options_2: assistOption2,
+          assist_options_3: assistOption3,
+          nor_tendered_days: norTenderedDays,
+          nor_tendered_hours: norTenderedHours,
+          nor_retendered_days: norRetenderedDays,
+          nor_retendered_hours: norRetenderedHours,
+          nor_laytimestarts_days: norLaytimeStartDays,
+          nor_laytimestarts_hours: norLaytimeStartHours,
+          nor_laytime_end_days: norLaytimeEndDays,
+          nor_laytime_end_hours: norLaytimeEndHours,
+          nor_laytime_accepted_days: norAcepptedDays,
+          nor_laytime_accepted_hours: norAcepptedHours,
+          notepad: notepad,
+          time_used: timeUsed,
+          time_result: timeResult,
+          time_allowed: timeAllowed,
+          rate: rate,
+          comission: comission,
+          subtotal: subtotal,
+          total: total,
+          despatch_or_demurrage: despatchOrDemurrage
+        };
+    
+        
+    
+        console.log(laytimeBody)
+      
+        try {
+          // Fazer o POST para registrar o Laytime
+          const laytimeResp = await axios.post(`${BASE_URL}/register_laytime`, laytimeBody, {
             headers: {
               Authorization: `Bearer ${token}`
             },
           });
+      
+          if (laytimeResp.status === 200) {
+            console.log("Entrou no if")
+            // Obter o ID do Laytime
+            const idLaytime = laytimeResp.data.id_laytime;
+            setIdLaytime(idLaytime);
+      
+            // Fazer POST de cada Event Log associado ao Laytime criado
+            for (const row of rows) {
+              const eventLogBody = {
+                id_laytime: idLaytime,
+                event_date: row.date,
+                from_time: row.from,
+                to_time: row.to,
+                remarks: row.remarks,
+                percent_count: row.percentCount,
+                excused_time: row.excusedTime
+              };
+      
+              await axios.post(`${BASE_URL}/register_event_log`, eventLogBody, {
+                headers: {
+                  Authorization: `Bearer ${token}`
+                },
+              });
+            }
+      
+            console.log("Todos os Event Logs foram registrados com sucesso.");
+          }
+        } catch (error) {
+          console.log("Houve um problema ao tentar cadastrar o laytime ou event logs: ", error);
         }
-  
-        console.log("Todos os Event Logs foram registrados com sucesso.");
       }
-    } catch (error) {
-      console.log("Houve um problema ao tentar cadastrar o laytime ou event logs: ", error);
+    } catch (erro) {
+      console.log("Houve um erro ao resgatar o id do usuário: ", erro)
     }
   }
   
