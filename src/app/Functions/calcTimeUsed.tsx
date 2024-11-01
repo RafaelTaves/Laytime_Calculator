@@ -41,6 +41,5 @@ export default function calcTimeUsed(dateDiff: string, lastTimeWasted: string) {
     const remainingMinutesFinal = duration.minutes();
 
     // Retorne no formato `${days} dias ${hours}:${minutes}`
-    console.log(`(${remainingDays} days) ${remainingHours}:${remainingMinutesFinal.toString().padStart(2, '0')}`)
     return `(${remainingDays} days) ${remainingHours}:${remainingMinutesFinal.toString().padStart(2, '0')}`;
 }

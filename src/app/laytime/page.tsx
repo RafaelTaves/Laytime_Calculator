@@ -40,6 +40,60 @@ interface TableRow {
   excusedTime: string;
 }
 
+interface EventLog {
+  event_date: string;
+  from_time: string;
+  to_time: string;
+  remarks: string;
+  percent_count: string;
+  excused_time: string;
+  id_event_log: number;
+}
+
+interface Laytime {
+  id_user: number;
+  id_vessel: number;
+  id_voyage: number;
+  charteres: string;
+  from_location: string;
+  to_location: string;
+  cp_date: Date;
+  operation: string;
+  cargo_quantity: number;
+  cargo_type: string;
+  demurrage_rate: number;
+  despatch_rate: number;
+  nor_type: string;
+  time_var1: string;
+  time_var2: string;
+  time_type: string;
+  endweek_type: string;
+  assist_options_1: string;
+  assist_options_2: string;
+  assist_options_3: string;
+  nor_tendered_days: string;
+  nor_tendered_hours: string;
+  nor_retendered_days: string;
+  nor_retendered_hours: string;
+  nor_laytimestarts_days: string;
+  nor_laytimestarts_hours: string;
+  nor_laytime_end_days: string;
+  nor_laytime_end_hours: string;
+  nor_laytime_accepted_days: string;
+  nor_laytime_accepted_hours: string;
+  notepad: string;
+  time_used: string;
+  time_result: string;
+  time_allowed: string;
+  rate: number;
+  comission: number;
+  subtotal: number;
+  total: number;
+  despatch_or_demurrage: string;
+  id_laytime: number;
+  event_logs: EventLog[];
+}
+
 const BASE_URL = "http://127.0.0.1:8000"
 
 export default function Laytime() {
@@ -47,6 +101,8 @@ export default function Laytime() {
   const [loading, setLoading] = useState(true);
   const [voyages, setVoyages] = useState<Voyages[]>([])
   const [vessels, setVessels] = useState<Vessel[]>([])
+  const [laytimes, setLaytimes] = useState<Laytime[]>([])
+  const [selectedLaytime, setSelectedLaytime] = useState<number>()
 
   const [selectedVoyage, setSelectedVoyage] = useState<number | null>(null);
   const [fromLocation, setFromLocation] = useState<string>("");
@@ -126,7 +182,7 @@ export default function Laytime() {
   };
 
   const [rows, setRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', excusedTime: '(0 days) 0:00'}
+    { date: '', from: '', to: '', percentCount: '', remarks: '', excusedTime: '(0 days) 0:00' }
   ]);
 
   const [startDate, setStartDate] = useState<string>("")
@@ -192,6 +248,7 @@ export default function Laytime() {
 
       getVoyages();
       getVessels();
+      getLaytimes();
     }
   }, [loading]);
 
@@ -286,8 +343,7 @@ export default function Laytime() {
       setBadNotification(true)
       return;
     }
-    console.log("On click Demurrage rate: " + demurrageRate)
-    console.log("On clickDespatch rate: " + despatchRate)
+
     calcTimeAllowed()
     const start = calcWhenLaytimeStarts(norType, timeVar1, timeVar2, timeType, startDate, endweekType)
     setLaytimeStarts(start)
@@ -370,40 +426,23 @@ export default function Laytime() {
     return true;
   }
 
-  // post laytime 
-
-  async function getIdUser() {
-    const token = localStorage.getItem('token');
-
-    try{
-      const resp = await axios.get(`${BASE_URL}/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      })
-      
-      if(resp.status == 200){
-        setIdUser(resp.data.id_user)
-      }
-    } catch (erro) {
-      console.log("Houve um erro ao resgatar o id do usuário: ", erro)
-    }
-
-  }
+  // Funções para tiros na api  
 
   async function postLaytimeAndEventLogs() {
     const token = localStorage.getItem('token');
 
-    try{
+    try {
       const resp = await axios.get(`${BASE_URL}/me`, {
         headers: {
           Authorization: `Bearer ${token}`
         },
       })
-      
-      if(resp.status == 200){
+
+      if(resp.status !== 200) {
+        console.log("Erro ao dar tiro resgatando id")
+      }
+      if (resp.status == 200) {
         setIdUser(resp.data.id_user)
-        console.log("Id do usuario: " + resp.data.id_user)
 
         const laytimeBody = {
           id_user: resp.data.id_user,
@@ -446,11 +485,7 @@ export default function Laytime() {
           total: total,
           despatch_or_demurrage: despatchOrDemurrage
         };
-    
-        
-    
-        console.log(laytimeBody)
-      
+
         try {
           // Fazer o POST para registrar o Laytime
           const laytimeResp = await axios.post(`${BASE_URL}/register_laytime`, laytimeBody, {
@@ -458,13 +493,12 @@ export default function Laytime() {
               Authorization: `Bearer ${token}`
             },
           });
-      
+
           if (laytimeResp.status === 200) {
-            console.log("Entrou no if")
             // Obter o ID do Laytime
             const idLaytime = laytimeResp.data.id_laytime;
             setIdLaytime(idLaytime);
-      
+
             // Fazer POST de cada Event Log associado ao Laytime criado
             for (const row of rows) {
               const eventLogBody = {
@@ -476,15 +510,14 @@ export default function Laytime() {
                 percent_count: row.percentCount,
                 excused_time: row.excusedTime
               };
-      
+
               await axios.post(`${BASE_URL}/register_event_log`, eventLogBody, {
                 headers: {
                   Authorization: `Bearer ${token}`
                 },
               });
             }
-      
-            console.log("Todos os Event Logs foram registrados com sucesso.");
+
           }
         } catch (error) {
           console.log("Houve um problema ao tentar cadastrar o laytime ou event logs: ", error);
@@ -494,17 +527,40 @@ export default function Laytime() {
       console.log("Houve um erro ao resgatar o id do usuário: ", erro)
     }
   }
-  
+
+  async function getLaytimes () {
+    const token = localStorage.getItem('token');
+
+    try {
+      const resp = await axios.get(`${BASE_URL}/laytimes`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })
+
+      if(resp.status == 200) {
+        setLaytimes(resp.data)
+      }
+    } catch (error) {
+      console.log("Houve um erro ao tentar recuperar os laytimes: " + error)
+    }
+  }
 
   return (
     <>
-      <Header onButtonClick={handleButtonClick} onButtonSaveClick={postLaytimeAndEventLogs} />
+      <Header 
+      onButtonCalculateClick={handleButtonClick} 
+      onButtonSaveClick={postLaytimeAndEventLogs} 
+      laytimes={laytimes}
+      selectedLaytime={selectedLaytime}
+      setSelectedLaytime={setSelectedLaytime}
+      />
       <div className="bg-gray-200 w-full h-full">
         <BadNotification
-              show={badNotification}
-              title="Houve um erro!"
-              desc="Todos os campos devem estar preenchidos."
-              onClose={handleCloseNotification}
+          show={badNotification}
+          title="Houve um erro!"
+          desc="Todos os campos devem estar preenchidos."
+          onClose={handleCloseNotification}
         />
         <Laytime_calculation
           voyages={voyages}
@@ -571,9 +627,9 @@ export default function Laytime() {
           setFatherSubtotal={setSubtotal}
           setFatherTotal={setTotal}
         />
-        <Notepad 
-        notepad={notepad}
-        setNotepad={setNotepad}
+        <Notepad
+          notepad={notepad}
+          setNotepad={setNotepad}
         />
       </div>
     </>

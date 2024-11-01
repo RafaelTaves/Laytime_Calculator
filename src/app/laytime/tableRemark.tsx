@@ -76,7 +76,6 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
 
     if (newRows.length > 0) {
       const lastTimeWasted = newRows[newRows.length - 1].excusedTime;
-      console.log('Time Wasted da última linha:', lastTimeWasted);
     }
   };
 
