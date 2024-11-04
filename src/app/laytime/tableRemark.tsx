@@ -1,13 +1,13 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface TableRow {
-  date: string;
-  from: string;
-  to: string;
-  percentCount: string;
+  event_date: string;
+  from_time: string;
+  to_time: string;
+  percent_count: string;
   remarks: string;
-  excusedTime: string;
+  excused_time: string;
 }
 
 interface RemarkProps {
@@ -16,12 +16,16 @@ interface RemarkProps {
 }
 
 export default function TableRemark ({rows, setRows}: RemarkProps) {
+
+  useEffect(() => {
+    setChildRows(rows)
+  }, [rows])
   const [childRows, setChildRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', excusedTime: '(0 days) 0:00'}
+    { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00'}
   ]);
 
   const addRow = () => {
-    setChildRows([...childRows, { date: '', from: '', to: '', percentCount: '', remarks: '', excusedTime: '(0 days) 0:00'}]);
+    setChildRows([...childRows, { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00'}]);
   };
 
   const removeRow = (index: number) => {
@@ -63,19 +67,19 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
     let cumulativeTimeWasted = 0;
 
     for (let i = 0; i < newRows.length; i++) {
-      const diff = calculateTimeDifference(newRows[i].from, newRows[i].to);
-      const percent = parseFloat(newRows[i].percentCount) || 0;
+      const diff = calculateTimeDifference(newRows[i].from_time, newRows[i].to_time);
+      const percent = parseFloat(newRows[i].percent_count) || 0;
       const timeWasted = (diff * percent) / 100;
       
       cumulativeTimeWasted += timeWasted;
-      newRows[i].excusedTime = formatTimeInHours(cumulativeTimeWasted);
+      newRows[i].excused_time = formatTimeInHours(cumulativeTimeWasted);
     }
 
     setChildRows(newRows);
     setRows(newRows);
 
     if (newRows.length > 0) {
-      const lastTimeWasted = newRows[newRows.length - 1].excusedTime;
+      const lastTimeWasted = newRows[newRows.length - 1].excused_time;
     }
   };
 
@@ -124,32 +128,32 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
                   <input
                     className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
                     type="date"
-                    value={row.date}
-                    onChange={(e) => handleChange(index, 'date', e.target.value)}
+                    value={row.event_date}
+                    onChange={(e) => handleChange(index, 'event_date', e.target.value)}
                   />
                 </td>
                 <td className="border p-2">
                   <input
                     className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
                     type="text"
-                    value={row.from}
-                    onChange={(e) => handleChange(index, 'from', e.target.value)}
+                    value={row.from_time}
+                    onChange={(e) => handleChange(index, 'from_time', e.target.value)}
                   />
                 </td>
                 <td className="border p-2">
                   <input
                     className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
                     type="text"
-                    value={row.to}
-                    onChange={(e) => handleChange(index, 'to', e.target.value)}
+                    value={row.to_time}
+                    onChange={(e) => handleChange(index, 'to_time', e.target.value)}
                   />
                 </td>
                 <td className="border p-2">
                   <input
                     className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
                     type="text"
-                    value={row.percentCount}
-                    onChange={(e) => handleChange(index, 'percentCount', e.target.value)}
+                    value={row.percent_count}
+                    onChange={(e) => handleChange(index, 'percent_count', e.target.value)}
                   />
                 </td>
                 <td className="border p-2">
@@ -165,7 +169,7 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
                     className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
                     type='text'
                     readOnly
-                    value={row.excusedTime}
+                    value={row.excused_time}
                   />
                 </td>
               </tr>

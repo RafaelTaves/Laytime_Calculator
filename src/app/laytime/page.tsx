@@ -32,12 +32,12 @@ interface Vessel {
 }
 
 interface TableRow {
-  date: string;
-  from: string;
-  to: string;
-  percentCount: string;
+  event_date: string;
+  from_time: string;
+  to_time: string;
+  percent_count: string;
   remarks: string;
-  excusedTime: string;
+  excused_time: string;
 }
 
 interface EventLog {
@@ -58,6 +58,7 @@ interface Laytime {
   from_location: string;
   to_location: string;
   cp_date: Date;
+  cp_rate: number;
   operation: string;
   cargo_quantity: number;
   cargo_type: string;
@@ -182,22 +183,20 @@ export default function Laytime() {
   };
 
   const [rows, setRows] = useState<TableRow[]>([
-    { date: '', from: '', to: '', percentCount: '', remarks: '', excusedTime: '(0 days) 0:00' }
+    { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00' }
   ]);
 
   const [startDate, setStartDate] = useState<string>("")
   const [endDate, setEndDate] = useState<string>("")
-  const [laytimeStarts, setLaytimeStarts] = useState<string>("")
   const [norLaytimeStartDays, setNorLaytimeStartDays] = useState<string>("")
   const [norLaytimeStartHours, setNorLaytimeStartHours] = useState<string>("")
   const [timeUsed, setTimeUsed] = useState<string>("")
 
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<string>("")
-  const lastTimeWasted = rows.length > 0 ? rows[rows.length - 1].excusedTime : '(0 days) 0:00';
+  const lastTimeWasted = rows.length > 0 ? rows[rows.length - 1].excused_time : '(0 days) 0:00';
 
   // const for api
-  const [idUser, setIdUser] = useState<number>(0)
   const [timeResult, setTimeResult] = useState<string>("")
   const [despatchOrDemurrage, setDespatchOrDemurrage] = useState<string>("")
   const [rate, setRate] = useState<number | null>(0)
@@ -213,8 +212,12 @@ export default function Laytime() {
   const [norLaytimeEndDays, setNorLaytimeEndDays] = useState<string>("")
   const [norLaytimeEndHours, setNorLaytimeEndHours] = useState<string>("")
   const [notepad, setNotepad] = useState<string>("")
-  const [idLaytime, setIdLaytime] = useState<number>(0)
-  const [idEventLog, setIdEventLog] = useState<number>(0)
+  const [idUser, setIdUser] = useState<number>()
+
+  useEffect(() => {
+    console.log("Chamou o use effect")
+    findAndSetLaytime(laytimes, selectedLaytime)
+  }, [selectedLaytime])
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -256,9 +259,9 @@ export default function Laytime() {
     return <div>{null}</div>;
   }
 
-  // Funções para resgatar dados inseridos por usuario e calcular laytime
-
-  function setConsts(
+  // Setar const com laytime selecionado
+  function setConstsSavedLaytime(
+    idUser: number,
     selectedVoyage: number | null,
     fromLocation: string,
     toLocation: string,
@@ -278,27 +281,124 @@ export default function Laytime() {
     endweekType: string,
     assistOption1: string,
     assistOption2: string,
-    assistOption3: string) {
-    setSelectedVoyage(selectedVoyage)
-    setFromLocation(fromLocation)
-    setToLocation(toLocation)
-    setSelectedVessel(selectedVessel)
-    setCharteres(charteres)
-    setCpDate(cpDate)
-    setCpRate(cpRate)
-    setOperation(operation)
-    setCargoQuantity(cargoQuantity)
-    setCargoType(cargoType)
-    setDemurrageRate(demurrageRate)
-    setDespatchRate(despatchRate)
-    setNorType(norType)
-    setTimeVar1(timeVar1)
-    setTimeVar2(timeVar2)
-    setTimeType(timeType)
-    setEndweekType(endweekType)
-    setAssistOption1(assistOption1)
-    setAssistOption2(assistOption2)
-    setAssistOption3(assistOption3)
+    assistOption3: string,
+    timeResult: string,
+    despatchOrDemurrage: string,
+    rate: number | null,
+    comission: number,
+    subtotal: number,
+    total: number,
+    norTenderedDays: string,
+    norTenderedHours: string,
+    norRetenderedDays: string,
+    norRetenderedHours: string,
+    norAcepptedDays: string,
+    norAcepptedHours: string,
+    norLaytimeEndDays: string,
+    norLaytimeEndHours: string,
+    notepad: string,
+    norLaytimeStartDays: string,
+    norLaytimeStartHours: string,
+    timeUsed: string,
+    timeAllowed: string,
+    rows: TableRow[]
+  ) {
+    setIdUser(idUser)
+    setSelectedVoyage(selectedVoyage);
+    setFromLocation(fromLocation);
+    setToLocation(toLocation);
+    setSelectedVessel(selectedVessel);
+    setCharteres(charteres);
+    setCpDate(cpDate);
+    setCpRate(cpRate);
+    setOperation(operation);
+    setCargoQuantity(cargoQuantity);
+    setCargoType(cargoType);
+    setDemurrageRate(demurrageRate);
+    setDespatchRate(despatchRate);
+    setNorType(norType);
+    setTimeVar1(timeVar1);
+    setTimeVar2(timeVar2);
+    setTimeType(timeType);
+    setEndweekType(endweekType);
+    setAssistOption1(assistOption1);
+    setAssistOption2(assistOption2);
+    setAssistOption3(assistOption3);
+    setTimeResult(timeResult);
+    setDespatchOrDemurrage(despatchOrDemurrage);
+    setRate(rate);
+    setComission(comission);
+    setSubtotal(subtotal);
+    setTotal(total);
+    setNorTenderedDays(norTenderedDays);
+    setNorTenderedHours(norTenderedHours);
+    setNorRetenderedDays(norRetenderedDays);
+    setNorRetenderedHours(norRetenderedHours);
+    setNorAcepptedDays(norAcepptedDays);
+    setNorAcepptedHours(norAcepptedHours);
+    setNorLaytimeEndDays(norLaytimeEndDays);
+    setNorLaytimeEndHours(norLaytimeEndHours);
+    setNotepad(notepad);
+    setNorLaytimeStartDays(norLaytimeStartDays);
+    setNorLaytimeStartHours(norLaytimeStartHours);
+    setTimeUsed(timeUsed);
+    setTimeAllowed(timeAllowed);
+    setRows(rows);
+  }
+
+  function findAndSetLaytime(laytimes: Laytime[], selectedLaytime: number | undefined) {
+    const laytime = laytimes.find(item => item.id_laytime === selectedLaytime);
+
+    if (laytime) {
+      console.log("Entrou no if da função")
+      console.log(laytime)
+      const cpDateString = laytime.cp_date instanceof Date ? laytime.cp_date.toISOString().split('T')[0] : laytime.cp_date;
+      setConstsSavedLaytime(
+        laytime.id_user,
+        laytime.id_voyage,
+        laytime.from_location,
+        laytime.to_location,
+        laytime.id_vessel,
+        laytime.charteres,
+        cpDateString,
+        laytime.cp_rate,
+        laytime.operation,
+        laytime.cargo_quantity,
+        laytime.cargo_type,
+        laytime.demurrage_rate,
+        laytime.despatch_rate,
+        laytime.nor_type,
+        laytime.time_var1,
+        laytime.time_var2,
+        laytime.time_type,
+        laytime.endweek_type,
+        laytime.assist_options_1,
+        laytime.assist_options_2,
+        laytime.assist_options_3,
+        laytime.time_result,
+        laytime.despatch_or_demurrage,
+        laytime.rate,
+        laytime.comission,
+        laytime.subtotal,
+        laytime.total,
+        laytime.nor_tendered_days,
+        laytime.nor_tendered_hours,
+        laytime.nor_retendered_days,
+        laytime.nor_retendered_hours,
+        laytime.nor_laytime_accepted_days,
+        laytime.nor_laytime_accepted_hours,
+        laytime.nor_laytime_end_days,
+        laytime.nor_laytime_end_hours,
+        laytime.notepad,
+        laytime.nor_laytime_accepted_days,
+        laytime.nor_laytime_accepted_hours,
+        laytime.time_used,
+        laytime.time_allowed,
+        laytime.event_logs
+      );
+    } else {
+      console.warn(`Laytime com o id ${selectedLaytime} não encontrado.`);
+    }
   }
 
   // Funções para o calculo matematico
@@ -346,7 +446,6 @@ export default function Laytime() {
 
     calcTimeAllowed()
     const start = calcWhenLaytimeStarts(norType, timeVar1, timeVar2, timeType, startDate, endweekType)
-    setLaytimeStarts(start)
     setNorLaytimeStartDays(moment(start).format("YYYY-MM-DD"));
     setNorLaytimeStartHours(moment(start).format("HH:mm"));
     calculateAndSetTimeUsed(start, endDate, lastTimeWasted);
@@ -438,11 +537,10 @@ export default function Laytime() {
         },
       })
 
-      if(resp.status !== 200) {
+      if (resp.status !== 200) {
         console.log("Erro ao dar tiro resgatando id")
       }
       if (resp.status == 200) {
-        setIdUser(resp.data.id_user)
 
         const laytimeBody = {
           id_user: resp.data.id_user,
@@ -497,18 +595,17 @@ export default function Laytime() {
           if (laytimeResp.status === 200) {
             // Obter o ID do Laytime
             const idLaytime = laytimeResp.data.id_laytime;
-            setIdLaytime(idLaytime);
 
             // Fazer POST de cada Event Log associado ao Laytime criado
             for (const row of rows) {
               const eventLogBody = {
                 id_laytime: idLaytime,
-                event_date: row.date,
-                from_time: row.from,
-                to_time: row.to,
-                remarks: row.remarks,
-                percent_count: row.percentCount,
-                excused_time: row.excusedTime
+                event_date: row.event_date,
+                from_time: row.from_time,
+                to_time: row.to_time,
+                remarks: row.percent_count,
+                percent_count: row.remarks,
+                excused_time: row.excused_time
               };
 
               await axios.post(`${BASE_URL}/register_event_log`, eventLogBody, {
@@ -528,7 +625,7 @@ export default function Laytime() {
     }
   }
 
-  async function getLaytimes () {
+  async function getLaytimes() {
     const token = localStorage.getItem('token');
 
     try {
@@ -538,7 +635,7 @@ export default function Laytime() {
         },
       })
 
-      if(resp.status == 200) {
+      if (resp.status == 200) {
         setLaytimes(resp.data)
       }
     } catch (error) {
@@ -548,12 +645,12 @@ export default function Laytime() {
 
   return (
     <>
-      <Header 
-      onButtonCalculateClick={handleButtonClick} 
-      onButtonSaveClick={postLaytimeAndEventLogs} 
-      laytimes={laytimes}
-      selectedLaytime={selectedLaytime}
-      setSelectedLaytime={setSelectedLaytime}
+      <Header
+        onButtonCalculateClick={handleButtonClick}
+        onButtonSaveClick={postLaytimeAndEventLogs}
+        laytimes={laytimes}
+        selectedLaytime={selectedLaytime}
+        setSelectedLaytime={setSelectedLaytime}
       />
       <div className="bg-gray-200 w-full h-full">
         <BadNotification
@@ -564,28 +661,71 @@ export default function Laytime() {
         />
         <Laytime_calculation
           voyages={voyages}
+          setVoyages={setVoyages}
+
           vessels={vessels}
+          setVessels={setVessels}
+
           selectedVoyage={selectedVoyage}
+          setSelectedVoyage={setSelectedVoyage}
+
           fromLocation={fromLocation}
+          setFromLocation={setFromLocation}
+
           toLocation={toLocation}
+          setToLocation={setToLocation}
+
           selectedVessel={selectedVessel}
+          setSelectedVessel={setSelectedVessel}
+
           charteres={charteres}
+          setCharteres={setCharteres}
+
           cpDate={cpDate}
+          setCpDate={setCpDate}
+
           cpRate={cpRate}
+          setCpRate={setCpRate}
+
           operation={operation}
+          setOperation={setOperation}
+
           cargoQuantity={cargoQuantity}
+          setCargoQuantity={setCargoQuantity}
+
           cargoType={cargoType}
+          setCargoType={setCargoType}
+
           demurrageRate={demurrageRate}
+          setDemurrageRate={setDemurrageRate}
+
           despatchRate={despatchRate}
+          setDespatchRate={setDespatchRate}
+
           norType={norType}
+          setNorType={setNorType}
+
           timeVar1={timeVar1}
+          setTimeVar1={setTimeVar1}
+
           timeVar2={timeVar2}
+          setTimeVar2={setTimeVar2}
+
           timeType={timeType}
+          setTimeType={setTimeType}
+
           endweekType={endweekType}
+          setEndweekType={setEndweekType}
+
           assistOption1={assistOption1}
+          setAssistOption1={setAssistOption1}
+
           assistOption2={assistOption2}
+          setAssistOption2={setAssistOption2}
+
           assistOption3={assistOption3}
-          setConsts={setConsts}
+          setAssistOption3={setAssistOption3}
+
           erros={erros}
           setters={setters}
         />

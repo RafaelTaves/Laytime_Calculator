@@ -95,7 +95,10 @@ export default function Header({ onButtonCalculateClick, onButtonSaveClick, layt
         <div className='hidden lg:flex'>
           <select
             value={selectedLaytime ?? ""}
-            onChange={(e) => setSelectedLaytime(Number(e.target.value))}
+            onChange={(e) => {
+              setSelectedLaytime(Number(e.target.value))
+              console.log("Id selecionado: " + Number(e.target.value))
+            }}
             className='border-0 rounded-lg text-black font-Poppins w-full px-3 xl:w-96 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm'>
             <option>Selecione um laytime</option>
             {laytimes.map(laytime => (

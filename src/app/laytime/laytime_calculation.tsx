@@ -51,28 +51,70 @@ interface SettersProps {
 
 interface laytimeProps {
     voyages: Voyages[],
+    setVoyages: React.Dispatch<React.SetStateAction<Voyages[]>>,
+    
     vessels: Vessels[],
+    setVessels: React.Dispatch<React.SetStateAction<Vessels[]>>,
+    
     selectedVoyage: number | null,
+    setSelectedVoyage: React.Dispatch<React.SetStateAction<number | null>>,
+    
     fromLocation: string,
+    setFromLocation: React.Dispatch<React.SetStateAction<string>>,
+    
     toLocation: string,
+    setToLocation: React.Dispatch<React.SetStateAction<string>>,
+    
     selectedVessel: number | null,
+    setSelectedVessel: React.Dispatch<React.SetStateAction<number | null>>,
+    
     charteres: string,
+    setCharteres: React.Dispatch<React.SetStateAction<string>>,
+    
     cpDate: string,
+    setCpDate: React.Dispatch<React.SetStateAction<string>>,
+    
     cpRate: number | null,
+    setCpRate: React.Dispatch<React.SetStateAction<number | null>>,
+    
     operation: string,
+    setOperation: React.Dispatch<React.SetStateAction<string>>,
+    
     cargoQuantity: number | null,
+    setCargoQuantity: React.Dispatch<React.SetStateAction<number | null>>,
+    
     cargoType: string,
+    setCargoType: React.Dispatch<React.SetStateAction<string>>,
+    
     demurrageRate: number,
+    setDemurrageRate: React.Dispatch<React.SetStateAction<number>>,
+    
     despatchRate: number,
+    setDespatchRate: React.Dispatch<React.SetStateAction<number>>,
+    
     norType: string,
+    setNorType: React.Dispatch<React.SetStateAction<string>>,
+    
     timeVar1: string,
+    setTimeVar1: React.Dispatch<React.SetStateAction<string>>,
+    
     timeVar2: string,
+    setTimeVar2: React.Dispatch<React.SetStateAction<string>>,
+    
     timeType: string,
+    setTimeType: React.Dispatch<React.SetStateAction<string>>,
+    
     endweekType: string,
+    setEndweekType: React.Dispatch<React.SetStateAction<string>>,
+    
     assistOption1: string,
+    setAssistOption1: React.Dispatch<React.SetStateAction<string>>,
+    
     assistOption2: string,
+    setAssistOption2: React.Dispatch<React.SetStateAction<string>>,
+    
     assistOption3: string,
-    setConsts: (selectedVoyage: number | null, fromLocation: string, toLocation: string, selectedVessel: number | null, charteres: string, cpDate: string, cpRate: number | null, operation: string, cargoQuantity: number | null, cargoType: string, demurrageRate: number, despatchRate: number, norType: string, timeVar1: string, timeVar2: string, timeType: string, endweekType: string, assistOption1: string, assistOption2: string, assistOption3: string) => void
+    setAssistOption3: React.Dispatch<React.SetStateAction<string>>,
     erros: ErrosProps;
     setters: SettersProps;
 }
@@ -84,29 +126,56 @@ interface Vessels {
     id_vessel: number
 }
 
-export default function Laytime_calculation({ voyages, vessels, selectedVoyage, fromLocation, toLocation, selectedVessel, charteres, cpDate, operation, cargoQuantity, cargoType, demurrageRate, despatchRate, norType, timeVar1, timeVar2, timeType, endweekType, assistOption1, assistOption2, assistOption3, setConsts, erros, setters }: laytimeProps) {
-    const [NewselectedVoyage, setNewSelectedVoyage] = useState<number | null>(selectedVoyage);
-    const [NewfromLocation, setNewFromLocation] = useState<string>(fromLocation);
-    const [NewtoLocation, setNewToLocation] = useState<string>(toLocation);
-    const [NewselectedVessel, setNewSelectedVessel] = useState<number | null>(selectedVessel)
-    const [Newcharteres, setNewCharteres] = useState<string>(charteres)
-    const [NewcpDate, setNewCpDate] = useState<string>(cpDate)
-    const [NewcpRate, setNewCpRate] = useState<number | null>(null)
-    const [Newoperation, setNewOperation] = useState<string>(operation)
-    const [NewcargoQuantity, setNewCargoQuantity] = useState<number | null>(cargoQuantity)
-    const [NewcargoType, setNewCargoType] = useState<string>(cargoType)
-    const [NewdemurrageRate, setNewDemurrageRate] = useState<number>(demurrageRate)
+export default function Laytime_calculation({ 
+    voyages,
+    setVoyages,
+    vessels,
+    setVessels,
+    selectedVoyage,
+    setSelectedVoyage,
+    fromLocation,
+    setFromLocation,
+    toLocation,
+    setToLocation,
+    selectedVessel,
+    setSelectedVessel,
+    charteres,
+    setCharteres,
+    cpDate,
+    setCpDate,
+    cpRate,
+    setCpRate,
+    operation,
+    setOperation,
+    cargoQuantity,
+    setCargoQuantity,
+    cargoType,
+    setCargoType,
+    demurrageRate,
+    setDemurrageRate,
+    despatchRate,
+    setDespatchRate,
+    norType,
+    setNorType,
+    timeVar1,
+    setTimeVar1,
+    timeVar2,
+    setTimeVar2,
+    timeType,
+    setTimeType,
+    endweekType,
+    setEndweekType,
+    assistOption1,
+    setAssistOption1,
+    assistOption2,
+    setAssistOption2,
+    assistOption3,
+    setAssistOption3,
+    erros, 
+    setters 
+}: laytimeProps) {
     const [NewDisplaydemurrageRate, setNewDisplayDemurrageRate] = useState<string>("$ 0.00")
-    const [NewdespatchRate, setNewDespatchRate] = useState<number>(despatchRate)
     const [NewDisplaydespatchRate, setNewDisplayDespatchRate] = useState<string>("$ 0.00")
-    const [NewnorType, setNewNorType] = useState<string>(norType)
-    const [NewtimeVar1, setNewTimeVar1] = useState<string>(timeVar1)
-    const [NewtimeVar2, setNewTimeVar2] = useState<string>(timeVar2)
-    const [NewtimeType, setNewTimeType] = useState<string>(timeType)
-    const [NewendweekType, setNewEndweekType] = useState<string>(endweekType)
-    const [NewassistOption1, setNewAssistOption1] = useState<string>(assistOption1)
-    const [NewassistOption2, setNewAssistOption2] = useState<string>(assistOption2)
-    const [NewassistOption3, setNewAssistOption3] = useState<string>(assistOption3)
 
     const [voyageInput, setVoyageInput] = useState<string>("");
     const [filteredVoyages, setFilteredVoyages] = useState<Voyages[]>(voyages);
@@ -159,15 +228,39 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
         setErroTimeVar2,
     } = setters;
 
+    const formatCurrency = (value: string): string => {
+        const [integerPart, decimalPart] = value.split('.');
+        const formattedDecimal = decimalPart ? decimalPart.slice(0, 2).padEnd(2, '0') : '00';
+        return `$ ${integerPart || '0'}.${formattedDecimal}`;
+    };
+
     useEffect(() => {
-        if (NewselectedVoyage !== null) {
-            const voyage = voyages.find((v) => v.id_voyage === NewselectedVoyage);
+        updateDespatchRate(despatchRate);
+    }, [despatchRate]);
+
+    useEffect(() => {
+        updateDemurrageRate(demurrageRate);
+    }, [demurrageRate]);
+
+    useEffect(() => {
+        if (selectedVoyage !== null) {
+            const voyage = voyages.find((v) => v.id_voyage === selectedVoyage);
             if (voyage) {
-                setNewFromLocation(voyage.from_location);
-                setNewToLocation(voyage.to_location);
+                setVoyageInput(voyage.name)
+                setFromLocation(voyage.from_location);
+                setToLocation(voyage.to_location);
             }
         }
-    }, [NewselectedVoyage, voyages]);
+    }, [selectedVoyage, voyages]);
+
+    useEffect(() => {
+        if (selectedVessel !== null) {
+            const vessel = vessels.find((v) => v.id_vessel === selectedVessel);
+            if (vessel) {
+                setVesselInput(vessel.name)
+            }
+        }
+    }, [selectedVoyage, voyages]);
 
     useEffect(() => {
         const filtered = voyages.filter(voyage =>
@@ -177,7 +270,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
     }, [voyageInput, voyages]);
 
     const handleVoyageSelect = (voyage: Voyages) => {
-        setNewSelectedVoyage(voyage.id_voyage);
+        setSelectedVoyage(voyage.id_voyage);
         setVoyageInput(voyage.name);
         setShowDropdown(false);
     };
@@ -190,7 +283,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
     };
 
     function handleVesselChange(e: any) {
-        setNewSelectedVessel(Number(e.target.value))
+        setSelectedVessel(Number(e.target.value))
     }
 
     useEffect(() => {
@@ -201,40 +294,39 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
     }, [vesselInput, vessels]);
 
     const handleVesselSelect = (vessel: Vessels) => {
-        setNewSelectedVessel(vessel.id_vessel);
+        setSelectedVessel(vessel.id_vessel);
         setVesselInput(vessel.name);
         setShowDropdown(false);
     };
 
     function onRefresh() { }
 
-    useEffect(() => {
-        setConsts(NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpRate, Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3)
-
-    },
-        [NewselectedVoyage, NewfromLocation, NewtoLocation, NewselectedVessel, Newcharteres, NewcpDate, NewcpRate, Newoperation, NewcargoQuantity, NewcargoType, NewdemurrageRate, NewdespatchRate, NewnorType, NewtimeVar1, NewtimeVar2, NewtimeType, NewendweekType, NewassistOption1, NewassistOption2, NewassistOption3])
-
-    const handleDespatchInputChange = (e: any) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        setRate: React.Dispatch<React.SetStateAction<number>>,
+        setDisplayRate: React.Dispatch<React.SetStateAction<string>>
+    ) => {
         const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-        setNewDespatchRate(inputValue)
-        const [integerPart, decimalPart] = inputValue.split('.');
-
-        const formattedDecimal = decimalPart ? decimalPart.slice(0, 2) : '00';
-
-        const formattedValue = `$ ${integerPart || '0'}.${formattedDecimal}`;
-        setNewDisplayDespatchRate(formattedValue);
+        setRate(parseFloat(inputValue) || 0);
+        setDisplayRate(formatCurrency(inputValue));
     };
 
-    const handleDemurrageInputChange = (e: any) => {
-        const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-        setNewDemurrageRate(inputValue)
-        const [integerPart, decimalPart] = inputValue.split('.');
-
-        const formattedDecimal = decimalPart ? decimalPart.slice(0, 2) : '00';
-
-        const formattedValue = `$ ${integerPart || '0'}.${formattedDecimal}`;
-        setNewDisplayDemurrageRate(formattedValue);
+    const updateRate = (
+        value: number,
+        setDisplayRate: React.Dispatch<React.SetStateAction<string>>
+    ) => {
+        const formattedValue = formatCurrency(value.toFixed(2));
+        setDisplayRate(formattedValue);
     };
+
+    const updateDespatchRate = (value: number) => {
+        updateRate(value, setNewDisplayDespatchRate);
+    };
+
+    const updateDemurrageRate = (value: number) => {
+        updateRate(value, setNewDisplayDemurrageRate);
+    };
+
 
     return (
         <>
@@ -344,7 +436,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Vessel</label>
-                            <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={NewselectedVessel ?? ''}>
+                            <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
                                 <option value={0}>Select a vessel</option>
                                 {vessels.map((vessel) => (
                                     <option key={vessel.id_vessel} value={vessel.id_vessel}>{vessel.name}</option>
@@ -357,9 +449,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="charterers"
                                 name="charterers"
-                                value={Newcharteres}
+                                value={charteres}
                                 onChange={(e) => {
-                                    setNewCharteres(e.target.value)
+                                    setCharteres(e.target.value)
                                     setErroCharteres(false)
                                 }}
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCharteres === true ? "ring-red-500" : "ring-gray-300"}`}
@@ -374,9 +466,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="charterers"
                                 name="charterers"
-                                value={Newcharteres}
+                                value={charteres}
                                 onChange={(e) => {
-                                    setNewCharteres(e.target.value)
+                                    setCharteres(e.target.value)
                                     setErroCharteres(false)
                                 }}
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCharteres === true ? "ring-red-500" : "ring-gray-300"}`}
@@ -389,7 +481,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="from"
                                 name="from"
-                                value={NewfromLocation}
+                                value={fromLocation}
                                 readOnly
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
                             />
@@ -400,7 +492,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="to"
                                 name="to"
-                                value={NewtoLocation}
+                                value={toLocation}
                                 readOnly
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
                             />
@@ -411,9 +503,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="date"
                                 id="cpDate"
                                 name="cpDate"
-                                value={NewcpDate}
+                                value={cpDate}
                                 onChange={(e) => {
-                                    setNewCpDate(e.target.value)
+                                    setCpDate(e.target.value)
                                     setErroCpDate(false)
                                 }}
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCpDate === true ? "ring-red-500" : "ring-gray-300"}`}
@@ -424,9 +516,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="incoterm"
                                 name="incoterm"
-                                value={Newoperation}
+                                value={operation}
                                 onChange={(e) => {
-                                    setNewOperation(e.target.value)
+                                    setOperation(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -444,7 +536,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="from"
                                 name="from"
-                                value={NewfromLocation}
+                                value={fromLocation}
                                 readOnly
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
                             />
@@ -455,7 +547,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="to"
                                 name="to"
-                                value={NewtoLocation}
+                                value={toLocation}
                                 readOnly
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
                             />
@@ -469,9 +561,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="date"
                                 id="cpDate"
                                 name="cpDate"
-                                value={NewcpDate}
+                                value={cpDate}
                                 onChange={(e) => {
-                                    setNewCpDate(e.target.value)
+                                    setCpDate(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
@@ -481,9 +573,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="incoterm"
                                 name="incoterm"
-                                value={Newoperation}
+                                value={operation}
                                 onChange={(e) => {
-                                    setNewOperation(e.target.value)
+                                    setOperation(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -501,9 +593,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="cargoQuantity"
                                 name="cargoQuantity"
-                                value={NewcargoQuantity !== null ? NewcargoQuantity : ""}
+                                value={cargoQuantity !== null ? cargoQuantity : ""}
                                 onChange={(e) => {
-                                    setNewCargoQuantity(Number(e.target.value))
+                                    setCargoQuantity(Number(e.target.value))
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
@@ -514,9 +606,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="cargiType"
                                 name="cargiType"
-                                value={NewcargoType}
+                                value={cargoType}
                                 onChange={(e) => {
-                                    setNewCargoType((e.target.value))
+                                    setCargoType((e.target.value))
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
@@ -530,8 +622,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
-                                value={NewdemurrageRate}
-                                onChange={(e) => setNewDemurrageRate(Number(e.target.value))}
+                                value={demurrageRate}
+                                onChange={(e) => setDemurrageRate(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -540,8 +632,8 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
-                                value={NewdespatchRate}
-                                onChange={(e) => setNewDespatchRate(Number(e.target.value))}
+                                value={`$ ${despatchRate}`}
+                                onChange={(e) => setDespatchRate(Number(e.target.value))}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                         </div>
                     </div>
@@ -553,9 +645,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="cargoQuantity"
                                 name="cargoQuantity"
-                                value={NewcargoQuantity !== null ? NewcargoQuantity : ""}
+                                value={cargoQuantity !== null ? cargoQuantity : ""}
                                 onChange={(e) => {
-                                    setNewCargoQuantity(Number(e.target.value))
+                                    setCargoQuantity(Number(e.target.value))
                                     setErroCargoQuantity(false)
                                 }}
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCargoQuantity === true ? "ring-red-500" : "ring-gray-300"}`}
@@ -567,9 +659,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="cpRate"
                                 name="cpRate"
-                                value={NewcpRate !== null ? NewcpRate : ""}
+                                value={cpRate !== null ? cpRate : ""}
                                 onChange={(e) => {
-                                    setNewCpRate(Number(e.target.value))
+                                    setCpRate(Number(e.target.value))
                                     setErroCpRate(false)
                                 }}
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCpRate === true ? "ring-red-500" : "ring-gray-300"}`}
@@ -581,9 +673,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 type="text"
                                 id="cargiType"
                                 name="cargiType"
-                                value={NewcargoType}
+                                value={cargoType}
                                 onChange={(e) => {
-                                    setNewCargoType(e.target.value)
+                                    setCargoType(e.target.value)
                                     setErroCargoType(false)
                                 }}
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCargoType === true ? "ring-red-500" : "ring-gray-300"}`}
@@ -596,10 +688,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 id="demurrageRate"
                                 name="demurrageRate"
                                 value={NewDisplaydemurrageRate}
-                                onChange={(e) => {
-                                    handleDemurrageInputChange(e);
-                                    setErroDemurrageRate(false);
-                                }}
+                                onChange={(e) => handleInputChange(e, setDemurrageRate, setNewDisplayDemurrageRate)}
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroDemurrageRate === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
@@ -610,10 +699,7 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 id="despatchRate"
                                 name="despatchRate"
                                 value={NewDisplaydespatchRate}
-                                onChange={(e) => {
-                                    handleDespatchInputChange(e);
-                                    setErroDespatchRate(false);
-                                }}
+                                onChange={(e) => handleInputChange(e, setDespatchRate, setNewDisplayDespatchRate)}
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroDespatchRate === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
@@ -624,9 +710,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="norType"
                                 name="norType"
-                                value={NewnorType}
+                                value={norType}
                                 onChange={(e) => {
-                                    setNewNorType(e.target.value)
+                                    setNorType(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -641,9 +727,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 id="timeVar1"
                                 name="timeVar1"
                                 placeholder='hh:mm'
-                                value={NewtimeVar1}
+                                value={timeVar1}
                                 onChange={(e) => {
-                                    setNewTimeVar1(e.target.value);
+                                    setTimeVar1(e.target.value);
                                     setErroTimeVar1(false);
                                 }}
                                 className={`text-center mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroTimeVar1 === true ? "ring-red-500" : "ring-gray-300"}`}
@@ -658,9 +744,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                                 id="timeVar2"
                                 name="timeVar2"
                                 placeholder='hh:mm'
-                                value={NewtimeVar2}
+                                value={timeVar2}
                                 onChange={(e) => {
-                                    setNewTimeVar2(e.target.value);
+                                    setTimeVar2(e.target.value);
                                     setErroTimeVar2(false);
                                 }}
                                 className={`text-center mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroTimeVar2 === true ? "ring-red-500" : "ring-gray-300"}`}
@@ -670,9 +756,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="selectClause2"
                                 name="selectClause2"
-                                value={NewtimeType}
+                                value={timeType}
                                 onChange={(e) => {
-                                    setNewTimeType(e.target.value)
+                                    setTimeType(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -688,9 +774,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="selectClause3"
                                 name="selectClause3"
-                                value={NewendweekType}
+                                value={endweekType}
                                 onChange={(e) => {
-                                    setNewEndweekType(e.target.value)
+                                    setEndweekType(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -704,9 +790,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="selectClause6"
                                 name="selectClause6"
-                                value={NewassistOption1}
+                                value={assistOption1}
                                 onChange={(e) => {
-                                    setNewAssistOption1(e.target.value)
+                                    setAssistOption1(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -718,9 +804,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="selectClause7"
                                 name="selectClause7"
-                                value={NewassistOption2}
+                                value={assistOption2}
                                 onChange={(e) => {
-                                    setNewAssistOption2(e.target.value)
+                                    setAssistOption2(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -735,9 +821,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="selectClause3"
                                 name="selectClause3"
-                                value={NewendweekType}
+                                value={endweekType}
                                 onChange={(e) => {
-                                    setNewEndweekType(e.target.value)
+                                    setEndweekType(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -761,9 +847,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="selectClause6"
                                 name="selectClause6"
-                                value={NewassistOption1}
+                                value={assistOption1}
                                 onChange={(e) => {
-                                    setNewAssistOption1(e.target.value)
+                                    setAssistOption1(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
@@ -778,9 +864,9 @@ export default function Laytime_calculation({ voyages, vessels, selectedVoyage, 
                             <select
                                 id="selectClause7"
                                 name="selectClause7"
-                                value={NewassistOption2}
+                                value={assistOption2}
                                 onChange={(e) => {
-                                    setNewAssistOption2(e.target.value)
+                                    setAssistOption2(e.target.value)
 
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
