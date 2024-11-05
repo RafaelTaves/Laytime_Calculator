@@ -17,7 +17,7 @@ export default function GoodNotification({ show, title, desc, onClose }: Notific
     <>
       <div
         aria-live="assertive"
-        className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 z-10 sm:items-start sm:p-6"
+        className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 z-50 sm:items-start sm:p-6"
       >
         <div className="flex w-full flex-col items-center mb-20 space-y-4 mt-12 sm:items-end">
           <Transition
@@ -35,7 +35,7 @@ export default function GoodNotification({ show, title, desc, onClose }: Notific
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <FaRegCheckCircle
-                      className="h-7 w-7 text-light-red-I"
+                      className="h-10 w-10 text-green-500"
                       aria-hidden="true"
                     />
                   </div>

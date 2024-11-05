@@ -15,6 +15,7 @@ import moment from "moment";
 import calcTimeUsed from "../Functions/calcTimeUsed";
 import BadNotification from "../components/notifications/badNotification";
 import axios from "axios";
+import GoodNotification from "../components/notifications/goodNotification";
 
 interface Voyages {
   from_location: string,
@@ -41,6 +42,7 @@ interface TableRow {
 }
 
 interface EventLog {
+  id_laytime: number;
   event_date: string;
   from_time: string;
   to_time: string;
@@ -48,6 +50,16 @@ interface EventLog {
   percent_count: string;
   excused_time: string;
   id_event_log: number;
+}
+
+interface EventLogPatch {
+  id_laytime: number;
+  event_date: string;
+  from_time: string;
+  to_time: string;
+  remarks: string;
+  percent_count: string;
+  excused_time: string;
 }
 
 interface Laytime {
@@ -103,7 +115,7 @@ export default function Laytime() {
   const [voyages, setVoyages] = useState<Voyages[]>([])
   const [vessels, setVessels] = useState<Vessel[]>([])
   const [laytimes, setLaytimes] = useState<Laytime[]>([])
-  const [selectedLaytime, setSelectedLaytime] = useState<number>()
+  const [selectedLaytime, setSelectedLaytime] = useState<number>(0)
 
   const [selectedVoyage, setSelectedVoyage] = useState<number | null>(null);
   const [fromLocation, setFromLocation] = useState<string>("");
@@ -143,7 +155,7 @@ export default function Laytime() {
   const [erroTimeVar2, setErroTimeVar2] = useState<boolean>(false);
   const [erroStartDate, setErroStartDate] = useState<boolean>(false);
   const [erroEndDate, setErroEndDate] = useState<boolean>(false);
-  const [badNotification, setBadNotification] = useState<boolean>(false);
+  
   const erros = {
     erroSelectedVoyage,
     erroFromLocation,
@@ -181,6 +193,13 @@ export default function Laytime() {
     setErroStartDate,
     setErroEndDate
   };
+
+  // Notifications 
+  const [badNotification, setBadNotification] = useState<boolean>(false);
+  const [goodSaveNotification, setGoodSaveNotification] = useState<boolean>(false);
+  const [badGetLaytimesNotification, setBadGetLaytimesNotification] = useState<boolean>(false);
+  const [badPatchNotification, setBadPatchNotification] = useState<boolean>(false);
+  const [badSaveNotification, setBadSaveNotification] = useState<boolean>(false);
 
   const [rows, setRows] = useState<TableRow[]>([
     { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00' }
@@ -454,6 +473,10 @@ export default function Laytime() {
   // Função para checar campos antes de calcular
   const handleCloseNotification = () => {
     setBadNotification(false);
+    setGoodSaveNotification(false);
+    setBadGetLaytimesNotification(false);
+    setBadPatchNotification(false)
+    setBadSaveNotification(false)
   };
 
   function checkInputs() {
@@ -527,251 +550,397 @@ export default function Laytime() {
 
   // Funções para tiros na api  
 
-  async function postLaytimeAndEventLogs() {
+  async function saveLaytimeAndEventLogs() {
     const token = localStorage.getItem('token');
 
-    try {
-      const resp = await axios.get(`${BASE_URL}/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      })
+    if (selectedLaytime == 0) {
+      try {
+        const resp = await axios.get(`${BASE_URL}/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        })
 
-      if (resp.status !== 200) {
-        console.log("Erro ao dar tiro resgatando id")
-      }
-      if (resp.status == 200) {
+        if (resp.status !== 200) {
+          console.log("Erro ao dar tiro resgatando id")
+        }
+        if (resp.status == 200) {
 
-        const laytimeBody = {
-          id_user: resp.data.id_user,
-          id_vessel: selectedVessel,
-          id_voyage: selectedVoyage,
-          charteres: charteres,
-          from_location: fromLocation,
-          to_location: toLocation,
-          cp_date: cpDate,
-          operation: operation,
-          cargo_quantity: cargoQuantity,
-          cargo_type: cargoType,
-          demurrage_rate: demurrageRate,
-          despatch_rate: despatchRate,
-          nor_type: norType,
-          time_var1: timeVar1,
-          time_var2: timeVar2,
-          time_type: timeType,
-          endweek_type: endweekType,
-          assist_options_1: assistOption1,
-          assist_options_2: assistOption2,
-          assist_options_3: assistOption3,
-          nor_tendered_days: norTenderedDays,
-          nor_tendered_hours: norTenderedHours,
-          nor_retendered_days: norRetenderedDays,
-          nor_retendered_hours: norRetenderedHours,
-          nor_laytimestarts_days: norLaytimeStartDays,
-          nor_laytimestarts_hours: norLaytimeStartHours,
-          nor_laytime_end_days: norLaytimeEndDays,
-          nor_laytime_end_hours: norLaytimeEndHours,
-          nor_laytime_accepted_days: norAcepptedDays,
-          nor_laytime_accepted_hours: norAcepptedHours,
-          notepad: notepad,
-          time_used: timeUsed,
-          time_result: timeResult,
-          time_allowed: timeAllowed,
-          rate: rate,
-          comission: comission,
-          subtotal: subtotal,
-          total: total,
-          despatch_or_demurrage: despatchOrDemurrage
-        };
+          const laytimeBody = {
+            id_user: resp.data.id_user,
+            id_vessel: selectedVessel,
+            id_voyage: selectedVoyage,
+            charteres: charteres,
+            from_location: fromLocation,
+            to_location: toLocation,
+            cp_date: cpDate,
+            cp_rate: cpRate,
+            operation: operation,
+            cargo_quantity: cargoQuantity,
+            cargo_type: cargoType,
+            demurrage_rate: demurrageRate,
+            despatch_rate: despatchRate,
+            nor_type: norType,
+            time_var1: timeVar1,
+            time_var2: timeVar2,
+            time_type: timeType,
+            endweek_type: endweekType,
+            assist_options_1: assistOption1,
+            assist_options_2: assistOption2,
+            assist_options_3: assistOption3,
+            nor_tendered_days: norTenderedDays,
+            nor_tendered_hours: norTenderedHours,
+            nor_retendered_days: norRetenderedDays,
+            nor_retendered_hours: norRetenderedHours,
+            nor_laytimestarts_days: norLaytimeStartDays,
+            nor_laytimestarts_hours: norLaytimeStartHours,
+            nor_laytime_end_days: norLaytimeEndDays,
+            nor_laytime_end_hours: norLaytimeEndHours,
+            nor_laytime_accepted_days: norAcepptedDays,
+            nor_laytime_accepted_hours: norAcepptedHours,
+            notepad: notepad,
+            time_used: timeUsed,
+            time_result: timeResult,
+            time_allowed: timeAllowed,
+            rate: rate,
+            comission: comission,
+            subtotal: subtotal,
+            total: total,
+            despatch_or_demurrage: despatchOrDemurrage
+          };
 
-        try {
-          // Fazer o POST para registrar o Laytime
-          const laytimeResp = await axios.post(`${BASE_URL}/register_laytime`, laytimeBody, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          });
+          try {
+            // Fazer o POST para registrar o Laytime
+            const laytimeResp = await axios.post(`${BASE_URL}/register_laytime`, laytimeBody, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              },
+            });
 
-          if (laytimeResp.status === 200) {
-            // Obter o ID do Laytime
-            const idLaytime = laytimeResp.data.id_laytime;
-
-            // Fazer POST de cada Event Log associado ao Laytime criado
-            for (const row of rows) {
-              const eventLogBody = {
-                id_laytime: idLaytime,
-                event_date: row.event_date,
-                from_time: row.from_time,
-                to_time: row.to_time,
-                remarks: row.percent_count,
-                percent_count: row.remarks,
-                excused_time: row.excused_time
-              };
-
-              await axios.post(`${BASE_URL}/register_event_log`, eventLogBody, {
-                headers: {
-                  Authorization: `Bearer ${token}`
-                },
-              });
+            try {
+              if (laytimeResp.status === 200) {
+                // Fazer POST de cada Event Log associado ao Laytime criado
+                for (const row of rows) {
+                  const eventLogBody = {
+                    id_laytime: laytimeResp.data.id_laytime,
+                    event_date: row.event_date,
+                    from_time: row.from_time,
+                    to_time: row.to_time,
+                    remarks: row.percent_count,
+                    percent_count: row.remarks,
+                    excused_time: row.excused_time
+                  };
+  
+                  await axios.post(`${BASE_URL}/register_event_log`, eventLogBody, {
+                    headers: {
+                      Authorization: `Bearer ${token}`
+                    },
+                  });
+                }
+  
+              }
+            } catch (error) {
+              setBadSaveNotification(true)
+              console.log("Houve um problema ao tentar cadastrar os event logs: ", error);
+            } finally {
+              setGoodSaveNotification(true)
             }
-
+          } catch (error) {
+            setBadSaveNotification(true)
+            console.log("Houve um problema ao tentar cadastrar o laytime: ", error);
           }
-        } catch (error) {
-          console.log("Houve um problema ao tentar cadastrar o laytime ou event logs: ", error);
+        }
+      } catch (erro) {
+        setBadSaveNotification(true)
+        console.log("Houve um erro ao resgatar o id do usuário: ", erro)
+      }
+    } else {
+      // PATCH
+      try {
+        const resp = await axios.get(`${BASE_URL}/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        })
+
+        if (resp.status !== 200) {
+          console.log("Erro ao dar tiro resgatando id")
+        }
+        if (resp.status == 200) {
+
+          const laytimeBody = {
+            id_user: resp.data.id_user,
+            id_vessel: selectedVessel,
+            id_voyage: selectedVoyage,
+            charteres: charteres,
+            from_location: fromLocation,
+            to_location: toLocation,
+            cp_date: cpDate,
+            cp_rate: cpRate,
+            operation: operation,
+            cargo_quantity: cargoQuantity,
+            cargo_type: cargoType,
+            demurrage_rate: demurrageRate,
+            despatch_rate: despatchRate,
+            nor_type: norType,
+            time_var1: timeVar1,
+            time_var2: timeVar2,
+            time_type: timeType,
+            endweek_type: endweekType,
+            assist_options_1: assistOption1,
+            assist_options_2: assistOption2,
+            assist_options_3: assistOption3,
+            nor_tendered_days: norTenderedDays,
+            nor_tendered_hours: norTenderedHours,
+            nor_retendered_days: norRetenderedDays,
+            nor_retendered_hours: norRetenderedHours,
+            nor_laytimestarts_days: norLaytimeStartDays,
+            nor_laytimestarts_hours: norLaytimeStartHours,
+            nor_laytime_end_days: norLaytimeEndDays,
+            nor_laytime_end_hours: norLaytimeEndHours,
+            nor_laytime_accepted_days: norAcepptedDays,
+            nor_laytime_accepted_hours: norAcepptedHours,
+            notepad: notepad,
+            time_used: timeUsed,
+            time_result: timeResult,
+            time_allowed: timeAllowed,
+            rate: rate,
+            comission: comission,
+            subtotal: subtotal,
+            total: total,
+            despatch_or_demurrage: despatchOrDemurrage
+          };
+
+          try {
+            // Fazer o PATCH para registrar o Laytime
+            const laytimeResp = await axios.patch(`${BASE_URL}/laytimes/${selectedLaytime}`, laytimeBody, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              },
+            });
+            try{
+              const laytime = laytimes.find(laytime => laytime.id_laytime === selectedLaytime);
+
+              if (laytime) {
+                laytime.event_logs.forEach(row => {
+                  const updatedData: EventLogPatch = {
+                    id_laytime: laytimeResp.data.id_laytime,
+                    event_date: row.event_date,
+                    from_time: row.from_time,
+                    to_time: row.to_time,
+                    remarks: row.remarks,
+                    percent_count: row.percent_count,
+                    excused_time: row.excused_time,
+                  };
+                  patchEventLog(row.id_event_log, updatedData);
+                });
+              }
+            } catch (error) {
+              setBadPatchNotification(true)
+              console.log("Houve um problema ao tentar cadastrar os event logs: ", error);
+            } 
+          } catch (error) {
+            setBadPatchNotification(true)
+          console.log("Houve um problema ao tentar cadastrar o laytime: ", error);
         }
       }
-    } catch (erro) {
+      } catch (erro) {
+        setBadPatchNotification(true)
       console.log("Houve um erro ao resgatar o id do usuário: ", erro)
     }
   }
+}
 
-  async function getLaytimes() {
-    const token = localStorage.getItem('token');
+async function patchEventLog(eventLogId: number, updatedData: EventLogPatch) {
+  const token = localStorage.getItem('token');
 
-    try {
-      const resp = await axios.get(`${BASE_URL}/laytimes`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      })
+  try {
+    const response = await axios.patch(`${BASE_URL}/event_logs/${eventLogId}`, updatedData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    });
 
-      if (resp.status == 200) {
-        setLaytimes(resp.data)
-      }
-    } catch (error) {
-      console.log("Houve um erro ao tentar recuperar os laytimes: " + error)
-    }
+  } catch (error) {
+    setBadPatchNotification(true)
+    console.error(error);
+  } finally {
+    setGoodSaveNotification(true)
   }
+}
 
-  return (
-    <>
-      <Header
-        onButtonCalculateClick={handleButtonClick}
-        onButtonSaveClick={postLaytimeAndEventLogs}
-        laytimes={laytimes}
-        selectedLaytime={selectedLaytime}
-        setSelectedLaytime={setSelectedLaytime}
+async function getLaytimes() {
+  const token = localStorage.getItem('token');
+
+  try {
+    const resp = await axios.get(`${BASE_URL}/laytimes`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+
+    if (resp.status == 200) {
+      setLaytimes(resp.data)
+    }
+  } catch (error) {
+    setBadGetLaytimesNotification(true)
+    console.log("Houve um erro ao tentar recuperar os laytimes: " + error)
+  }
+}
+
+return (
+  <>
+    <Header
+      onButtonCalculateClick={handleButtonClick}
+      onButtonSaveClick={saveLaytimeAndEventLogs}
+      laytimes={laytimes}
+      selectedLaytime={selectedLaytime}
+      setSelectedLaytime={setSelectedLaytime}
+    />
+    <div className="bg-gray-200 w-full h-full">
+      <BadNotification
+        show={badNotification}
+        title="Houve um erro!"
+        desc="Todos os campos devem estar preenchidos."
+        onClose={handleCloseNotification}
       />
-      <div className="bg-gray-200 w-full h-full">
-        <BadNotification
-          show={badNotification}
-          title="Houve um erro!"
-          desc="Todos os campos devem estar preenchidos."
-          onClose={handleCloseNotification}
-        />
-        <Laytime_calculation
-          voyages={voyages}
-          setVoyages={setVoyages}
+      <BadNotification
+        show={badGetLaytimesNotification}
+        title="Erro!"
+        desc="Houve um problema para carregar os laytimes existentes."
+        onClose={handleCloseNotification}
+      />
+      <BadNotification
+        show={badPatchNotification}
+        title="Erro!"
+        desc="Houve um problema para salvar os remarks alterados."
+        onClose={handleCloseNotification}
+      />
+      <BadNotification
+        show={badSaveNotification}
+        title="Erro!"
+        desc="Houve um problema para salvar o novo laytime."
+        onClose={handleCloseNotification}
+      />
+      <GoodNotification
+        show={goodSaveNotification}
+        title="Sucesso!"
+        desc="Salvo com sucesso."
+        onClose={handleCloseNotification}
+      />
+      <Laytime_calculation
+        voyages={voyages}
+        setVoyages={setVoyages}
 
-          vessels={vessels}
-          setVessels={setVessels}
+        vessels={vessels}
+        setVessels={setVessels}
 
-          selectedVoyage={selectedVoyage}
-          setSelectedVoyage={setSelectedVoyage}
+        selectedVoyage={selectedVoyage}
+        setSelectedVoyage={setSelectedVoyage}
 
-          fromLocation={fromLocation}
-          setFromLocation={setFromLocation}
+        fromLocation={fromLocation}
+        setFromLocation={setFromLocation}
 
-          toLocation={toLocation}
-          setToLocation={setToLocation}
+        toLocation={toLocation}
+        setToLocation={setToLocation}
 
-          selectedVessel={selectedVessel}
-          setSelectedVessel={setSelectedVessel}
+        selectedVessel={selectedVessel}
+        setSelectedVessel={setSelectedVessel}
 
-          charteres={charteres}
-          setCharteres={setCharteres}
+        charteres={charteres}
+        setCharteres={setCharteres}
 
-          cpDate={cpDate}
-          setCpDate={setCpDate}
+        cpDate={cpDate}
+        setCpDate={setCpDate}
 
-          cpRate={cpRate}
-          setCpRate={setCpRate}
+        cpRate={cpRate}
+        setCpRate={setCpRate}
 
-          operation={operation}
-          setOperation={setOperation}
+        operation={operation}
+        setOperation={setOperation}
 
-          cargoQuantity={cargoQuantity}
-          setCargoQuantity={setCargoQuantity}
+        cargoQuantity={cargoQuantity}
+        setCargoQuantity={setCargoQuantity}
 
-          cargoType={cargoType}
-          setCargoType={setCargoType}
+        cargoType={cargoType}
+        setCargoType={setCargoType}
 
-          demurrageRate={demurrageRate}
-          setDemurrageRate={setDemurrageRate}
+        demurrageRate={demurrageRate}
+        setDemurrageRate={setDemurrageRate}
 
-          despatchRate={despatchRate}
-          setDespatchRate={setDespatchRate}
+        despatchRate={despatchRate}
+        setDespatchRate={setDespatchRate}
 
-          norType={norType}
-          setNorType={setNorType}
+        norType={norType}
+        setNorType={setNorType}
 
-          timeVar1={timeVar1}
-          setTimeVar1={setTimeVar1}
+        timeVar1={timeVar1}
+        setTimeVar1={setTimeVar1}
 
-          timeVar2={timeVar2}
-          setTimeVar2={setTimeVar2}
+        timeVar2={timeVar2}
+        setTimeVar2={setTimeVar2}
 
-          timeType={timeType}
-          setTimeType={setTimeType}
+        timeType={timeType}
+        setTimeType={setTimeType}
 
-          endweekType={endweekType}
-          setEndweekType={setEndweekType}
+        endweekType={endweekType}
+        setEndweekType={setEndweekType}
 
-          assistOption1={assistOption1}
-          setAssistOption1={setAssistOption1}
+        assistOption1={assistOption1}
+        setAssistOption1={setAssistOption1}
 
-          assistOption2={assistOption2}
-          setAssistOption2={setAssistOption2}
+        assistOption2={assistOption2}
+        setAssistOption2={setAssistOption2}
 
-          assistOption3={assistOption3}
-          setAssistOption3={setAssistOption3}
+        assistOption3={assistOption3}
+        setAssistOption3={setAssistOption3}
 
-          erros={erros}
-          setters={setters}
-        />
-        <TableNOR
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
-          norLaytimeStartDays={norLaytimeStartDays}
-          norLaytimeStartHours={norLaytimeStartHours}
-          norTenderedDays={norTenderedDays}
-          setNorTenderedDays={setNorTenderedDays}
-          norTenderedHours={norTenderedHours}
-          setNorTenderedHours={setNorTenderedHours}
-          norRetenderedDays={norRetenderedDays}
-          setNorRetenderedDays={setNorRetenderedDays}
-          norRetenderedHours={norRetenderedHours}
-          setNorRetenderedHours={setNorRetenderedHours}
-          norAcepptedDays={norAcepptedDays}
-          setNorAcepptedDays={setNorAcepptedDays}
-          norAcepptedHours={norAcepptedHours}
-          setNorAcepptedHours={setNorAcepptedHours}
-          norLaytimeEndDays={norLaytimeEndDays}
-          setNorLaytimeEndDays={setNorLaytimeEndDays}
-          norLaytimeEndHours={norLaytimeEndHours}
-          setNorLaytimeEndHours={setNorLaytimeEndHours}
-        />
-        <TableRemark
-          rows={rows}
-          setRows={setRows}
-        />
-        <Total
-          timeAllowed={timeAllowed}
-          timeUsed={timeUsed}
-          demurrageRate={demurrageRate}
-          despatchRate={despatchRate}
-          setFatherTimeResult={setTimeResult}
-          setFatherDespatchOrDemurrage={setDespatchOrDemurrage}
-          setFatherRate={setRate}
-          setFatherComission={setComission}
-          setFatherSubtotal={setSubtotal}
-          setFatherTotal={setTotal}
-        />
-        <Notepad
-          notepad={notepad}
-          setNotepad={setNotepad}
-        />
-      </div>
-    </>
-  )
+        erros={erros}
+        setters={setters}
+      />
+      <TableNOR
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        norLaytimeStartDays={norLaytimeStartDays}
+        norLaytimeStartHours={norLaytimeStartHours}
+        norTenderedDays={norTenderedDays}
+        setNorTenderedDays={setNorTenderedDays}
+        norTenderedHours={norTenderedHours}
+        setNorTenderedHours={setNorTenderedHours}
+        norRetenderedDays={norRetenderedDays}
+        setNorRetenderedDays={setNorRetenderedDays}
+        norRetenderedHours={norRetenderedHours}
+        setNorRetenderedHours={setNorRetenderedHours}
+        norAcepptedDays={norAcepptedDays}
+        setNorAcepptedDays={setNorAcepptedDays}
+        norAcepptedHours={norAcepptedHours}
+        setNorAcepptedHours={setNorAcepptedHours}
+        norLaytimeEndDays={norLaytimeEndDays}
+        setNorLaytimeEndDays={setNorLaytimeEndDays}
+        norLaytimeEndHours={norLaytimeEndHours}
+        setNorLaytimeEndHours={setNorLaytimeEndHours}
+      />
+      <TableRemark
+        rows={rows}
+        setRows={setRows}
+      />
+      <Total
+        timeAllowed={timeAllowed}
+        timeUsed={timeUsed}
+        demurrageRate={demurrageRate}
+        despatchRate={despatchRate}
+        setFatherTimeResult={setTimeResult}
+        setFatherDespatchOrDemurrage={setDespatchOrDemurrage}
+        setFatherRate={setRate}
+        setFatherComission={setComission}
+        setFatherSubtotal={setSubtotal}
+        setFatherTotal={setTotal}
+      />
+      <Notepad
+        notepad={notepad}
+        setNotepad={setNotepad}
+      />
+    </div>
+  </>
+)
 }

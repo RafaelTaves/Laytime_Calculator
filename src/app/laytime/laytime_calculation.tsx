@@ -330,11 +330,11 @@ export default function Laytime_calculation({
 
     return (
         <>
-            <div className='flex flex-col w-full mx-auto p-8 max-w-8xl border-b-2 border-gray-300'>
+            <div className='flex flex-col w-full mx-auto p-8 py-4 max-w-8xl border-b-2 border-gray-300'>
                 <div>
                     <h2 className='font-Jost text-lg font-bold text-black'>Laytime Calculation</h2>
                 </div>
-                <div className='bg-white mt-4 md:mt-4 p-8 rounded-lg shadow-md w-full flex flex-col'>
+                <div className='bg-white mt-4 md:mt-1 px-8  py-6 rounded-lg shadow-md w-full flex flex-col'>
                     <div className='flex flex-col lg:hidden'>
                         <label htmlFor="voyage" className='text-lg font-Jost font-semibold text-black'>Voyage</label>
                         <input
@@ -433,7 +433,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
+                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Vessel</label>
                             <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
@@ -459,7 +459,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 hidden lg:flex'>
+                    <div className='flex flex-row mt-2 space-x-6 hidden lg:flex'>
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="charterers" className='text-md font-Jost font-semibold text-black'>Charterers</label>
                             <input
@@ -529,7 +529,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
+                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="from" className='text-md font-Jost font-semibold text-black'>From</label>
                             <input
@@ -554,7 +554,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-6 space-x-6 lg:hidden'>
+                    <div className='flex flex-row mt-6 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="cpDate" className='text-md font-Jost font-semibold text-black'>C/P Date</label>
                             <input
@@ -586,7 +586,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
+                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="cargoQuantity" className='text-md font-Jost font-semibold text-black'>Cargo quantity (tons)</label>
                             <input
@@ -615,7 +615,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
+                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="demurrageRate" className='text-md font-Jost font-semibold text-black'>Demurrage rate</label>
                             <input
@@ -638,7 +638,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 hidden lg:flex'>
+                    <div className='flex flex-row mt-2 space-x-6 hidden lg:flex'>
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="cargoQuantity" className='text-md font-Jost font-semibold text-black'>Cargo quantity (tons)</label>
                             <input
@@ -705,7 +705,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-6 space-x-6'>
+                    <div className='flex flex-row mt-2 space-x-6'>
                         <div className='flex flex-col w-1/2'>
                             <select
                                 id="norType"
@@ -769,7 +769,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6'>
+                    <div className='flex flex-row mt-2 space-x-6'>
                         <div className='flex flex-col w-full'>
                             <select
                                 id="selectClause3"
@@ -816,7 +816,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
+                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-full'>
                             <select
                                 id="selectClause3"
@@ -842,7 +842,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
+                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-full'>
                             <select
                                 id="selectClause6"
@@ -859,7 +859,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'>
+                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-full'>
                             <select
                                 id="selectClause7"

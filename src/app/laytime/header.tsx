@@ -1,8 +1,9 @@
 "use client";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 interface EventLog {
   event_date: string;
@@ -62,13 +63,19 @@ interface headerProps {
   onButtonCalculateClick: () => void;
   onButtonSaveClick: () => void;
   laytimes: Laytime[];
-  selectedLaytime: number | undefined;
-  setSelectedLaytime: React.Dispatch<React.SetStateAction<number | undefined>>;
+  selectedLaytime: number;
+  setSelectedLaytime: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function Header({ onButtonCalculateClick, onButtonSaveClick, laytimes, selectedLaytime, setSelectedLaytime }: headerProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter();
+  const [saveCaption, setSaveCaption] = useState("Save new")
+
+  useEffect(() => {
+    if(selectedLaytime != 0)
+      setSaveCaption("Save")
+  }, [selectedLaytime])
 
   function handleLogout() {
     localStorage.clear()
@@ -76,8 +83,8 @@ export default function Header({ onButtonCalculateClick, onButtonSaveClick, layt
   }
 
   return (
-    <header className="bg-white">
-      <nav className="mx-auto flex max-w-8xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+    <header className="bg-white sticky top-0 z-10 shadow-lg">
+      <nav className="mx-auto flex items-center justify-between p-6 lg:px-8" aria-label="Global">
         <a href="#" className="-m-1.5 p-1.5">
           <span className="sr-only">Great Ocean</span>
           <img className="h-12 w-auto" src="./images/greatOceanMinLogo.png" alt="" />
@@ -113,10 +120,7 @@ export default function Header({ onButtonCalculateClick, onButtonSaveClick, layt
             Calculate
           </button>
           <button onClick={onButtonSaveClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
-            Save New
-          </button>
-          <button className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
-            Save
+            {saveCaption}
           </button>
           <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
             Print

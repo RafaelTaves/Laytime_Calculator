@@ -20,6 +20,7 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
   useEffect(() => {
     setChildRows(rows)
   }, [rows])
+
   const [childRows, setChildRows] = useState<TableRow[]>([
     { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00'}
   ]);
@@ -91,8 +92,8 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
   };
 
   return (
-    <div className="flex flex-col w-full justify-center mx-auto p-8 max-w-8xl border-b-2 border-gray-300">
-      <div className='bg-white mt-4 md:mt-0 p-8 rounded-lg shadow-md flex flex-col overflow-x-auto'>
+    <div className="flex flex-col w-full justify-center mx-auto p-8 py-4 max-w-8xl border-b-2 border-gray-300">
+      <div className='bg-white mt-4 md:mt-0 p-8 py-5 rounded-lg shadow-md flex flex-col overflow-x-auto'>
         <table className="min-w-full border-collapse">
           <thead>
             <tr>

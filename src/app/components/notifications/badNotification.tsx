@@ -18,7 +18,7 @@ export default function BadNotification({ show, title, desc, onClose }: Notifica
     <>
       <div
         aria-live="assertive"
-        className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 z-10 sm:items-start sm:p-6"
+        className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 z-50 sm:items-start sm:p-6"
       >
         <div className="flex w-full flex-col items-center mb-20 space-y-4 mt-12 sm:items-end">
           <Transition
@@ -36,7 +36,7 @@ export default function BadNotification({ show, title, desc, onClose }: Notifica
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <FaRegCircleXmark
-                      className="h-7 w-7 text-red-500"
+                      className="h-10 w-10 text-red-500"
                       aria-hidden="true"
                     />
                   </div>

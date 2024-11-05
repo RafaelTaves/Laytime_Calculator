@@ -68,16 +68,14 @@ export default function TableNOR({
 
     return (
 
-        <div className='flex flex-col w-full mx-auto p-8 max-w-8xl border-b-2 border-gray-300'>
-            <div>
-                <h2 className='font-Jost text-lg font-bold text-black'>NOR</h2>
-            </div>
-            <div className='bg-white mt-4 p-8 rounded-lg shadow-md flex flex-col overflow-x-auto'>
+        <div className='flex flex-col w-full mx-auto p-8 py-4 max-w-8xl border-b-2 border-gray-300'>
+
+            <div className='bg-white px-8 py-2 rounded-lg shadow-md flex flex-col overflow-x-auto'>
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
                             <th scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Wed 01 Jan 2020
+                                Date
                             </th>
                             <th scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 hh:mm
@@ -89,7 +87,7 @@ export default function TableNOR({
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 <input
                                     type="date"
                                     id="NORTendered"
@@ -98,7 +96,7 @@ export default function TableNOR({
                                     onChange={(e) => setNorTenderedDays(e.target.value)}
                                     className='text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                                 <input
                                     type="text"
                                     id="timeClause1"
@@ -108,12 +106,12 @@ export default function TableNOR({
                                     onChange={(e) => setNorTenderedHours(e.target.value)}
                                     className='mt-2 block text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
-                            <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="text-center px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 NOR tendered
                             </td>
                         </tr>
                         <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 <input 
                                 type="date" 
                                 id="NORReTendered" 
@@ -122,7 +120,7 @@ export default function TableNOR({
                                 onChange={(e) => setNorRetenderedDays(e.target.value)}
                                 className='text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                                 <input 
                                 type="text" 
                                 id="timeClause1" 
@@ -132,12 +130,12 @@ export default function TableNOR({
                                 onChange={(e) => setNorRetenderedHours(e.target.value)}
                                 className='mt-2 block text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
-                            <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="text-center px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 NOR re-tendered
                             </td>
                         </tr>
                         <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 <input 
                                     type="date" 
                                     id="NorAceppted" 
@@ -147,7 +145,7 @@ export default function TableNOR({
                                     className='text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' 
                                 />
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                                 <input
                                     type="text"
                                     id="NorAcepptedHours"
@@ -158,12 +156,12 @@ export default function TableNOR({
                                     className='mt-2 block text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' 
                                 />
                             </td>
-                            <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="text-center px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 NOR accepted
                             </td>
                         </tr>
                         <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 <input 
                                 type="date" 
                                 id="layTimeStarts" 
@@ -172,7 +170,7 @@ export default function TableNOR({
                                 readOnly
                                 className='text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                                 <input 
                                 type="text" 
                                 id="timeClause1" 
@@ -182,12 +180,12 @@ export default function TableNOR({
                                 readOnly
                                 className='mt-2 block text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
-                            <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="text-center px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 Laytime starts
                             </td>
                         </tr>
                         <tr>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 <input 
                                 type="date" 
                                 id="layTimeStarts" 
@@ -196,7 +194,7 @@ export default function TableNOR({
                                 onChange={(e) => setNorLaytimeEndDays(e.target.value)}
                                 className='text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                                 <input 
                                 type="text" 
                                 id="timeClause1" 
@@ -206,7 +204,7 @@ export default function TableNOR({
                                 onChange={(e) => setNorLaytimeEndHours(e.target.value)}
                                 className='mt-2 block text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
                             </td>
-                            <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td className="text-center px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                                 Laytime ends
                             </td>
                         </tr>
