@@ -122,8 +122,11 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
 
   return (
     <>
-      <div className='flex flex-col w-full mx-auto p-8 py-4 max-w-8xl border-b-2 border-gray-300'>
-        <div className='bg-white p-8 py-5 rounded-lg shadow-md flex flex-col overflow-x-auto'>
+      <div className='flex flex-col w-full mx-auto p-8 max-w-8xl border-b-2 border-gray-300'>
+        <div>
+          <h2 className='font-Jost text-lg font-bold text-black'>Total</h2>
+        </div>
+        <div className='bg-white p-8 mt-4 rounded-lg shadow-md flex flex-col overflow-x-auto'>
           <div className='flex flex-row  space-x-6'>
             <div className='flex flex-col w-1/2'>
               <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Time Allowed ( Days )</label>
@@ -158,7 +161,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
               />
             </div>
           </div>
-          <div className='flex flex-row mt-2 space-x-6'>
+          <div className='flex flex-row mt-4 space-x-6'>
             <div className='flex flex-col w-1/2'>
               <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Subtotal</label>
               <input

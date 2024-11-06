@@ -155,7 +155,7 @@ export default function Laytime() {
   const [erroTimeVar2, setErroTimeVar2] = useState<boolean>(false);
   const [erroStartDate, setErroStartDate] = useState<boolean>(false);
   const [erroEndDate, setErroEndDate] = useState<boolean>(false);
-  
+
   const erros = {
     erroSelectedVoyage,
     erroFromLocation,
@@ -420,6 +420,14 @@ export default function Laytime() {
     }
   }
 
+  const handleCloseNotification = () => {
+    setBadNotification(false);
+    setGoodSaveNotification(false);
+    setBadGetLaytimesNotification(false);
+    setBadPatchNotification(false)
+    setBadSaveNotification(false)
+  };
+
   // Funções para o calculo matematico
 
   function convertDecimalDaysToString(decimalDays: number) {
@@ -456,7 +464,7 @@ export default function Laytime() {
     }
   }
 
-  const handleButtonClick = async () => {
+  const handleCalculateClick = async () => {
     const check = checkInputs()
     if (!check) {
       setBadNotification(true)
@@ -471,13 +479,6 @@ export default function Laytime() {
   };
 
   // Função para checar campos antes de calcular
-  const handleCloseNotification = () => {
-    setBadNotification(false);
-    setGoodSaveNotification(false);
-    setBadGetLaytimesNotification(false);
-    setBadPatchNotification(false)
-    setBadSaveNotification(false)
-  };
 
   function checkInputs() {
     if (selectedVoyage === null) {
@@ -630,14 +631,14 @@ export default function Laytime() {
                     percent_count: row.remarks,
                     excused_time: row.excused_time
                   };
-  
+
                   await axios.post(`${BASE_URL}/register_event_log`, eventLogBody, {
                     headers: {
                       Authorization: `Bearer ${token}`
                     },
                   });
                 }
-  
+
               }
             } catch (error) {
               setBadSaveNotification(true)
@@ -718,7 +719,7 @@ export default function Laytime() {
                 Authorization: `Bearer ${token}`
               },
             });
-            try{
+            try {
               const laytime = laytimes.find(laytime => laytime.id_laytime === selectedLaytime);
 
               if (laytime) {
@@ -738,209 +739,211 @@ export default function Laytime() {
             } catch (error) {
               setBadPatchNotification(true)
               console.log("Houve um problema ao tentar cadastrar os event logs: ", error);
-            } 
+            }
           } catch (error) {
             setBadPatchNotification(true)
-          console.log("Houve um problema ao tentar cadastrar o laytime: ", error);
+            console.log("Houve um problema ao tentar cadastrar o laytime: ", error);
+          }
         }
-      }
       } catch (erro) {
         setBadPatchNotification(true)
-      console.log("Houve um erro ao resgatar o id do usuário: ", erro)
+        console.log("Houve um erro ao resgatar o id do usuário: ", erro)
+      }
     }
   }
-}
 
-async function patchEventLog(eventLogId: number, updatedData: EventLogPatch) {
-  const token = localStorage.getItem('token');
+  async function patchEventLog(eventLogId: number, updatedData: EventLogPatch) {
+    const token = localStorage.getItem('token');
 
-  try {
-    const response = await axios.patch(`${BASE_URL}/event_logs/${eventLogId}`, updatedData, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-    });
+    try {
+      const response = await axios.patch(`${BASE_URL}/event_logs/${eventLogId}`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
 
-  } catch (error) {
-    setBadPatchNotification(true)
-    console.error(error);
-  } finally {
-    setGoodSaveNotification(true)
-  }
-}
-
-async function getLaytimes() {
-  const token = localStorage.getItem('token');
-
-  try {
-    const resp = await axios.get(`${BASE_URL}/laytimes`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-    })
-
-    if (resp.status == 200) {
-      setLaytimes(resp.data)
+    } catch (error) {
+      setBadPatchNotification(true)
+      console.error(error);
+    } finally {
+      setGoodSaveNotification(true)
     }
-  } catch (error) {
-    setBadGetLaytimesNotification(true)
-    console.log("Houve um erro ao tentar recuperar os laytimes: " + error)
   }
-}
 
-return (
-  <>
-    <Header
-      onButtonCalculateClick={handleButtonClick}
-      onButtonSaveClick={saveLaytimeAndEventLogs}
-      laytimes={laytimes}
-      selectedLaytime={selectedLaytime}
-      setSelectedLaytime={setSelectedLaytime}
-    />
-    <div className="bg-gray-200 w-full h-full">
-      <BadNotification
-        show={badNotification}
-        title="Houve um erro!"
-        desc="Todos os campos devem estar preenchidos."
-        onClose={handleCloseNotification}
+  async function getLaytimes() {
+    const token = localStorage.getItem('token');
+
+    try {
+      const resp = await axios.get(`${BASE_URL}/laytimes`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })
+
+      if (resp.status == 200) {
+        setLaytimes(resp.data)
+      }
+    } catch (error) {
+      setBadGetLaytimesNotification(true)
+      console.log("Houve um erro ao tentar recuperar os laytimes: " + error)
+    }
+  }
+
+  return (
+    <>
+      <Header
+        onButtonCalculateClick={handleCalculateClick}
+        onButtonSaveClick={saveLaytimeAndEventLogs}
+        laytimes={laytimes}
+        selectedLaytime={selectedLaytime}
+        setSelectedLaytime={setSelectedLaytime}
       />
-      <BadNotification
-        show={badGetLaytimesNotification}
-        title="Erro!"
-        desc="Houve um problema para carregar os laytimes existentes."
-        onClose={handleCloseNotification}
-      />
-      <BadNotification
-        show={badPatchNotification}
-        title="Erro!"
-        desc="Houve um problema para salvar os remarks alterados."
-        onClose={handleCloseNotification}
-      />
-      <BadNotification
-        show={badSaveNotification}
-        title="Erro!"
-        desc="Houve um problema para salvar o novo laytime."
-        onClose={handleCloseNotification}
-      />
-      <GoodNotification
-        show={goodSaveNotification}
-        title="Sucesso!"
-        desc="Salvo com sucesso."
-        onClose={handleCloseNotification}
-      />
-      <Laytime_calculation
-        voyages={voyages}
-        setVoyages={setVoyages}
+      <div className="bg-gray-200 w-full h-full">
+        <BadNotification
+          show={badNotification}
+          title="Houve um erro!"
+          desc="Todos os campos devem estar preenchidos."
+          onClose={handleCloseNotification}
+        />
+        <BadNotification
+          show={badGetLaytimesNotification}
+          title="Erro!"
+          desc="Houve um problema para carregar os laytimes existentes."
+          onClose={handleCloseNotification}
+        />
+        <BadNotification
+          show={badPatchNotification}
+          title="Erro!"
+          desc="Houve um problema para salvar os remarks alterados."
+          onClose={handleCloseNotification}
+        />
+        <BadNotification
+          show={badSaveNotification}
+          title="Erro!"
+          desc="Houve um problema para salvar o novo laytime."
+          onClose={handleCloseNotification}
+        />
+        <GoodNotification
+          show={goodSaveNotification}
+          title="Sucesso!"
+          desc="Salvo com sucesso."
+          onClose={handleCloseNotification}
+        />
+        <div className="flex flex-col 2xl:flex-row 2xl:border-b-2 2xl:border-gray-300">
+          <Laytime_calculation
+            voyages={voyages}
+            setVoyages={setVoyages}
 
-        vessels={vessels}
-        setVessels={setVessels}
+            vessels={vessels}
+            setVessels={setVessels}
 
-        selectedVoyage={selectedVoyage}
-        setSelectedVoyage={setSelectedVoyage}
+            selectedVoyage={selectedVoyage}
+            setSelectedVoyage={setSelectedVoyage}
 
-        fromLocation={fromLocation}
-        setFromLocation={setFromLocation}
+            fromLocation={fromLocation}
+            setFromLocation={setFromLocation}
 
-        toLocation={toLocation}
-        setToLocation={setToLocation}
+            toLocation={toLocation}
+            setToLocation={setToLocation}
 
-        selectedVessel={selectedVessel}
-        setSelectedVessel={setSelectedVessel}
+            selectedVessel={selectedVessel}
+            setSelectedVessel={setSelectedVessel}
 
-        charteres={charteres}
-        setCharteres={setCharteres}
+            charteres={charteres}
+            setCharteres={setCharteres}
 
-        cpDate={cpDate}
-        setCpDate={setCpDate}
+            cpDate={cpDate}
+            setCpDate={setCpDate}
 
-        cpRate={cpRate}
-        setCpRate={setCpRate}
+            cpRate={cpRate}
+            setCpRate={setCpRate}
 
-        operation={operation}
-        setOperation={setOperation}
+            operation={operation}
+            setOperation={setOperation}
 
-        cargoQuantity={cargoQuantity}
-        setCargoQuantity={setCargoQuantity}
+            cargoQuantity={cargoQuantity}
+            setCargoQuantity={setCargoQuantity}
 
-        cargoType={cargoType}
-        setCargoType={setCargoType}
+            cargoType={cargoType}
+            setCargoType={setCargoType}
 
-        demurrageRate={demurrageRate}
-        setDemurrageRate={setDemurrageRate}
+            demurrageRate={demurrageRate}
+            setDemurrageRate={setDemurrageRate}
 
-        despatchRate={despatchRate}
-        setDespatchRate={setDespatchRate}
+            despatchRate={despatchRate}
+            setDespatchRate={setDespatchRate}
 
-        norType={norType}
-        setNorType={setNorType}
+            norType={norType}
+            setNorType={setNorType}
 
-        timeVar1={timeVar1}
-        setTimeVar1={setTimeVar1}
+            timeVar1={timeVar1}
+            setTimeVar1={setTimeVar1}
 
-        timeVar2={timeVar2}
-        setTimeVar2={setTimeVar2}
+            timeVar2={timeVar2}
+            setTimeVar2={setTimeVar2}
 
-        timeType={timeType}
-        setTimeType={setTimeType}
+            timeType={timeType}
+            setTimeType={setTimeType}
 
-        endweekType={endweekType}
-        setEndweekType={setEndweekType}
+            endweekType={endweekType}
+            setEndweekType={setEndweekType}
 
-        assistOption1={assistOption1}
-        setAssistOption1={setAssistOption1}
+            assistOption1={assistOption1}
+            setAssistOption1={setAssistOption1}
 
-        assistOption2={assistOption2}
-        setAssistOption2={setAssistOption2}
+            assistOption2={assistOption2}
+            setAssistOption2={setAssistOption2}
 
-        assistOption3={assistOption3}
-        setAssistOption3={setAssistOption3}
+            assistOption3={assistOption3}
+            setAssistOption3={setAssistOption3}
 
-        erros={erros}
-        setters={setters}
-      />
-      <TableNOR
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
-        norLaytimeStartDays={norLaytimeStartDays}
-        norLaytimeStartHours={norLaytimeStartHours}
-        norTenderedDays={norTenderedDays}
-        setNorTenderedDays={setNorTenderedDays}
-        norTenderedHours={norTenderedHours}
-        setNorTenderedHours={setNorTenderedHours}
-        norRetenderedDays={norRetenderedDays}
-        setNorRetenderedDays={setNorRetenderedDays}
-        norRetenderedHours={norRetenderedHours}
-        setNorRetenderedHours={setNorRetenderedHours}
-        norAcepptedDays={norAcepptedDays}
-        setNorAcepptedDays={setNorAcepptedDays}
-        norAcepptedHours={norAcepptedHours}
-        setNorAcepptedHours={setNorAcepptedHours}
-        norLaytimeEndDays={norLaytimeEndDays}
-        setNorLaytimeEndDays={setNorLaytimeEndDays}
-        norLaytimeEndHours={norLaytimeEndHours}
-        setNorLaytimeEndHours={setNorLaytimeEndHours}
-      />
-      <TableRemark
-        rows={rows}
-        setRows={setRows}
-      />
-      <Total
-        timeAllowed={timeAllowed}
-        timeUsed={timeUsed}
-        demurrageRate={demurrageRate}
-        despatchRate={despatchRate}
-        setFatherTimeResult={setTimeResult}
-        setFatherDespatchOrDemurrage={setDespatchOrDemurrage}
-        setFatherRate={setRate}
-        setFatherComission={setComission}
-        setFatherSubtotal={setSubtotal}
-        setFatherTotal={setTotal}
-      />
-      <Notepad
-        notepad={notepad}
-        setNotepad={setNotepad}
-      />
-    </div>
-  </>
-)
+            erros={erros}
+            setters={setters}
+          />
+          <TableNOR
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            norLaytimeStartDays={norLaytimeStartDays}
+            norLaytimeStartHours={norLaytimeStartHours}
+            norTenderedDays={norTenderedDays}
+            setNorTenderedDays={setNorTenderedDays}
+            norTenderedHours={norTenderedHours}
+            setNorTenderedHours={setNorTenderedHours}
+            norRetenderedDays={norRetenderedDays}
+            setNorRetenderedDays={setNorRetenderedDays}
+            norRetenderedHours={norRetenderedHours}
+            setNorRetenderedHours={setNorRetenderedHours}
+            norAcepptedDays={norAcepptedDays}
+            setNorAcepptedDays={setNorAcepptedDays}
+            norAcepptedHours={norAcepptedHours}
+            setNorAcepptedHours={setNorAcepptedHours}
+            norLaytimeEndDays={norLaytimeEndDays}
+            setNorLaytimeEndDays={setNorLaytimeEndDays}
+            norLaytimeEndHours={norLaytimeEndHours}
+            setNorLaytimeEndHours={setNorLaytimeEndHours}
+          />
+        </div>
+        <TableRemark
+          rows={rows}
+          setRows={setRows}
+        />
+        <Total
+          timeAllowed={timeAllowed}
+          timeUsed={timeUsed}
+          demurrageRate={demurrageRate}
+          despatchRate={despatchRate}
+          setFatherTimeResult={setTimeResult}
+          setFatherDespatchOrDemurrage={setDespatchOrDemurrage}
+          setFatherRate={setRate}
+          setFatherComission={setComission}
+          setFatherSubtotal={setSubtotal}
+          setFatherTotal={setTotal}
+        />
+        <Notepad
+          notepad={notepad}
+          setNotepad={setNotepad}
+        />
+      </div>
+    </>
+  )
 }

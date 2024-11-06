@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from '../components/Dialogs/modal';
 import Modal_vessel from '../register_vessel/modal';
 import Modal_voyage from '../register_voyage/modal';
+import { IoSaveOutline } from "react-icons/io5";
 
 interface Voyages {
     from_location: string,
@@ -330,11 +331,11 @@ export default function Laytime_calculation({
 
     return (
         <>
-            <div className='flex flex-col w-full mx-auto p-8 py-4 max-w-8xl border-b-2 border-gray-300'>
+            <div className='flex flex-col w-full 2xl:w-1/2 mx-auto 2xl:mx-0 p-8 border-b-2 2xl:border-b-0 2xl:h-full border-gray-300'>
                 <div>
                     <h2 className='font-Jost text-lg font-bold text-black'>Laytime Calculation</h2>
                 </div>
-                <div className='bg-white mt-4 md:mt-1 px-8  py-6 rounded-lg shadow-md w-full flex flex-col'>
+                <div className='bg-white mt-4 md:mt-4 p-8 rounded-lg shadow-md w-full flex flex-col'>
                     <div className='flex flex-col lg:hidden'>
                         <label htmlFor="voyage" className='text-lg font-Jost font-semibold text-black'>Voyage</label>
                         <input
@@ -346,7 +347,7 @@ export default function Laytime_calculation({
                             }}
                             onFocus={() => setShowDropdown(true)}
                             onBlur={handleBlur}
-                            className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroSelectedVoyage === true ? "ring-red-500" : "ring-gray-300"}`}
+                            className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroSelectedVoyage === true ? "ring-red-500" : "ring-gray-300"}`}
                             placeholder="Type to search voyages"
                         />
                         {showDropdown && (
@@ -366,7 +367,7 @@ export default function Laytime_calculation({
 
                     <div className='flex flex-row space-x-6 hidden lg:flex'>
                         <div className='flex flex-col w-1/2 relative'>
-                            <label htmlFor="voyage" className='text-md font-Jost font-semibold text-black'>Voyage</label>
+                            <label htmlFor="voyage" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Voyage</label>
                             <input
                                 type="text"
                                 value={voyageInput}
@@ -376,7 +377,7 @@ export default function Laytime_calculation({
                                 }}
                                 onFocus={() => setShowDropdown(true)}
                                 onBlur={handleBlur}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroSelectedVoyage === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroSelectedVoyage === true ? "ring-red-500" : "ring-gray-300"}`}
                                 placeholder="Type to search voyages"
                             />
                             {showDropdown && (
@@ -394,12 +395,12 @@ export default function Laytime_calculation({
                             )}
                         </div>
                         <div className='flex flex-col w-1/6 self-end'>
-                            <button className='text-md w-full bg-mid-blue-I text-white text-center font-semibold font-Jost border py-2 px-2 rounded-lg hover:bg-light-blue-I' onClick={openModalVoyage} >
-                                Register Voyage
+                            <button className='text-sm 2xl:text-xs w-full bg-mid-blue-I text-white text-center font-semibold font-Jost border py-2 px-2 rounded-lg hover:bg-light-blue-I' onClick={openModalVoyage} >
+                            Register Voyage
                             </button>
                         </div>
                         <div className='flex flex-col w-1/2 relative'>
-                            <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Vessel</label>
+                            <label htmlFor="vessel" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Vessel</label>
                             <input
                                 type="text"
                                 value={vesselInput}
@@ -409,7 +410,7 @@ export default function Laytime_calculation({
                                 }}
                                 onFocus={() => setShowDropdownVessel(true)}
                                 onBlur={handleBlur}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroSelectedVessel === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroSelectedVessel === true ? "ring-red-500" : "ring-gray-300"}`}
                                 placeholder="Type to search vessels"
                             />
                             {showDropdownVessel && (
@@ -427,7 +428,7 @@ export default function Laytime_calculation({
                             )}
                         </div>
                         <div className='flex flex-col w-1/6 self-end'>
-                            <button className='text-md w-full bg-mid-blue-I text-white text-center font-semibold font-Jost border py-2 px-2 rounded-lg hover:bg-light-blue-I' onClick={openModalVessel}>
+                            <button className='text-sm 2xl:text-xs w-full bg-mid-blue-I text-white text-center font-semibold font-Jost border py-2 px-2 rounded-lg hover:bg-light-blue-I' onClick={openModalVessel}>
                                 Register Vessel
                             </button>
                         </div>
@@ -435,8 +436,8 @@ export default function Laytime_calculation({
 
                      <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Vessel</label>
-                            <select id="selectVessel" name="selectVessel" className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
+                            <label htmlFor="vessel" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Vessel</label>
+                            <select id="selectVessel" name="selectVessel" className='mt-2 text-sm 2xl:text-xs block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
                                 <option value={0}>Select a vessel</option>
                                 {vessels.map((vessel) => (
                                     <option key={vessel.id_vessel} value={vessel.id_vessel}>{vessel.name}</option>
@@ -444,7 +445,7 @@ export default function Laytime_calculation({
                             </select>
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="charterers" className='text-md font-Jost font-semibold text-black'>Charterers</label>
+                            <label htmlFor="charterers" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Charterers</label>
                             <input
                                 type="text"
                                 id="charterers"
@@ -454,14 +455,14 @@ export default function Laytime_calculation({
                                     setCharteres(e.target.value)
                                     setErroCharteres(false)
                                 }}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCharteres === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCharteres === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-2 space-x-6 hidden lg:flex'>
+                    <div className='flex flex-row mt-4 space-x-6 hidden lg:flex'>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="charterers" className='text-md font-Jost font-semibold text-black'>Charterers</label>
+                            <label htmlFor="charterers" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Charterers</label>
                             <input
                                 type="text"
                                 id="charterers"
@@ -471,34 +472,34 @@ export default function Laytime_calculation({
                                     setCharteres(e.target.value)
                                     setErroCharteres(false)
                                 }}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCharteres === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCharteres === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
 
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="from" className='text-md font-Jost font-semibold text-black'>From</label>
+                            <label htmlFor="from" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>From</label>
                             <input
                                 type="text"
                                 id="from"
                                 name="from"
                                 value={fromLocation}
                                 readOnly
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="to" className='text-md font-Jost font-semibold text-black'>To</label>
+                            <label htmlFor="to" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>To</label>
                             <input
                                 type="text"
                                 id="to"
                                 name="to"
                                 value={toLocation}
                                 readOnly
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="cpDate" className='text-md font-Jost font-semibold text-black'>C/P Date</label>
+                            <label htmlFor="cpDate" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>C/P Date</label>
                             <input
                                 type="date"
                                 id="cpDate"
@@ -508,20 +509,20 @@ export default function Laytime_calculation({
                                     setCpDate(e.target.value)
                                     setErroCpDate(false)
                                 }}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCpDate === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCpDate === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label>
+                            <label htmlFor="operation" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Operation</label>
                             <select
-                                id="incoterm"
-                                name="incoterm"
+                                id="operation"
+                                name="operation"
                                 value={operation}
                                 onChange={(e) => {
                                     setOperation(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="">Select an operation</option>
                                 <option value="discharging">Discharging</option>
                                 <option value="loading">Loading</option>
@@ -531,32 +532,32 @@ export default function Laytime_calculation({
 
                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="from" className='text-md font-Jost font-semibold text-black'>From</label>
+                            <label htmlFor="from" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>From</label>
                             <input
                                 type="text"
                                 id="from"
                                 name="from"
                                 value={fromLocation}
                                 readOnly
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="to" className='text-md font-Jost font-semibold text-black'>To</label>
+                            <label htmlFor="to" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>To</label>
                             <input
                                 type="text"
                                 id="to"
                                 name="to"
                                 value={toLocation}
                                 readOnly
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'
                             />
                         </div>
                     </div>
 
                     <div className='flex flex-row mt-6 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="cpDate" className='text-md font-Jost font-semibold text-black'>C/P Date</label>
+                            <label htmlFor="cpDate" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>C/P Date</label>
                             <input
                                 type="date"
                                 id="cpDate"
@@ -566,10 +567,10 @@ export default function Laytime_calculation({
                                     setCpDate(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="operation" className='text-md font-Jost font-semibold text-black'>Operation</label>
+                            <label htmlFor="operation" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Operation</label>
                             <select
                                 id="incoterm"
                                 name="incoterm"
@@ -578,7 +579,7 @@ export default function Laytime_calculation({
                                     setOperation(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="">Select an operation</option>
                                 <option value="discharging">Discharging</option>
                                 <option value="loading">Loading</option>
@@ -588,7 +589,7 @@ export default function Laytime_calculation({
 
                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="cargoQuantity" className='text-md font-Jost font-semibold text-black'>Cargo quantity (tons)</label>
+                            <label htmlFor="cargoQuantity" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Cargo quantity (tons)</label>
                             <input
                                 type="text"
                                 id="cargoQuantity"
@@ -598,10 +599,10 @@ export default function Laytime_calculation({
                                     setCargoQuantity(Number(e.target.value))
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="cargiType" className='text-md font-Jost font-semibold text-black'>Cargo Type</label>
+                            <label htmlFor="cargiType" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Cargo Type</label>
                             <input
                                 type="text"
                                 id="cargiType"
@@ -611,36 +612,36 @@ export default function Laytime_calculation({
                                     setCargoType((e.target.value))
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6' />
                         </div>
                     </div>
 
                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="demurrageRate" className='text-md font-Jost font-semibold text-black'>Demurrage rate</label>
+                            <label htmlFor="demurrageRate" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Demurrage rate</label>
                             <input
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
                                 value={demurrageRate}
                                 onChange={(e) => setDemurrageRate(Number(e.target.value))}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6' />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="despatchRate" className='text-md font-Jost font-semibold text-black'>Despatch Rate</label>
+                            <label htmlFor="despatchRate" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Despatch Rate</label>
                             <input
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
                                 value={`$ ${despatchRate}`}
                                 onChange={(e) => setDespatchRate(Number(e.target.value))}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6' />
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6' />
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-2 space-x-6 hidden lg:flex'>
+                    <div className='flex flex-row mt-4 space-x-6 hidden lg:flex'>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="cargoQuantity" className='text-md font-Jost font-semibold text-black'>Cargo quantity (tons)</label>
+                            <label htmlFor="cargoQuantity" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Cargo quantity (tons)</label>
                             <input
                                 type="text"
                                 id="cargoQuantity"
@@ -650,11 +651,11 @@ export default function Laytime_calculation({
                                     setCargoQuantity(Number(e.target.value))
                                     setErroCargoQuantity(false)
                                 }}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCargoQuantity === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCargoQuantity === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="cpRate" className='text-md font-Jost font-semibold text-black'>C/P Rate (t/day)</label>
+                            <label htmlFor="cpRate" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>C/P Rate (t/day)</label>
                             <input
                                 type="text"
                                 id="cpRate"
@@ -664,11 +665,11 @@ export default function Laytime_calculation({
                                     setCpRate(Number(e.target.value))
                                     setErroCpRate(false)
                                 }}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCpRate === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCpRate === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="cargiType" className='text-md font-Jost font-semibold text-black'>Cargo Type</label>
+                            <label htmlFor="cargiType" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Cargo Type</label>
                             <input
                                 type="text"
                                 id="cargiType"
@@ -678,34 +679,34 @@ export default function Laytime_calculation({
                                     setCargoType(e.target.value)
                                     setErroCargoType(false)
                                 }}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroCargoType === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCargoType === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="demurrageRate" className='text-md font-Jost font-semibold text-black'>Demurrage rate</label>
+                            <label htmlFor="demurrageRate" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Demurrage rate</label>
                             <input
                                 type="text"
                                 id="demurrageRate"
                                 name="demurrageRate"
                                 value={NewDisplaydemurrageRate}
                                 onChange={(e) => handleInputChange(e, setDemurrageRate, setNewDisplayDemurrageRate)}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroDemurrageRate === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroDemurrageRate === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
-                            <label htmlFor="despatchRate" className='text-md font-Jost font-semibold text-black'>Despatch Rate</label>
+                            <label htmlFor="despatchRate" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Despatch Rate</label>
                             <input
                                 type="text"
                                 id="despatchRate"
                                 name="despatchRate"
                                 value={NewDisplaydespatchRate}
                                 onChange={(e) => handleInputChange(e, setDespatchRate, setNewDisplayDespatchRate)}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroDespatchRate === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroDespatchRate === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-2 space-x-6'>
+                    <div className='flex flex-row mt-4 space-x-6'>
                         <div className='flex flex-col w-1/2'>
                             <select
                                 id="norType"
@@ -715,7 +716,7 @@ export default function Laytime_calculation({
                                     setNorType(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="If NOR before">If NOR before</option>
                                 <option value="If NOR after">If NOR after</option>
                                 <option value="If NOR on">If NOR on</option>
@@ -732,11 +733,11 @@ export default function Laytime_calculation({
                                     setTimeVar1(e.target.value);
                                     setErroTimeVar1(false);
                                 }}
-                                className={`text-center mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroTimeVar1 === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`text-center mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroTimeVar1 === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                         <div className='flex flex-col w-1/4 items-center justify-center'>
-                            <label className='text-md font-Jost align-center text-black'>time counts after</label>
+                            <label className='text-sm 2xl:text-xs font-Jost align-center text-black'>time counts after</label>
                         </div>
                         <div className='flex flex-col w-1/4'>
                             <input
@@ -749,7 +750,7 @@ export default function Laytime_calculation({
                                     setTimeVar2(e.target.value);
                                     setErroTimeVar2(false);
                                 }}
-                                className={`text-center mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${erroTimeVar2 === true ? "ring-red-500" : "ring-gray-300"}`}
+                                className={`text-center mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroTimeVar2 === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -761,7 +762,7 @@ export default function Laytime_calculation({
                                     setTimeType(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="same day">Same day</option>
                                 <option value="next working day">Next working day</option>
                                 <option value="hours after NOR">Hour after NOR (TT)</option>
@@ -769,7 +770,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                    <div className='flex flex-row mt-2 space-x-6'>
+                    <div className='flex flex-row mt-4 space-x-6'>
                         <div className='flex flex-col w-full'>
                             <select
                                 id="selectClause3"
@@ -779,7 +780,7 @@ export default function Laytime_calculation({
                                     setEndweekType(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="shinc">Shinc</option>
                                 <option value="fhinc">Fhinc</option>
                                 <option value="shex">Shex</option>
@@ -795,7 +796,7 @@ export default function Laytime_calculation({
                                     setAssistOption1(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="laytime_non-reversible">Laytime non-reversible</option>
                                 <option value="laytime_reversible">Laytime reversible</option>
                             </select>
@@ -809,7 +810,7 @@ export default function Laytime_calculation({
                                     setAssistOption2(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
                                 <option value="Once_on_demurrage_not_always_on_demurrage">Once on demurrage not always on demurrage</option>
                             </select>
@@ -826,7 +827,7 @@ export default function Laytime_calculation({
                                     setEndweekType(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="sunday">Sunday</option>
                                 <option value="Monday">Monday</option>
                                 <option value="Tuesday">Tuesday</option>
@@ -852,7 +853,7 @@ export default function Laytime_calculation({
                                     setAssistOption1(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="laytime_non-reversible">Laytime non-reversible</option>
                                 <option value="laytime_reversible">Laytime reversible</option>
                             </select>
@@ -869,7 +870,7 @@ export default function Laytime_calculation({
                                     setAssistOption2(e.target.value)
 
                                 }}
-                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6'>
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="Once_on_demurrage_always_on_demurrage">Once on demurrage always on demurrage</option>
                                 <option value="Once_on_demurrage_not_always_on_demurrage">Once on demurrage not always on demurrage</option>
                             </select>

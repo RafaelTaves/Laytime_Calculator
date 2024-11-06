@@ -21,6 +21,9 @@ const config: Config = {
         Jost: ["Jost", "sans-serif"],
         Poppins: ["Poppins", "sans-serif"],
       },
+      screens: {
+        '2xl': '1680px',
+      },
     },
   },
   plugins: [
