@@ -116,6 +116,13 @@ interface laytimeProps {
     
     assistOption3: string,
     setAssistOption3: React.Dispatch<React.SetStateAction<string>>,
+
+    voyageInput: string,
+    setVoyageInput: React.Dispatch<React.SetStateAction<string>>,
+
+    vesselInput: string,
+    setVesselInput: React.Dispatch<React.SetStateAction<string>>,
+
     erros: ErrosProps;
     setters: SettersProps;
 }
@@ -172,17 +179,19 @@ export default function Laytime_calculation({
     setAssistOption2,
     assistOption3,
     setAssistOption3,
+    voyageInput,
+    setVoyageInput,
+    vesselInput,
+    setVesselInput,
     erros, 
     setters 
 }: laytimeProps) {
     const [NewDisplaydemurrageRate, setNewDisplayDemurrageRate] = useState<string>("$ 0.00")
     const [NewDisplaydespatchRate, setNewDisplayDespatchRate] = useState<string>("$ 0.00")
 
-    const [voyageInput, setVoyageInput] = useState<string>("");
     const [filteredVoyages, setFilteredVoyages] = useState<Voyages[]>(voyages);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
-    const [vesselInput, setVesselInput] = useState<string>("");
     const [filteredVessels, setFilteredVessels] = useState<Vessels[]>(vessels);
     const [showDropdownVessel, setShowDropdownVessel] = useState<boolean>(false);
 
@@ -336,7 +345,7 @@ export default function Laytime_calculation({
                     <h2 className='font-Jost text-lg font-bold text-black'>Laytime Calculation</h2>
                 </div>
                 <div className='bg-white mt-4 md:mt-4 p-8 rounded-lg shadow-md w-full flex flex-col'>
-                    <div className='flex flex-col lg:hidden'>
+                    <div className='flex flex-col lg:hidden'> {/*Mobile*/}
                         <label htmlFor="voyage" className='text-lg font-Jost font-semibold text-black'>Voyage</label>
                         <input
                             type="text"
@@ -381,7 +390,7 @@ export default function Laytime_calculation({
                                 placeholder="Type to search voyages"
                             />
                             {showDropdown && (
-                                <ul className='text-black absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                <ul className='text-black absolute z-10 w-full mt-20 2xl:mt-14 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
                                     {filteredVoyages.map((voyage) => (
                                         <li
                                             key={voyage.id_voyage}
@@ -414,7 +423,7 @@ export default function Laytime_calculation({
                                 placeholder="Type to search vessels"
                             />
                             {showDropdownVessel && (
-                                <ul className='text-black absolute z-10 w-full mt-20 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
+                                <ul className='text-black absolute z-10 w-full mt-20 2xl:mt-14 bg-white border border-gray-300 mt-2 rounded-md shadow-lg max-h-60 overflow-y-auto'>
                                     {filteredVessels.map((vessel) => (
                                         <li
                                             key={vessel.id_vessel}

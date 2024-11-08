@@ -129,7 +129,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
         <div className='bg-white p-8 mt-4 rounded-lg shadow-md flex flex-col overflow-x-auto'>
           <div className='flex flex-row  space-x-6'>
             <div className='flex flex-col w-1/2'>
-              <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Time Allowed ( Days )</label>
+              <label htmlFor="vessel" className='text-sm font-Jost font-semibold text-black'>Time Allowed ( Days )</label>
               <input
                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
                 value={timeAllowed != null ? timeAllowed : ""}
@@ -137,7 +137,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
               />
             </div>
             <div className='flex flex-col w-1/2'>
-              <label htmlFor="charterers" className='text-md font-Jost font-semibold text-black'>Time used</label>
+              <label htmlFor="charterers" className='text-sm font-Jost font-semibold text-black'>Time used</label>
               <input
                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
                 value={timeUsed}
@@ -145,7 +145,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
               />
             </div>
             <div className='flex flex-col w-1/2'>
-              <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>{timeResult}</label>
+              <label htmlFor="vessel" className='text-sm font-Jost font-semibold text-black'>{timeResult}</label>
               <input
                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
                 value={timeDifference}
@@ -153,7 +153,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
               />
             </div>
             <div className='flex flex-col w-1/2'>
-              <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>{despatchOrDemurrage} Rate</label>
+              <label htmlFor="vessel" className='text-sm font-Jost font-semibold text-black'>{despatchOrDemurrage} Rate</label>
               <input
                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
                 value={despatchOrDemurrageRate !== null ? formatCurrency(despatchOrDemurrageRate) : ""}
@@ -163,7 +163,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
           </div>
           <div className='flex flex-row mt-4 space-x-6'>
             <div className='flex flex-col w-1/2'>
-              <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Subtotal</label>
+              <label htmlFor="vessel" className='text-sm font-Jost font-semibold text-black'>Subtotal</label>
               <input
                 value={formatCurrency(subtotal)}
                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
@@ -171,7 +171,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
               />
             </div>
             <div className='flex flex-col w-1/2'>
-              <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Less Comission</label>
+              <label htmlFor="vessel" className='text-sm font-Jost font-semibold text-black'>Less Comission</label>
               <input
                 value={lessComission}
                 onChange={(e) => {
@@ -183,7 +183,7 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
               />
             </div>
             <div className='flex flex-col w-1/2 mx-auto'>
-              <label htmlFor="vessel" className='text-md font-Jost font-semibold text-black'>Total</label>
+              <label htmlFor="vessel" className='text-sm font-Jost font-semibold text-black'>Total</label>
               <input
                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 p-2'
                 value={formatCurrency(totalAmount)}

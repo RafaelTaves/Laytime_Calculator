@@ -116,6 +116,8 @@ export default function Laytime() {
   const [vessels, setVessels] = useState<Vessel[]>([])
   const [laytimes, setLaytimes] = useState<Laytime[]>([])
   const [selectedLaytime, setSelectedLaytime] = useState<number>(0)
+  const [voyageInput, setVoyageInput] = useState<string>("");
+  const [vesselInput, setVesselInput] = useState<string>("");
 
   const [selectedVoyage, setSelectedVoyage] = useState<number | null>(null);
   const [fromLocation, setFromLocation] = useState<string>("");
@@ -259,15 +261,6 @@ export default function Laytime() {
 
   useEffect(() => {
     if (!loading) {
-      const getVoyages = async () => {
-        const fetchedVoyages = await FetchVoyages();
-        setVoyages(fetchedVoyages);
-      };
-      const getVessels = async () => {
-        const fetchedVessels = await FetchVessels();
-        setVessels(fetchedVessels);
-      };
-
       getVoyages();
       getVessels();
       getLaytimes();
@@ -789,11 +782,72 @@ export default function Laytime() {
     }
   }
 
+  const getVoyages = async () => {
+    const fetchedVoyages = await FetchVoyages();
+    setVoyages(fetchedVoyages);
+  };
+
+  const getVessels = async () => {
+    const fetchedVessels = await FetchVessels();
+    setVessels(fetchedVessels);
+  };
+
+  // Funções da página
+
+    function setClear () {
+      setSelectedLaytime(0);
+      setSelectedVoyage(null);
+      setFromLocation("");
+      setToLocation("");
+      setSelectedVessel(null);
+      setCharteres("");
+      setCpDate("");
+      setCpRate(null);
+      setOperation("");
+      setCargoQuantity(null);
+      setCargoType("");
+      setDemurrageRate(0);
+      setDespatchRate(0);
+      setNorType("If NOR before");
+      setTimeVar1("");
+      setTimeVar2("");
+      setTimeType("same day");
+      setEndweekType("Shinc");
+      setAssistOption1("laytime_non-reversible");
+      setAssistOption2("Once_on_demurrage_always_on_demurrage");
+      setAssistOption3("Working_time_saved");
+      setRows([{ event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00' }]);
+      setStartDate("");
+      setEndDate("");
+      setNorLaytimeStartDays("");
+      setNorLaytimeStartHours("");
+      setTimeUsed("");
+      setTimeAllowed("");
+      setTimeResult("");
+      setDespatchOrDemurrage("");
+      setRate(0);
+      setComission(0);
+      setSubtotal(0);
+      setTotal(0);
+      setNorTenderedDays("");
+      setNorTenderedHours("");
+      setNorRetenderedDays("");
+      setNorRetenderedHours("");
+      setNorAcepptedDays("");
+      setNorAcepptedHours("");
+      setNorLaytimeEndDays("");
+      setNorLaytimeEndHours("");
+      setNotepad("");
+      setVoyageInput("")
+      setVesselInput("")
+  }
+
   return (
     <>
       <Header
         onButtonCalculateClick={handleCalculateClick}
         onButtonSaveClick={saveLaytimeAndEventLogs}
+        onButtonClearClick={setClear}
         laytimes={laytimes}
         selectedLaytime={selectedLaytime}
         setSelectedLaytime={setSelectedLaytime}
@@ -896,6 +950,12 @@ export default function Laytime() {
 
             assistOption3={assistOption3}
             setAssistOption3={setAssistOption3}
+
+            voyageInput={voyageInput}
+            setVoyageInput={setVoyageInput}
+
+            vesselInput={vesselInput}
+            setVesselInput={setVesselInput}
 
             erros={erros}
             setters={setters}

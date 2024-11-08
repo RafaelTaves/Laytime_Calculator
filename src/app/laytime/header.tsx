@@ -62,12 +62,13 @@ interface Laytime {
 interface headerProps {
   onButtonCalculateClick: () => void;
   onButtonSaveClick: () => void;
+  onButtonClearClick: () => void;
   laytimes: Laytime[];
   selectedLaytime: number;
   setSelectedLaytime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Header({ onButtonCalculateClick, onButtonSaveClick, laytimes, selectedLaytime, setSelectedLaytime }: headerProps) {
+export default function Header({ onButtonCalculateClick, onButtonSaveClick, onButtonClearClick, laytimes, selectedLaytime, setSelectedLaytime }: headerProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter();
   const [saveCaption, setSaveCaption] = useState("Save new")
@@ -125,9 +126,9 @@ export default function Header({ onButtonCalculateClick, onButtonSaveClick, layt
           <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
             Print
           </a>
-          <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+          <button onClick={onButtonClearClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
             Clear
-          </a>
+          </button>
           <button onClick={handleLogout} className="text-md w-32 bg-red-800 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-red-700">
             Log out <span aria-hidden="true">&rarr;</span>
           </button>

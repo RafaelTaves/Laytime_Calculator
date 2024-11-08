@@ -72,7 +72,7 @@ export default function TableNOR({
             <div>
                 <h2 className='font-Jost text-lg font-bold text-black'>NOR</h2>
             </div>
-            <div className='bg-white mt-4 px-8 py-2 rounded-lg shadow-md flex flex-col overflow-x-auto '>
+            <div className='bg-white mt-4 px-8 py-2 2xl:py-0 2xl:px-2 2xl:pt-2 2xl:pb-1 rounded-lg shadow-md flex flex-col overflow-x-auto '>
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
