@@ -17,7 +17,7 @@ export default function Notepad({notepad, setNotepad}: NotepadProps) {
             className="min-h-48 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 h-auto placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
             value={notepad}
             onChange={(e) => setNotepad(e.target.value)}
-            placeholder="Note: This observations will be included on your report."
+            placeholder="Note: This observations will NOT be included on your report."
             ></textarea>
           </div>
         </div>  

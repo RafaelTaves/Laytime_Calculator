@@ -39,6 +39,7 @@ interface TableRow {
   percent_count: string;
   remarks: string;
   excused_time: string;
+  id_event_log: number | undefined;
 }
 
 interface EventLog {
@@ -97,6 +98,7 @@ interface Laytime {
   notepad: string;
   time_used: string;
   time_result: string;
+  time_difference: string;
   time_allowed: string;
   rate: number;
   comission: number;
@@ -202,9 +204,10 @@ export default function Laytime() {
   const [badGetLaytimesNotification, setBadGetLaytimesNotification] = useState<boolean>(false);
   const [badPatchNotification, setBadPatchNotification] = useState<boolean>(false);
   const [badSaveNotification, setBadSaveNotification] = useState<boolean>(false);
+  const [badPrintNotification, setBadPrintNotification] = useState<boolean>(false);
 
   const [rows, setRows] = useState<TableRow[]>([
-    { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00' }
+    { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00', id_event_log: undefined }
   ]);
 
   const [startDate, setStartDate] = useState<string>("")
@@ -212,6 +215,7 @@ export default function Laytime() {
   const [norLaytimeStartDays, setNorLaytimeStartDays] = useState<string>("")
   const [norLaytimeStartHours, setNorLaytimeStartHours] = useState<string>("")
   const [timeUsed, setTimeUsed] = useState<string>("")
+  const [timeDifference, setTimeDifference] = useState<string>('(0 days) 0:00');
 
   // math consts
   const [timeAllowed, setTimeAllowed] = useState<string>("")
@@ -236,7 +240,6 @@ export default function Laytime() {
   const [idUser, setIdUser] = useState<number>()
 
   useEffect(() => {
-    console.log("Chamou o use effect")
     findAndSetLaytime(laytimes, selectedLaytime)
   }, [selectedLaytime])
 
@@ -354,6 +357,7 @@ export default function Laytime() {
     setNorLaytimeStartDays(norLaytimeStartDays);
     setNorLaytimeStartHours(norLaytimeStartHours);
     setTimeUsed(timeUsed);
+    setTimeDifference(timeDifference)
     setTimeAllowed(timeAllowed);
     setRows(rows);
   }
@@ -362,8 +366,6 @@ export default function Laytime() {
     const laytime = laytimes.find(item => item.id_laytime === selectedLaytime);
 
     if (laytime) {
-      console.log("Entrou no if da função")
-      console.log(laytime)
       const cpDateString = laytime.cp_date instanceof Date ? laytime.cp_date.toISOString().split('T')[0] : laytime.cp_date;
       setConstsSavedLaytime(
         laytime.id_user,
@@ -595,6 +597,7 @@ export default function Laytime() {
             notepad: notepad,
             time_used: timeUsed,
             time_result: timeResult,
+            time_difference: timeDifference,
             time_allowed: timeAllowed,
             rate: rate,
             comission: comission,
@@ -697,6 +700,7 @@ export default function Laytime() {
             notepad: notepad,
             time_used: timeUsed,
             time_result: timeResult,
+            time_difference: timeDifference,
             time_allowed: timeAllowed,
             rate: rate,
             comission: comission,
@@ -706,18 +710,15 @@ export default function Laytime() {
           };
 
           try {
-            // Fazer o PATCH para registrar o Laytime
+            // Fazer o PATCH para atualizar o Laytime
             const laytimeResp = await axios.patch(`${BASE_URL}/laytimes/${selectedLaytime}`, laytimeBody, {
               headers: {
                 Authorization: `Bearer ${token}`
               },
             });
             try {
-              const laytime = laytimes.find(laytime => laytime.id_laytime === selectedLaytime);
-
-              if (laytime) {
-                laytime.event_logs.forEach(row => {
-                  const updatedData: EventLogPatch = {
+              for (const row of rows) {
+                const eventLogData = {
                     id_laytime: laytimeResp.data.id_laytime,
                     event_date: row.event_date,
                     from_time: row.from_time,
@@ -725,9 +726,15 @@ export default function Laytime() {
                     remarks: row.remarks,
                     percent_count: row.percent_count,
                     excused_time: row.excused_time,
-                  };
-                  patchEventLog(row.id_event_log, updatedData);
-                });
+                };
+
+                if (row.id_event_log != undefined) {
+                    // Se o log já possui um ID, faça o PATCH
+                    await patchEventLog(row.id_event_log, eventLogData);
+                } else {
+                    // Se o log não possui ID, faça o POST
+                    await postNewEventLog(eventLogData);
+                }
               }
             } catch (error) {
               setBadPatchNotification(true)
@@ -744,6 +751,21 @@ export default function Laytime() {
       }
     }
   }
+
+  async function postNewEventLog(eventLogData: EventLogPatch) {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await axios.post(`${BASE_URL}/register_event_log`, eventLogData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+        console.log("Novo Event Log registrado:", response.data);
+    } catch (error) {
+        setBadSaveNotification(true);
+        console.error("Erro ao criar novo Event Log:", error);
+    }
+}
 
   async function patchEventLog(eventLogId: number, updatedData: EventLogPatch) {
     const token = localStorage.getItem('token');
@@ -816,7 +838,7 @@ export default function Laytime() {
       setAssistOption1("laytime_non-reversible");
       setAssistOption2("Once_on_demurrage_always_on_demurrage");
       setAssistOption3("Working_time_saved");
-      setRows([{ event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00' }]);
+      setRows([{ event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00', id_event_log: undefined }]);
       setStartDate("");
       setEndDate("");
       setNorLaytimeStartDays("");
@@ -840,6 +862,31 @@ export default function Laytime() {
       setNotepad("");
       setVoyageInput("")
       setVesselInput("")
+      setTimeDifference('(0 days) 0:00')
+  }
+
+  async function printLaytime() {
+    const token = localStorage.getItem('token');
+
+    const headersDownload = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    try{
+      const resp = await axios.get(`${BASE_URL}/generate_report/${selectedLaytime}`,
+        { responseType: "blob", headers: headersDownload }
+      )
+
+      const url = window.URL.createObjectURL(new Blob([resp.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `laytime_report_${charteres}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch {
+        alert("Houve um erro ao tentar gerar o relatório, contate o suporte!")
+    }
   }
 
   return (
@@ -848,6 +895,7 @@ export default function Laytime() {
         onButtonCalculateClick={handleCalculateClick}
         onButtonSaveClick={saveLaytimeAndEventLogs}
         onButtonClearClick={setClear}
+        onButtonPrintClick={printLaytime}
         laytimes={laytimes}
         selectedLaytime={selectedLaytime}
         setSelectedLaytime={setSelectedLaytime}
@@ -881,6 +929,12 @@ export default function Laytime() {
           show={goodSaveNotification}
           title="Sucesso!"
           desc="Salvo com sucesso."
+          onClose={handleCloseNotification}
+        />
+        <BadNotification
+          show={badPrintNotification}
+          title="Erro!"
+          desc="Salve suas alterações antes de gerar um relatório"
           onClose={handleCloseNotification}
         />
         <div className="flex flex-col 2xl:flex-row 2xl:border-b-2 2xl:border-gray-300">
@@ -984,6 +1038,7 @@ export default function Laytime() {
           />
         </div>
         <TableRemark
+          selectedLaytime={selectedLaytime}
           rows={rows}
           setRows={setRows}
         />
@@ -992,6 +1047,8 @@ export default function Laytime() {
           timeUsed={timeUsed}
           demurrageRate={demurrageRate}
           despatchRate={despatchRate}
+          timeDifference={timeDifference}
+          setTimeDifference={setTimeDifference}
           setFatherTimeResult={setTimeResult}
           setFatherDespatchOrDemurrage={setDespatchOrDemurrage}
           setFatherRate={setRate}

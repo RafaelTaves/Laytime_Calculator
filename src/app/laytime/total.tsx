@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 interface totalProps {
   timeAllowed: string,
   timeUsed: string,
+  timeDifference: string,
   demurrageRate: number | null,
   despatchRate: number | null,
   setFatherTimeResult: React.Dispatch<React.SetStateAction<string>>;
@@ -11,10 +12,10 @@ interface totalProps {
   setFatherComission: React.Dispatch<React.SetStateAction<number>>;
   setFatherSubtotal: React.Dispatch<React.SetStateAction<number>>;
   setFatherTotal: React.Dispatch<React.SetStateAction<number>>;
+  setTimeDifference: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRate, setFatherTimeResult, setFatherDespatchOrDemurrage, setFatherRate, setFatherComission, setFatherSubtotal, setFatherTotal }: totalProps) {
-  const [timeDifference, setTimeDifference] = useState<string>('(0 days) 0:00');
+export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRate, timeDifference, setFatherTimeResult, setFatherDespatchOrDemurrage, setFatherRate, setFatherComission, setFatherSubtotal, setFatherTotal, setTimeDifference }: totalProps) {
   const [timeResult, setTimeResult] = useState<string>("Time Result")
   const [despatchOrDemurrage, setDespatchOrDemurrage] = useState<string>("Demurrage/Despatch")
   const [despatchOrDemurrageRate, setDespatchOrDemurrageRate] = useState<number | null>(0)

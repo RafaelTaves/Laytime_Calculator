@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface TableRow {
   event_date: string;
@@ -8,30 +8,26 @@ interface TableRow {
   percent_count: string;
   remarks: string;
   excused_time: string;
+  id_event_log: number | undefined;
 }
 
 interface RemarkProps {
-  rows: TableRow[],
-  setRows: React.Dispatch<React.SetStateAction<TableRow[]>>
+  selectedLaytime: number;
+  rows: TableRow[];
+  setRows: React.Dispatch<React.SetStateAction<TableRow[]>>;
 }
 
-export default function TableRemark ({rows, setRows}: RemarkProps) {
-
-  useEffect(() => {
-    setChildRows(rows)
-  }, [rows])
-
-  const [childRows, setChildRows] = useState<TableRow[]>([
-    { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00'}
-  ]);
-
+export default function TableRemark({ selectedLaytime, rows, setRows }: RemarkProps) {
   const addRow = () => {
-    setChildRows([...childRows, { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00'}]);
+    setRows([
+      ...rows,
+      { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00', id_event_log: undefined },
+    ]);
   };
 
   const removeRow = (index: number) => {
-    const newRows = childRows.filter((_, i) => i !== index);
-    setChildRows(newRows);
+    const newRows = rows.filter((_, i) => i !== index);
+    setRows(newRows);
   };
 
   const calculateTimeDifference = (from: string, to: string): number => {
@@ -50,50 +46,32 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
     return diff > 0 ? diff : 0;
   };
 
-  const formatTime = (minutes: number): string => {
-    const days = Math.floor(minutes / 1440);
-    const remainingMinutes = minutes % 1440;
-    const hours = Math.floor(remainingMinutes / 60);
-    const mins = remainingMinutes % 60;
-    return `(${days} days) ${hours}:${mins.toString().padStart(2, '0')}`;
-  };
-
   const formatTimeInHours = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}:${mins.toString().padStart(2, '0')}`;
   };
 
-  const updateRows = (newRows: TableRow[]) => {
-    let cumulativeTimeWasted = 0;
-
-    for (let i = 0; i < newRows.length; i++) {
-      const diff = calculateTimeDifference(newRows[i].from_time, newRows[i].to_time);
-      const percent = parseFloat(newRows[i].percent_count) || 0;
-      const timeWasted = (diff * percent) / 100;
-      
-      cumulativeTimeWasted += timeWasted;
-      newRows[i].excused_time = formatTimeInHours(cumulativeTimeWasted);
-    }
-
-    setChildRows(newRows);
-    setRows(newRows);
-
-    if (newRows.length > 0) {
-      const lastTimeWasted = newRows[newRows.length - 1].excused_time;
-    }
-  };
-
   const handleChange = (index: number, field: keyof TableRow, value: string) => {
-    const newRows = [...childRows];
-    newRows[index] = { ...newRows[index], [field]: value };
-
-    updateRows(newRows);
+    const updatedRows = [...rows];
+    updatedRows[index] = { ...updatedRows[index], [field]: value };
+  
+    let cumulativeTimeWasted = 0;
+    for (let i = 0; i < updatedRows.length; i++) {
+      const diff = calculateTimeDifference(updatedRows[i].from_time, updatedRows[i].to_time);
+      const percent = parseFloat(updatedRows[i].percent_count) || 0;
+      const timeWasted = (diff * percent) / 100;
+  
+      cumulativeTimeWasted += timeWasted;
+      updatedRows[i].excused_time = formatTimeInHours(cumulativeTimeWasted);
+    }
+  
+    setRows(updatedRows);
   };
 
   return (
     <div className="flex flex-col w-full justify-center mx-auto p-8 py-4 max-w-8xl border-b-2 border-gray-300">
-      <div className='bg-white mt-4 md:mt-0 p-8 py-5 rounded-lg shadow-md flex flex-col overflow-x-auto'>
+      <div className="bg-white mt-4 md:mt-0 p-8 py-5 rounded-lg shadow-md flex flex-col overflow-x-auto">
         <table className="min-w-full border-collapse">
           <thead>
             <tr>
@@ -107,16 +85,16 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
             </tr>
           </thead>
           <tbody>
-            {childRows.map((row, index) => (
+            {rows.map((row, index) => (
               <tr key={index}>
                 <td className="border p-2">
                   <button
                     className="bg-blue-500 text-white px-2 py-1 rounded mr-2 min-w-full"
-                    onClick={() => addRow()}
+                    onClick={addRow}
                   >
                     +
                   </button>
-                  {childRows.length > 1 && (
+                  {rows.length > 1 && (
                     <button
                       className="bg-red-500 text-white px-2 py-1 rounded mt-2 min-w-full"
                       onClick={() => removeRow(index)}
@@ -168,7 +146,7 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
                 <td className="border p-2">
                   <input
                     className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                    type='text'
+                    type="text"
                     readOnly
                     value={row.excused_time}
                   />
@@ -180,5 +158,4 @@ export default function TableRemark ({rows, setRows}: RemarkProps) {
       </div>
     </div>
   );
-};
-
+}

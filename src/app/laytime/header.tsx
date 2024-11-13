@@ -63,12 +63,13 @@ interface headerProps {
   onButtonCalculateClick: () => void;
   onButtonSaveClick: () => void;
   onButtonClearClick: () => void;
+  onButtonPrintClick: () => void;
   laytimes: Laytime[];
   selectedLaytime: number;
   setSelectedLaytime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Header({ onButtonCalculateClick, onButtonSaveClick, onButtonClearClick, laytimes, selectedLaytime, setSelectedLaytime }: headerProps) {
+export default function Header({ onButtonCalculateClick, onButtonSaveClick, onButtonClearClick, onButtonPrintClick, laytimes, selectedLaytime, setSelectedLaytime }: headerProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter();
   const [saveCaption, setSaveCaption] = useState("Save new")
@@ -105,7 +106,6 @@ export default function Header({ onButtonCalculateClick, onButtonSaveClick, onBu
             value={selectedLaytime ?? ""}
             onChange={(e) => {
               setSelectedLaytime(Number(e.target.value))
-              console.log("Id selecionado: " + Number(e.target.value))
             }}
             className='border-0 rounded-lg text-black font-Poppins w-full px-3 xl:w-96 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm'>
             <option>Selecione um laytime</option>
@@ -123,9 +123,9 @@ export default function Header({ onButtonCalculateClick, onButtonSaveClick, onBu
           <button onClick={onButtonSaveClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
             {saveCaption}
           </button>
-          <a href="" className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
+          <button onClick={onButtonPrintClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
             Print
-          </a>
+          </button>
           <button onClick={onButtonClearClick} className="text-md w-32 bg-gray-900 text-white text-center font-semibold leading-6 font-Jost border py-2 px-4 rounded-lg hover:bg-gray-700">
             Clear
           </button>
