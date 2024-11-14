@@ -125,6 +125,9 @@ interface laytimeProps {
 
     erros: ErrosProps;
     setters: SettersProps;
+
+    getVessels: () => void;
+    getVoyages: () => void;
 }
 
 interface Vessels {
@@ -184,7 +187,9 @@ export default function Laytime_calculation({
     vesselInput,
     setVesselInput,
     erros, 
-    setters 
+    setters,
+    getVessels,
+    getVoyages 
 }: laytimeProps) {
     const [NewDisplaydemurrageRate, setNewDisplayDemurrageRate] = useState<string>("$ 0.00")
     const [NewDisplaydespatchRate, setNewDisplayDespatchRate] = useState<string>("$ 0.00")
@@ -886,10 +891,10 @@ export default function Laytime_calculation({
                         </div>
                     </div>
                     <Modal isOpen={isModalVesselOpen} onClose={closeModalVessel}>
-                        <Modal_vessel onRefresh={onRefresh} />
+                        <Modal_vessel onRefresh={onRefresh} getVessels={getVessels}/>
                     </Modal>
                     <Modal isOpen={isModalVoyageOpen} onClose={closeModalVoyage}>
-                        <Modal_voyage onRefresh={onRefresh} />
+                        <Modal_voyage onRefresh={onRefresh} getVoyages={getVoyages}/>
                     </Modal>
                 </div>
             </div>

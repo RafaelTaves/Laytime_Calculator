@@ -8,9 +8,10 @@ const BASE_URL = "http://127.0.0.1:8000";
 
 interface ModaVoyageProps {
   onRefresh: () => void;
+  getVoyages: () => void;
 }
 
-export default function Modal_voyage({onRefresh}: ModaVoyageProps) {
+export default function Modal_voyage({onRefresh, getVoyages}: ModaVoyageProps) {
   const [i_from_location, setFromLocation] = useState<string>("");
   const [i_description, setDescription] = useState<string>("");
   const [i_name, setName] = useState<string>("");
@@ -40,6 +41,7 @@ export default function Modal_voyage({onRefresh}: ModaVoyageProps) {
         });
 
         if (response.status === 200) {
+          getVoyages();
           setShowNotificationGood(true);
           setFromLocation("");
           setDescription("");
@@ -164,9 +166,6 @@ export default function Modal_voyage({onRefresh}: ModaVoyageProps) {
       </div>
 
       <div className="mt-4 flex items-center justify-end gap-x-6 px-4">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-          Cancel
-        </button>
         <button
           type="submit"
           className="inline-flex justify-center rounded-md bg-mid-blue-I px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-light-blue-I focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mid-blue-I"

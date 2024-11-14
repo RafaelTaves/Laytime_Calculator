@@ -67,6 +67,12 @@ export default function Register_vessel() {
         getVoyages()
       }, [refresh])
 
+      const getVoyages = async () => {
+        const fetchedVoyages = await FetchVoyages();
+        setVoyages(fetchedVoyages);
+        setRefresh(false)
+      }
+    
       function onRefresh () {
         setRefresh(true)
       }
@@ -177,7 +183,7 @@ export default function Register_vessel() {
           </div>
         </div>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <Modal_voyage onRefresh={onRefresh}/>
+        <Modal_voyage onRefresh={onRefresh} getVoyages={getVoyages}/>
         </Modal>
       </div>
     </div>

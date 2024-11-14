@@ -614,6 +614,7 @@ export default function Laytime() {
               },
             });
 
+            setSelectedLaytime(laytimeResp.data.id_laytime)
             try {
               if (laytimeResp.status === 200) {
                 // Fazer POST de cada Event Log associado ao Laytime criado
@@ -623,8 +624,8 @@ export default function Laytime() {
                     event_date: row.event_date,
                     from_time: row.from_time,
                     to_time: row.to_time,
-                    remarks: row.percent_count,
-                    percent_count: row.remarks,
+                    remarks: row.remarks,
+                    percent_count: row.percent_count,
                     excused_time: row.excused_time
                   };
 
@@ -640,6 +641,7 @@ export default function Laytime() {
               setBadSaveNotification(true)
               console.log("Houve um problema ao tentar cadastrar os event logs: ", error);
             } finally {
+              getLaytimes()
               setGoodSaveNotification(true)
             }
           } catch (error) {
@@ -1013,6 +1015,9 @@ export default function Laytime() {
 
             erros={erros}
             setters={setters}
+
+            getVessels={getVessels}
+            getVoyages={getVoyages}
           />
           <TableNOR
             setStartDate={setStartDate}

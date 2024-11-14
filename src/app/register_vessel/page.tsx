@@ -66,6 +66,12 @@ export default function Register_vessel() {
         getVessels()
       }, [refresh])
 
+      const getVessels = async () => {
+        const fetchedVessels = await FetchVessels();
+        setVessels(fetchedVessels);
+        setRefresh(false)
+      }
+
       function onRefresh () {
         setRefresh(true)
       }
@@ -172,7 +178,7 @@ export default function Register_vessel() {
           </div>
         </div>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <Modal_vessel onRefresh={onRefresh}/>
+        <Modal_vessel onRefresh={onRefresh} getVessels={getVessels}/>
         </Modal>
       </div>
     </div>
