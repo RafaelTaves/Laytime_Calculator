@@ -319,13 +319,24 @@ export default function Laytime_calculation({
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement>,
         setRate: React.Dispatch<React.SetStateAction<number>>,
-        setDisplayRate: React.Dispatch<React.SetStateAction<string>>
+        setDisplayRate: React.Dispatch<React.SetStateAction<string>>,
+        isDemurrageRate?: boolean // Adiciona um indicador se é para o demurrageRate
     ) => {
         const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-        setRate(parseFloat(inputValue) || 0);
+        const numericValue = parseFloat(inputValue) || 0;
+    
+        setRate(numericValue);
         setDisplayRate(formatCurrency(inputValue));
+    
+        // Se for demurrageRate, atualiza automaticamente o dispatchRate
+        if (isDemurrageRate) {
+            const dispatchRate = numericValue / 2;
+            setDespatchRate(dispatchRate); // Define o valor de despatchRate
+            setNewDisplayDespatchRate(formatCurrency(dispatchRate.toFixed(2))); // Atualiza a exibição
+        }
     };
-
+    
+    // Função para formatar moeda
     const updateRate = (
         value: number,
         setDisplayRate: React.Dispatch<React.SetStateAction<string>>
@@ -333,11 +344,11 @@ export default function Laytime_calculation({
         const formattedValue = formatCurrency(value.toFixed(2));
         setDisplayRate(formattedValue);
     };
-
+    
     const updateDespatchRate = (value: number) => {
         updateRate(value, setNewDisplayDespatchRate);
     };
-
+    
     const updateDemurrageRate = (value: number) => {
         updateRate(value, setNewDisplayDemurrageRate);
     };
@@ -703,7 +714,9 @@ export default function Laytime_calculation({
                                 id="demurrageRate"
                                 name="demurrageRate"
                                 value={NewDisplaydemurrageRate}
-                                onChange={(e) => handleInputChange(e, setDemurrageRate, setNewDisplayDemurrageRate)}
+                                onChange={(e) =>
+                                    handleInputChange(e, setDemurrageRate, setNewDisplayDemurrageRate, true) // Passa 'true' aqui
+                                }
                                 className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroDemurrageRate === true ? "ring-red-500" : "ring-gray-300"}`}
                             />
                         </div>
