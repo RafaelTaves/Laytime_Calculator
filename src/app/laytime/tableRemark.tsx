@@ -1,5 +1,6 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
+import moment from 'moment';
 
 interface TableRow {
   event_date: string;
@@ -15,9 +16,12 @@ interface RemarkProps {
   selectedLaytime: number;
   rows: TableRow[];
   setRows: React.Dispatch<React.SetStateAction<TableRow[]>>;
+  onDemurrage: string;
 }
 
-export default function TableRemark({ selectedLaytime, rows, setRows }: RemarkProps) {
+export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrage }: RemarkProps) {
+  const [demurrageIndexes, setDemurrageIndexes] = useState<Set<number>>(new Set());
+
   const addRow = () => {
     setRows([
       ...rows,
@@ -28,6 +32,12 @@ export default function TableRemark({ selectedLaytime, rows, setRows }: RemarkPr
   const removeRow = (index: number) => {
     const newRows = rows.filter((_, i) => i !== index);
     setRows(newRows);
+    setDemurrageIndexes((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(index);
+      const adjustedSet = new Set(Array.from(newSet).map((i) => (i > index ? i - 1 : i)));
+      return adjustedSet;
+    });
   };
 
   const calculateTimeDifference = (from: string, to: string): number => {
@@ -52,20 +62,71 @@ export default function TableRemark({ selectedLaytime, rows, setRows }: RemarkPr
     return `${hours}:${mins.toString().padStart(2, '0')}`;
   };
 
+  const updateRowsWithDemurrage = (rows: TableRow[], index: number): TableRow[] => {
+    const demurrageDateTime = moment(onDemurrage, "YYYY-MM-DDTHH:mm");
+    const eventDateTime = moment(`${rows[index].event_date}T${rows[index].from_time}`);
+
+    if (eventDateTime.isAfter(demurrageDateTime)) {
+      setDemurrageIndexes((prev) => new Set(prev).add(index));
+
+      // Adiciona uma nova linha automaticamente na data de onDemurrage
+      const demurrageRow: TableRow = {
+        event_date: demurrageDateTime.format('YYYY-MM-DD'),
+        from_time: demurrageDateTime.format('HH:mm'),
+        to_time: demurrageDateTime.format('HH:mm'), // Assume o mesmo horário de início para simplicidade
+        percent_count: '100',
+        remarks: 'Entered Demurrage',
+        excused_time: '0:00',
+        id_event_log: undefined,
+      };
+
+      const existingRowIndex = rows.findIndex(
+        row => row.event_date === demurrageRow.event_date && row.from_time === demurrageRow.from_time
+      );
+
+      if (existingRowIndex === -1) {
+        const newRows = [...rows];
+        const insertIndex = newRows.findIndex(
+          row => moment(`${row.event_date}T${row.from_time}`).isAfter(demurrageDateTime)
+        );
+
+        if (insertIndex !== -1) {
+          newRows.splice(insertIndex, 0, demurrageRow);
+        } else {
+          newRows.push(demurrageRow);
+        }
+
+        return newRows;
+      }
+    } else {
+      setDemurrageIndexes((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(index);
+        return newSet;
+      });
+    }
+
+    return rows;
+  };
+
   const handleChange = (index: number, field: keyof TableRow, value: string) => {
-    const updatedRows = [...rows];
+    let updatedRows = [...rows];
     updatedRows[index] = { ...updatedRows[index], [field]: value };
-  
+
+    // Atualizar as linhas com demurrage, se necessário
+    updatedRows = updateRowsWithDemurrage(updatedRows, index);
+
+    // Recalcular o tempo acumulado
     let cumulativeTimeWasted = 0;
     for (let i = 0; i < updatedRows.length; i++) {
       const diff = calculateTimeDifference(updatedRows[i].from_time, updatedRows[i].to_time);
       const percent = parseFloat(updatedRows[i].percent_count) || 0;
       const timeWasted = (diff * percent) / 100;
-  
+
       cumulativeTimeWasted += timeWasted;
       updatedRows[i].excused_time = formatTimeInHours(cumulativeTimeWasted);
     }
-  
+
     setRows(updatedRows);
   };
 
@@ -85,74 +146,79 @@ export default function TableRemark({ selectedLaytime, rows, setRows }: RemarkPr
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                <td className="border p-2">
-                  <button
-                    className="bg-blue-500 text-white px-2 py-1 rounded mr-2 min-w-full"
-                    onClick={addRow}
-                  >
-                    +
-                  </button>
-                  {rows.length > 1 && (
+            {rows.map((row, index) => {
+              const isDemurrage = demurrageIndexes.has(index);
+              return (
+                <tr key={index}>
+                  <td className="border p-2">
                     <button
-                      className="bg-red-500 text-white px-2 py-1 rounded mt-2 min-w-full"
-                      onClick={() => removeRow(index)}
+                      className="bg-blue-500 text-white px-2 py-1 rounded mr-2 min-w-full"
+                      onClick={addRow}
                     >
-                      -
+                      +
                     </button>
-                  )}
-                </td>
-                <td className="border p-2">
-                  <input
-                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                    type="date"
-                    value={row.event_date}
-                    onChange={(e) => handleChange(index, 'event_date', e.target.value)}
-                  />
-                </td>
-                <td className="border p-2">
-                  <input
-                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                    type="text"
-                    value={row.from_time}
-                    onChange={(e) => handleChange(index, 'from_time', e.target.value)}
-                  />
-                </td>
-                <td className="border p-2">
-                  <input
-                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                    type="text"
-                    value={row.to_time}
-                    onChange={(e) => handleChange(index, 'to_time', e.target.value)}
-                  />
-                </td>
-                <td className="border p-2">
-                  <input
-                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                    type="text"
-                    value={row.percent_count}
-                    onChange={(e) => handleChange(index, 'percent_count', e.target.value)}
-                  />
-                </td>
-                <td className="border p-2">
-                  <input
-                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                    type="text"
-                    value={row.remarks}
-                    onChange={(e) => handleChange(index, 'remarks', e.target.value)}
-                  />
-                </td>
-                <td className="border p-2">
-                  <input
-                    className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
-                    type="text"
-                    readOnly
-                    value={row.excused_time}
-                  />
-                </td>
-              </tr>
-            ))}
+                    {rows.length > 1 && (
+                      <button
+                        className="bg-red-500 text-white px-2 py-1 rounded mt-2 min-w-full"
+                        onClick={() => removeRow(index)}
+                      >
+                        -
+                      </button>
+                    )}
+                  </td>
+                  <td className={`border p-2 ${isDemurrage ? 'border-red-500' : ''}`}>
+                    <input
+                      className={`w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${isDemurrage ? 'ring-red-500' : ''}`}
+                      type="date"
+                      value={row.event_date}
+                      onChange={(e) => handleChange(index, 'event_date', e.target.value)}
+                    />
+                  </td>
+                  <td className={`border p-2 ${isDemurrage ? 'border-red-500' : ''}`}>
+                    <input
+                      className={`w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${isDemurrage ? 'ring-red-500' : ''}`}
+                      type="text"
+                      placeholder="HH:mm"
+                      value={row.from_time}
+                      onChange={(e) => handleChange(index, 'from_time', e.target.value)}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <input
+                      className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                      type="text"
+                      placeholder="HH:mm"
+                      value={row.to_time}
+                      onChange={(e) => handleChange(index, 'to_time', e.target.value)}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <input
+                      className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                      type="text"
+                      value={row.percent_count}
+                      onChange={(e) => handleChange(index, 'percent_count', e.target.value)}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <input
+                      className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                      type="text"
+                      value={row.remarks}
+                      onChange={(e) => handleChange(index, 'remarks', e.target.value)}
+                    />
+                  </td>
+                  <td className="border p-2">
+                    <input
+                      className="w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6"
+                      type="text"
+                      readOnly
+                      value={row.excused_time}
+                    />
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

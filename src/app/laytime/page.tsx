@@ -13,6 +13,7 @@ import calcDateDifference from "../Functions/calcDateDifference";
 import calcWhenLaytimeStarts from "../Functions/calcWhenLaytimeStarts";
 import moment from "moment";
 import calcTimeUsed from "../Functions/calcTimeUsed";
+import calcOnDemurrage from "../Functions/calcOnDemurrage"
 import BadNotification from "../components/notifications/badNotification";
 import axios from "axios";
 import GoodNotification from "../components/notifications/goodNotification";
@@ -238,6 +239,7 @@ export default function Laytime() {
   const [norLaytimeEndHours, setNorLaytimeEndHours] = useState<string>("")
   const [notepad, setNotepad] = useState<string>("")
   const [idUser, setIdUser] = useState<number>()
+  const [onDemurrage, setOnDemurrage] = useState<string>("")
 
   useEffect(() => {
     findAndSetLaytime(laytimes, selectedLaytime)
@@ -471,6 +473,9 @@ export default function Laytime() {
     setNorLaytimeStartDays(moment(start).format("YYYY-MM-DD"));
     setNorLaytimeStartHours(moment(start).format("HH:mm"));
     calculateAndSetTimeUsed(start, endDate, lastTimeWasted);
+    const onDemurrageDate = calcOnDemurrage(start, timeAllowed);
+    console.log("Demurrage starts on: ", onDemurrageDate);
+    setOnDemurrage(onDemurrageDate)
   };
 
   // Função para checar campos antes de calcular
@@ -1046,6 +1051,7 @@ export default function Laytime() {
           selectedLaytime={selectedLaytime}
           rows={rows}
           setRows={setRows}
+          onDemurrage={onDemurrage}
         />
         <Total
           timeAllowed={timeAllowed}
