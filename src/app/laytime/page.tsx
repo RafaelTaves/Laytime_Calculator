@@ -108,6 +108,7 @@ interface Laytime {
   despatch_or_demurrage: string;
   id_laytime: number;
   event_logs: EventLog[];
+  on_demurrage: string;
 }
 
 const BASE_URL = "http://127.0.0.1:8000"
@@ -318,7 +319,8 @@ export default function Laytime() {
     norLaytimeStartHours: string,
     timeUsed: string,
     timeAllowed: string,
-    rows: TableRow[]
+    rows: TableRow[],
+    onDemurrage: string
   ) {
     setIdUser(idUser)
     setSelectedVoyage(selectedVoyage);
@@ -362,6 +364,7 @@ export default function Laytime() {
     setTimeDifference(timeDifference)
     setTimeAllowed(timeAllowed);
     setRows(rows);
+    setOnDemurrage(onDemurrage)
   }
 
   function findAndSetLaytime(laytimes: Laytime[], selectedLaytime: number | undefined) {
@@ -406,11 +409,12 @@ export default function Laytime() {
         laytime.nor_laytime_end_days,
         laytime.nor_laytime_end_hours,
         laytime.notepad,
-        laytime.nor_laytime_accepted_days,
-        laytime.nor_laytime_accepted_hours,
+        laytime.nor_laytimestarts_days,
+        laytime.nor_laytimestarts_hours,
         laytime.time_used,
         laytime.time_allowed,
-        laytime.event_logs
+        laytime.event_logs,
+        laytime.on_demurrage
       );
     } else {
       console.warn(`Laytime com o id ${selectedLaytime} não encontrado.`);
@@ -473,7 +477,7 @@ export default function Laytime() {
     setNorLaytimeStartDays(moment(start).format("YYYY-MM-DD"));
     setNorLaytimeStartHours(moment(start).format("HH:mm"));
     calculateAndSetTimeUsed(start, endDate, lastTimeWasted);
-    const onDemurrageDate = calcOnDemurrage(start, timeAllowed);
+    const onDemurrageDate = calcOnDemurrage(start, timeAllowed, rows);
     console.log("Demurrage starts on: ", onDemurrageDate);
     setOnDemurrage(onDemurrageDate)
   };
@@ -608,7 +612,8 @@ export default function Laytime() {
             comission: comission,
             subtotal: subtotal,
             total: total,
-            despatch_or_demurrage: despatchOrDemurrage
+            despatch_or_demurrage: despatchOrDemurrage,
+            on_demurrage: onDemurrage
           };
 
           try {
@@ -713,7 +718,8 @@ export default function Laytime() {
             comission: comission,
             subtotal: subtotal,
             total: total,
-            despatch_or_demurrage: despatchOrDemurrage
+            despatch_or_demurrage: despatchOrDemurrage,
+            on_demurrage: onDemurrage
           };
 
           try {
@@ -746,7 +752,7 @@ export default function Laytime() {
             } catch (error) {
               setBadPatchNotification(true)
               console.log("Houve um problema ao tentar cadastrar os event logs: ", error);
-            }
+            } 
           } catch (error) {
             setBadPatchNotification(true)
             console.log("Houve um problema ao tentar cadastrar o laytime: ", error);
@@ -788,6 +794,7 @@ export default function Laytime() {
       setBadPatchNotification(true)
       console.error(error);
     } finally {
+      getLaytimes()
       setGoodSaveNotification(true)
     }
   }
@@ -803,6 +810,7 @@ export default function Laytime() {
       })
 
       if (resp.status == 200) {
+        console.log(resp.data)
         setLaytimes(resp.data)
       }
     } catch (error) {

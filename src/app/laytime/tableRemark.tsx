@@ -166,7 +166,7 @@ export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrag
                       </button>
                     )}
                   </td>
-                  <td className={`border p-2 ${isDemurrage ? 'border-red-500' : ''}`}>
+                  <td className={`border p-2 `}>
                     <input
                       className={`w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${isDemurrage ? 'ring-red-500' : ''}`}
                       type="date"
@@ -174,7 +174,7 @@ export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrag
                       onChange={(e) => handleChange(index, 'event_date', e.target.value)}
                     />
                   </td>
-                  <td className={`border p-2 ${isDemurrage ? 'border-red-500' : ''}`}>
+                  <td className={`border p-2 `}>
                     <input
                       className={`w-full text-center border rounded p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm sm:leading-6 ${isDemurrage ? 'ring-red-500' : ''}`}
                       type="text"

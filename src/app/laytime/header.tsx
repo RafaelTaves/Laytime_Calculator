@@ -57,6 +57,7 @@ interface Laytime {
   despatch_or_demurrage: string;
   id_laytime: number;
   event_logs: EventLog[];
+  on_demurrage: string;
 }
 
 interface headerProps {
