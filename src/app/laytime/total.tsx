@@ -29,12 +29,19 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
   }, [timeAllowed, timeUsed, demurrageRate, despatchRate]);
 
   useEffect(() => {
+    function roundIfNeeded (value: number, precision: number = 5) {
+      const factor = Math.pow(10, precision);
+      return Math.round(value * factor) / factor;
+    };
+
     let timeDifferenceMinutes = convertStringToMinutes(timeDifference);
     let timeDifferenceDays = timeDifferenceMinutes / 1440;
 
+    timeDifferenceDays = roundIfNeeded(timeDifferenceDays);
+
     let subtotal = 0;
 
-    if (timeDifferenceMinutes >= 0) {
+    if (timeResult == "Time Saved") {
       if (despatchRate !== null) {
         subtotal = (timeDifferenceDays * despatchRate);
       }
@@ -44,7 +51,10 @@ export default function Total({ timeAllowed, timeUsed, demurrageRate, despatchRa
       }
     }
 
-    
+    // console.log("Time Difference Minutes:", timeDifferenceMinutes);
+    // console.log("Time Difference Days:", timeDifferenceDays);
+    // console.log("Subtotal:", subtotal);
+
     setSubtotal(subtotal);
     setFatherSubtotal(subtotal);
     setTotalAmount(subtotal);

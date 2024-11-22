@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import axios from 'axios';
 
 interface TableRow {
   event_date: string;
@@ -19,17 +20,48 @@ interface RemarkProps {
   onDemurrage: string;
 }
 
+const BASE_URL = "http://127.0.0.1:8000"
+
 export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrage }: RemarkProps) {
   const [demurrageIndexes, setDemurrageIndexes] = useState<Set<number>>(new Set());
 
-  const addRow = () => {
-    setRows([
-      ...rows,
-      { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00', id_event_log: undefined },
-    ]);
+  useEffect(() => {
+    const demurrageDateTime = moment(onDemurrage, "YYYY-MM-DDTHH:mm");
+    const newIndexes = new Set<number>();
+
+    rows.forEach((row, index) => {
+      const eventDateTime = moment(`${row.event_date}T${row.from_time}`, "YYYY-MM-DDTHH:mm");
+      if (eventDateTime.isAfter(demurrageDateTime)) {
+        newIndexes.add(index);
+      }
+    });
+
+    setDemurrageIndexes(newIndexes);
+  }, [rows, onDemurrage]);
+
+  const addRow = (index: number) => {
+    const newRow: TableRow = { event_date: '', from_time: '', to_time: '', percent_count: '', remarks: '', excused_time: '(0 days) 0:00', id_event_log: undefined };
+    const newRows = [...rows.slice(0, index + 1), newRow, ...rows.slice(index + 1)];
+    setRows(newRows);
   };
 
-  const removeRow = (index: number) => {
+  async function removeRow (index: number) {
+    const row = rows[index];
+    const token = localStorage.getItem('token');
+
+    if (row.id_event_log !== undefined) {
+      try {
+        await axios.delete(`${BASE_URL}/event_logs/${row.id_event_log}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        })
+      } catch (error) {
+        console.error(`Failed to delete event log with id: ${row.id_event_log}`, error);
+        return; // Talvez você queira parar a execução se o delete falhar
+      }
+    }
+
     const newRows = rows.filter((_, i) => i !== index);
     setRows(newRows);
     setDemurrageIndexes((prev) => {
@@ -153,7 +185,7 @@ export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrag
                   <td className="border p-2">
                     <button
                       className="bg-blue-500 text-white px-2 py-1 rounded mr-2 min-w-full"
-                      onClick={addRow}
+                      onClick={() => addRow(index)}
                     >
                       +
                     </button>

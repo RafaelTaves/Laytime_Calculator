@@ -53,67 +53,67 @@ interface SettersProps {
 interface laytimeProps {
     voyages: Voyages[],
     setVoyages: React.Dispatch<React.SetStateAction<Voyages[]>>,
-    
+
     vessels: Vessels[],
     setVessels: React.Dispatch<React.SetStateAction<Vessels[]>>,
-    
+
     selectedVoyage: number | null,
     setSelectedVoyage: React.Dispatch<React.SetStateAction<number | null>>,
-    
+
     fromLocation: string,
     setFromLocation: React.Dispatch<React.SetStateAction<string>>,
-    
+
     toLocation: string,
     setToLocation: React.Dispatch<React.SetStateAction<string>>,
-    
+
     selectedVessel: number | null,
     setSelectedVessel: React.Dispatch<React.SetStateAction<number | null>>,
-    
+
     charteres: string,
     setCharteres: React.Dispatch<React.SetStateAction<string>>,
-    
+
     cpDate: string,
     setCpDate: React.Dispatch<React.SetStateAction<string>>,
-    
+
     cpRate: number | null,
     setCpRate: React.Dispatch<React.SetStateAction<number | null>>,
-    
+
     operation: string,
     setOperation: React.Dispatch<React.SetStateAction<string>>,
-    
+
     cargoQuantity: number | null,
     setCargoQuantity: React.Dispatch<React.SetStateAction<number | null>>,
-    
+
     cargoType: string,
     setCargoType: React.Dispatch<React.SetStateAction<string>>,
-    
+
     demurrageRate: number,
     setDemurrageRate: React.Dispatch<React.SetStateAction<number>>,
-    
+
     despatchRate: number,
     setDespatchRate: React.Dispatch<React.SetStateAction<number>>,
-    
+
     norType: string,
     setNorType: React.Dispatch<React.SetStateAction<string>>,
-    
+
     timeVar1: string,
     setTimeVar1: React.Dispatch<React.SetStateAction<string>>,
-    
+
     timeVar2: string,
     setTimeVar2: React.Dispatch<React.SetStateAction<string>>,
-    
+
     timeType: string,
     setTimeType: React.Dispatch<React.SetStateAction<string>>,
-    
+
     endweekType: string,
     setEndweekType: React.Dispatch<React.SetStateAction<string>>,
-    
+
     assistOption1: string,
     setAssistOption1: React.Dispatch<React.SetStateAction<string>>,
-    
+
     assistOption2: string,
     setAssistOption2: React.Dispatch<React.SetStateAction<string>>,
-    
+
     assistOption3: string,
     setAssistOption3: React.Dispatch<React.SetStateAction<string>>,
 
@@ -137,7 +137,7 @@ interface Vessels {
     id_vessel: number
 }
 
-export default function Laytime_calculation({ 
+export default function Laytime_calculation({
     voyages,
     setVoyages,
     vessels,
@@ -186,10 +186,10 @@ export default function Laytime_calculation({
     setVoyageInput,
     vesselInput,
     setVesselInput,
-    erros, 
+    erros,
     setters,
     getVessels,
-    getVoyages 
+    getVoyages
 }: laytimeProps) {
     const [NewDisplaydemurrageRate, setNewDisplayDemurrageRate] = useState<string>("$ 0.00")
     const [NewDisplaydespatchRate, setNewDisplayDespatchRate] = useState<string>("$ 0.00")
@@ -324,10 +324,10 @@ export default function Laytime_calculation({
     ) => {
         const inputValue = e.target.value.replace(/[^0-9.]/g, '');
         const numericValue = parseFloat(inputValue) || 0;
-    
+
         setRate(numericValue);
         setDisplayRate(formatCurrency(inputValue));
-    
+
         // Se for demurrageRate, atualiza automaticamente o dispatchRate
         if (isDemurrageRate) {
             const dispatchRate = numericValue / 2;
@@ -335,7 +335,7 @@ export default function Laytime_calculation({
             setNewDisplayDespatchRate(formatCurrency(dispatchRate.toFixed(2))); // Atualiza a exibição
         }
     };
-    
+
     // Função para formatar moeda
     const updateRate = (
         value: number,
@@ -344,11 +344,11 @@ export default function Laytime_calculation({
         const formattedValue = formatCurrency(value.toFixed(2));
         setDisplayRate(formattedValue);
     };
-    
+
     const updateDespatchRate = (value: number) => {
         updateRate(value, setNewDisplayDespatchRate);
     };
-    
+
     const updateDemurrageRate = (value: number) => {
         updateRate(value, setNewDisplayDemurrageRate);
     };
@@ -421,7 +421,7 @@ export default function Laytime_calculation({
                         </div>
                         <div className='flex flex-col w-1/6 self-end'>
                             <button className='text-sm 2xl:text-xs w-full bg-mid-blue-I text-white text-center font-semibold font-Jost border py-2 px-2 rounded-lg hover:bg-light-blue-I' onClick={openModalVoyage} >
-                            Register Voyage
+                                Register Voyage
                             </button>
                         </div>
                         <div className='flex flex-col w-1/2 relative'>
@@ -459,7 +459,7 @@ export default function Laytime_calculation({
                         </div>
                     </div>
 
-                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
+                    <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="vessel" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Vessel</label>
                             <select id="selectVessel" name="selectVessel" className='mt-2 text-sm 2xl:text-xs block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6' onChange={handleVesselChange} value={selectedVessel ?? ''}>
@@ -668,29 +668,43 @@ export default function Laytime_calculation({
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="cargoQuantity" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>Cargo quantity (tons)</label>
                             <input
-                                type="text"
+                                type="number"
                                 id="cargoQuantity"
                                 name="cargoQuantity"
                                 value={cargoQuantity !== null ? cargoQuantity : ""}
                                 onChange={(e) => {
-                                    setCargoQuantity(Number(e.target.value))
-                                    setErroCargoQuantity(false)
+                                    const value = parseFloat(e.target.value);
+                                    if (!isNaN(value)) {
+                                        setCargoQuantity(value);
+                                        setErroCargoQuantity(false);
+                                    } else {
+                                        setCargoQuantity(null);
+                                    }
                                 }}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCargoQuantity === true ? "ring-red-500" : "ring-gray-300"}`}
+                                step="0.001" // Permite números com até 3 casas decimais
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCargoQuantity ? "ring-red-500" : "ring-gray-300"
+                                    }`}
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
                             <label htmlFor="cpRate" className='text-sm 2xl:text-xs font-Jost font-semibold text-black'>C/P Rate (t/day)</label>
                             <input
-                                type="text"
+                                type="number"
                                 id="cpRate"
                                 name="cpRate"
                                 value={cpRate !== null ? cpRate : ""}
                                 onChange={(e) => {
-                                    setCpRate(Number(e.target.value))
-                                    setErroCpRate(false)
+                                    const value = parseFloat(e.target.value);
+                                    if (!isNaN(value)) {
+                                        setCpRate(value); // Aceita números decimais
+                                        setErroCpRate(false);
+                                    } else {
+                                        setCpRate(null); // Reseta para null se não for válido
+                                    }
                                 }}
-                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCpRate === true ? "ring-red-500" : "ring-gray-300"}`}
+                                step="0.001" // Permite números com até 3 casas decimais
+                                className={`mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6 ${erroCpRate ? "ring-red-500" : "ring-gray-300"
+                                    }`}
                             />
                         </div>
                         <div className='flex flex-col w-1/2'>
@@ -904,10 +918,10 @@ export default function Laytime_calculation({
                         </div>
                     </div>
                     <Modal isOpen={isModalVesselOpen} onClose={closeModalVessel}>
-                        <Modal_vessel onRefresh={onRefresh} getVessels={getVessels}/>
+                        <Modal_vessel onRefresh={onRefresh} getVessels={getVessels} />
                     </Modal>
                     <Modal isOpen={isModalVoyageOpen} onClose={closeModalVoyage}>
-                        <Modal_voyage onRefresh={onRefresh} getVoyages={getVoyages}/>
+                        <Modal_voyage onRefresh={onRefresh} getVoyages={getVoyages} />
                     </Modal>
                 </div>
             </div>

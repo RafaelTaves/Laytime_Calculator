@@ -445,8 +445,8 @@ export default function Laytime() {
   function calcTimeAllowed() {
     if (cargoQuantity !== null && cpRate !== null) {
       const x = cargoQuantity / cpRate;
-      const roundedX = parseFloat(x.toFixed(2));
-      const timeAllowedString = convertDecimalDaysToString(roundedX);
+      // const roundedX = parseFloat(x.toFixed(2));
+      const timeAllowedString = convertDecimalDaysToString(x);
       setTimeAllowed(timeAllowedString);
     } else {
       setTimeAllowed("(0 days) 0:00");
