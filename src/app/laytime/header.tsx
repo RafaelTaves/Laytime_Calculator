@@ -58,6 +58,11 @@ interface Laytime {
   id_laytime: number;
   event_logs: EventLog[];
   on_demurrage: string;
+  selectedFirstCustomOption: string,
+  selectedSecondCustomOption: string,
+  selectedFirstCustomTimeOption: string,
+  selectedSecondCustomTimeOption: string,
+  selectedLastCustomOption: string,
 }
 
 interface headerProps {

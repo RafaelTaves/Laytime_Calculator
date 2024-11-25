@@ -109,6 +109,11 @@ interface Laytime {
   id_laytime: number;
   event_logs: EventLog[];
   on_demurrage: string;
+  selectedFirstCustomOption: string,
+  selectedSecondCustomOption: string,
+  selectedFirstCustomTimeOption: string,
+  selectedSecondCustomTimeOption: string,
+  selectedLastCustomOption: string,
 }
 
 const BASE_URL = "http://127.0.0.1:8000"
@@ -241,6 +246,11 @@ export default function Laytime() {
   const [notepad, setNotepad] = useState<string>("")
   const [idUser, setIdUser] = useState<number>()
   const [onDemurrage, setOnDemurrage] = useState<string>("")
+  const [selectedFirstCustomOption, setSelectedFirstCustomOption] = useState<string>("Friday")
+  const [selectedSecondCustomOption, setSelectedSecondCustomOption] = useState<string>("Sundat")
+  const [selectedFirstCustomTimeOption, setSelectedFirstCustomTimeOption] = useState<string>("")
+  const [selectedSecondCustomTimeOption, setSelectedSecondCustomTimeOption] = useState<string>("")
+  const [selectedLastCustomOption, setSelectedLastCustomOption] = useState<string>("Sundat")
 
   useEffect(() => {
     findAndSetLaytime(laytimes, selectedLaytime)
@@ -320,7 +330,12 @@ export default function Laytime() {
     timeUsed: string,
     timeAllowed: string,
     rows: TableRow[],
-    onDemurrage: string
+    onDemurrage: string,
+    selectedFirstCustomOption: string,
+    selectedSecondCustomOption: string,
+    selectedFirstCustomTimeOption: string,
+    selectedSecondCustomTimeOption: string,
+    selectedLastCustomOption: string,
   ) {
     setIdUser(idUser)
     setSelectedVoyage(selectedVoyage);
@@ -364,7 +379,12 @@ export default function Laytime() {
     setTimeDifference(timeDifference)
     setTimeAllowed(timeAllowed);
     setRows(rows);
-    setOnDemurrage(onDemurrage)
+    setOnDemurrage(onDemurrage);
+    setSelectedFirstCustomOption(selectedFirstCustomOption);
+    setSelectedSecondCustomOption(selectedSecondCustomOption);
+    setSelectedFirstCustomTimeOption(selectedFirstCustomTimeOption);
+    setSelectedSecondCustomTimeOption(selectedSecondCustomTimeOption);
+    setSelectedLastCustomOption(selectedLastCustomOption);
   }
 
   function findAndSetLaytime(laytimes: Laytime[], selectedLaytime: number | undefined) {
@@ -414,7 +434,12 @@ export default function Laytime() {
         laytime.time_used,
         laytime.time_allowed,
         laytime.event_logs,
-        laytime.on_demurrage
+        laytime.on_demurrage,
+        laytime.selectedFirstCustomOption,
+        laytime.selectedSecondCustomOption,
+        laytime.selectedFirstCustomTimeOption,
+        laytime.selectedSecondCustomTimeOption,
+        laytime.selectedLastCustomOption
       );
     } else {
       console.warn(`Laytime com o id ${selectedLaytime} não encontrado.`);
@@ -478,7 +503,6 @@ export default function Laytime() {
     setNorLaytimeStartHours(moment(start).format("HH:mm"));
     calculateAndSetTimeUsed(start, endDate, lastTimeWasted);
     const onDemurrageDate = calcOnDemurrage(start, timeAllowed, rows);
-    console.log("Demurrage starts on: ", onDemurrageDate);
     setOnDemurrage(onDemurrageDate)
   };
 
@@ -613,7 +637,12 @@ export default function Laytime() {
             subtotal: subtotal,
             total: total,
             despatch_or_demurrage: despatchOrDemurrage,
-            on_demurrage: onDemurrage
+            on_demurrage: onDemurrage,
+            selectedFirstCustomOption: selectedFirstCustomOption,
+            selectedSecondCustomOption: selectedSecondCustomOption,
+            selectedFirstCustomTimeOption: selectedFirstCustomTimeOption,
+            selectedSecondCustomTimeOption: selectedSecondCustomTimeOption,
+            selectedLastCustomOption: selectedLastCustomOption,
           };
 
           try {
@@ -719,7 +748,12 @@ export default function Laytime() {
             subtotal: subtotal,
             total: total,
             despatch_or_demurrage: despatchOrDemurrage,
-            on_demurrage: onDemurrage
+            on_demurrage: onDemurrage,
+            selectedFirstCustomOption: selectedFirstCustomOption,
+            selectedSecondCustomOption: selectedSecondCustomOption,
+            selectedFirstCustomTimeOption: selectedFirstCustomTimeOption,
+            selectedSecondCustomTimeOption: selectedSecondCustomTimeOption,
+            selectedLastCustomOption: selectedLastCustomOption,
           };
 
           try {
@@ -773,7 +807,6 @@ export default function Laytime() {
                 Authorization: `Bearer ${token}`
             },
         });
-        console.log("Novo Event Log registrado:", response.data);
     } catch (error) {
         setBadSaveNotification(true);
         console.error("Erro ao criar novo Event Log:", error);
@@ -810,7 +843,6 @@ export default function Laytime() {
       })
 
       if (resp.status == 200) {
-        console.log(resp.data)
         setLaytimes(resp.data)
       }
     } catch (error) {
@@ -1025,6 +1057,21 @@ export default function Laytime() {
 
             vesselInput={vesselInput}
             setVesselInput={setVesselInput}
+
+            selectedFirstCustomOption={selectedFirstCustomOption}
+            setSelectedFirstCustomOption={setSelectedFirstCustomOption}
+
+            selectedSecondCustomOption={selectedSecondCustomOption}
+            setSelectedSecondCustomOption={setSelectedSecondCustomOption}
+
+            selectedFirstCustomTimeOption={selectedFirstCustomTimeOption}
+            setSelectedFirstCustomTimeOption={setSelectedFirstCustomTimeOption}
+
+            selectedSecondCustomTimeOption={selectedSecondCustomTimeOption}
+            setSelectedSecondCustomTimeOption={setSelectedSecondCustomTimeOption}
+
+            selectedLastCustomOption={selectedLastCustomOption}
+            setSelectedLastCustomOption={setSelectedLastCustomOption}
 
             erros={erros}
             setters={setters}

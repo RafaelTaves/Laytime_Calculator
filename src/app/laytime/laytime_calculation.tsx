@@ -123,6 +123,21 @@ interface laytimeProps {
     vesselInput: string,
     setVesselInput: React.Dispatch<React.SetStateAction<string>>,
 
+    selectedFirstCustomOption: string,
+    setSelectedFirstCustomOption: React.Dispatch<React.SetStateAction<string>>,
+
+    selectedSecondCustomOption: string,
+    setSelectedSecondCustomOption: React.Dispatch<React.SetStateAction<string>>,
+
+    selectedFirstCustomTimeOption: string,
+    setSelectedFirstCustomTimeOption: React.Dispatch<React.SetStateAction<string>>,
+
+    selectedSecondCustomTimeOption: string,
+    setSelectedSecondCustomTimeOption: React.Dispatch<React.SetStateAction<string>>,
+
+    selectedLastCustomOption: string,
+    setSelectedLastCustomOption: React.Dispatch<React.SetStateAction<string>>,
+
     erros: ErrosProps;
     setters: SettersProps;
 
@@ -186,6 +201,16 @@ export default function Laytime_calculation({
     setVoyageInput,
     vesselInput,
     setVesselInput,
+    selectedFirstCustomOption,
+    setSelectedFirstCustomOption,
+    selectedSecondCustomOption,
+    setSelectedSecondCustomOption,
+    selectedFirstCustomTimeOption,
+    setSelectedFirstCustomTimeOption,
+    selectedSecondCustomTimeOption,
+    setSelectedSecondCustomTimeOption,
+    selectedLastCustomOption,
+    setSelectedLastCustomOption,
     erros,
     setters,
     getVessels,
@@ -207,6 +232,8 @@ export default function Laytime_calculation({
     const [isModalVesselOpen, setIsModalVesselOpen] = useState(false);
     const openModalVessel = () => setIsModalVesselOpen(true);
     const closeModalVessel = () => setIsModalVesselOpen(false);
+
+    const [isCustomSelected, setIsCustomSelected] = useState(false);
 
     // Consts para set errors
     const {
@@ -243,6 +270,15 @@ export default function Laytime_calculation({
         setErroTimeVar2,
     } = setters;
 
+    useEffect(() => {
+        if(endweekType == "Custom"){
+            setIsCustomSelected(true)
+        } else {
+            setIsCustomSelected(false)
+        }
+            
+    }, [endweekType])
+    
     const formatCurrency = (value: string): string => {
         const [integerPart, decimalPart] = value.split('.');
         const formattedDecimal = decimalPart ? decimalPart.slice(0, 2).padEnd(2, '0') : '00';
@@ -819,13 +855,14 @@ export default function Laytime_calculation({
                                 value={endweekType}
                                 onChange={(e) => {
                                     setEndweekType(e.target.value)
-
+                                    {e.target.value == "Custom" ? setIsCustomSelected(true) : setIsCustomSelected(false)}
                                 }}
                                 className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
                                 <option value="shinc">Shinc</option>
                                 <option value="fhinc">Fhinc</option>
                                 <option value="shex">Shex</option>
                                 <option value="Fhex">Fhex</option>
+                                <option value="Custom">Custom</option>
                             </select>
                         </div>
                         <div className='flex flex-col w-full'>
@@ -857,6 +894,86 @@ export default function Laytime_calculation({
                             </select>
                         </div>
                     </div>
+
+                    {isCustomSelected == true ? 
+                    <div className='flex flex-row mt-4 space-x-6'>
+                        <div className='flex flex-col w-1/2'>
+                            <select
+                                id="selectedFirstCustomOption"
+                                name="selectedFirstCustomOption"
+                                value={selectedFirstCustomOption}
+                                onChange={(e) => {
+                                    setSelectedFirstCustomOption(e.target.value)
+                                }}
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
+                                <option value="Sunday">Sunday</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                            </select>
+                        </div>
+                        <div className='flex flex-col w-1/4'>
+                            <input
+                                type="text"
+                                id="selectedFirstCustomTimeOption"
+                                name="selectedFirstCustomTimeOption"
+                                placeholder='hh:mm'
+                                value={selectedFirstCustomTimeOption}
+                                onChange={(e) => {
+                                    setSelectedFirstCustomTimeOption(e.target.value);
+                                }}
+                                className={`text-center mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6`}
+                            />
+                        </div>
+                        <div className='flex flex-col w-1/2'>
+                            <select
+                                id="selectedSecondCustomOption"
+                                name="selectedSecondCustomOption"
+                                value={selectedSecondCustomOption}
+                                onChange={(e) => {
+                                    setSelectedSecondCustomOption(e.target.value)
+                                }}
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
+                                <option value="Sunday">Sunday</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                            </select>
+                        </div>
+                        <div className='flex flex-col w-1/4'>
+                            <input
+                                type="text"
+                                id="selectedSecondCustomTimeOption"
+                                name="selectedSecondCustomTimeOption"
+                                placeholder='hh:mm'
+                                value={selectedSecondCustomTimeOption}
+                                onChange={(e) => {
+                                    setSelectedSecondCustomTimeOption(e.target.value);
+                                }}
+                                className={`text-center mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6`}
+                            />
+                        </div>
+                        <div className='flex flex-col w-1/2'>
+                            <select
+                                id="selectLastCustomOption"
+                                name="selectLastCustomOption"
+                                value={selectedLastCustomOption}
+                                onChange={(e) => {
+                                    setSelectedLastCustomOption(e.target.value)
+                                }}
+                                className='mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-mid-blue-I sm:text-sm 2xl:text-xs sm:leading-6'>
+                                <option value="Even if used">NTC even if used</option>
+                                <option value="Unless used">NTC unless used</option>
+                            </select>
+                        </div>
+                    </div>    
+                    : ""}
 
                     <div className='flex flex-row mt-4 space-x-6 lg:hidden'> {/* Mobile */}
                         <div className='flex flex-col w-full'>
