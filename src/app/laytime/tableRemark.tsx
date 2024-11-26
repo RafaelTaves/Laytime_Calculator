@@ -45,7 +45,7 @@ export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrag
     setRows(newRows);
   };
 
-  async function removeRow (index: number) {
+  async function removeRow(index: number) {
     const row = rows[index];
     const token = localStorage.getItem('token');
 
@@ -182,16 +182,16 @@ export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrag
               const isDemurrage = demurrageIndexes.has(index);
               return (
                 <tr key={index}>
-                  <td className="border p-2">
+                  <td className="border p-2 flex space-x-2 justify-center">
                     <button
-                      className="bg-blue-500 text-white px-2 py-1 rounded mr-2 min-w-full"
+                      className="bg-blue-500 text-white px-2 py-1 rounded min-w-[36px]"
                       onClick={() => addRow(index)}
                     >
                       +
                     </button>
                     {rows.length > 1 && (
                       <button
-                        className="bg-red-500 text-white px-2 py-1 rounded mt-2 min-w-full"
+                        className="bg-red-500 text-white px-2 py-1 rounded min-w-[36px]"
                         onClick={() => removeRow(index)}
                       >
                         -
