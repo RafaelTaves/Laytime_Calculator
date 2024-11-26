@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import BadNotification from "../notifications/badNotification";
 
-const BASE_URL = "apilaytime-production.up.railway.app"
+const BASE_URL = "https://apilaytime-production.up.railway.app"
 
 export default function Login() {
     const [username, setUsername] = useState<string>("")

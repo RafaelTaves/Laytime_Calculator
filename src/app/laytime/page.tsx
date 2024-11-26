@@ -116,7 +116,7 @@ interface Laytime {
   selectedLastCustomOption: string,
 }
 
-const BASE_URL = "apilaytime-production.up.railway.app"
+const BASE_URL = "https://apilaytime-production.up.railway.app"
 
 export default function Laytime() {
   const router = useRouter();

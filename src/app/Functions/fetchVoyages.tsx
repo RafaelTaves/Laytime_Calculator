@@ -8,7 +8,7 @@ interface Voyages {
     to_location: string
   }
 
-const BASE_URL = "apilaytime-production.up.railway.app"
+const BASE_URL = "https://apilaytime-production.up.railway.app"
 
 async function FetchVoyages(): Promise<Voyages[]> {
   try {

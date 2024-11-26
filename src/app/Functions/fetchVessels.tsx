@@ -7,7 +7,7 @@ type Vessel = {
   id_vessel: number;
 };
 
-const BASE_URL = "apilaytime-production.up.railway.app"
+const BASE_URL = "https://apilaytime-production.up.railway.app"
 
 async function FetchVessels(): Promise<Vessel[]> {
   try {
