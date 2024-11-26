@@ -4,7 +4,7 @@ import axios from 'axios';
 import BadNotification from '../components/notifications/badNotification';
 import GoodNotification from '../components/notifications/goodNotification';
 
-const BASE_URL = "https://apilaytime-production.up.railway.app";
+const BASE_URL = "apilaytime-production.up.railway.app";
 
 interface ModaVoyageProps {
   onRefresh: () => void;

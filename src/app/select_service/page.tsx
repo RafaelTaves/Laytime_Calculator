@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 
+const BASE_URL = "apilaytime-production.up.railway.app"
+
 export default function Select_service() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ export default function Select_service() {
         const verifyToken = async () => {
           const token = localStorage.getItem('token');
           try {
-            const response = await fetch(`http://localhost:8000/verify-token/${token}`);
+            const response = await fetch(`${BASE_URL}/verify-token/${token}`);
     
             if (!response.ok) {
               throw new Error('Token verification failed');
