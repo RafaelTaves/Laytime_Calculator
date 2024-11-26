@@ -13,7 +13,7 @@ interface Vessel {
   id_vessel: number
 }
 
-const BASE_URL = "http://127.0.0.1:8000"
+const BASE_URL = "https://apilaytime-production.up.railway.app"
 
 export default function Register_vessel() {
     const [vessels, setVessels] = useState<Vessel[]>([])

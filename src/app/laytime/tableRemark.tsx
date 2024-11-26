@@ -20,7 +20,7 @@ interface RemarkProps {
   onDemurrage: string;
 }
 
-const BASE_URL = "http://127.0.0.1:8000"
+const BASE_URL = "https://apilaytime-production.up.railway.app"
 
 export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrage }: RemarkProps) {
   const [demurrageIndexes, setDemurrageIndexes] = useState<Set<number>>(new Set());
