@@ -172,7 +172,7 @@ export default function TableRemark({ selectedLaytime, rows, setRows, onDemurrag
               <th className="border p-2 text-black">Date</th>
               <th className="border p-2 text-black">From</th>
               <th className="border p-2 text-black">To</th>
-              <th className="border p-2 text-black">% count</th>
+              <th className="border p-2 text-black">% Excluded</th>
               <th className="border p-2 text-black w-1/3">Remarks</th>
               <th className="border p-2 text-black">Total excused time</th>
             </tr>
